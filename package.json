@@ -1,0 +1,22 @@
+{
+  "name": "bfcmarketplace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "build": "remotion bundle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:23720/git/BFCMarketplace/BFCMarketplace"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/cli": "^4.0.448",
+    "remotion": "^4.0.448"
+  }
+}
