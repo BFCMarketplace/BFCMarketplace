@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BFC Marketplace — Logo Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #080808;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      padding: 60px 20px;
+      gap: 80px;
+    }
+
+    .page-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    .logos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 80px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+    .logo-card:hover { transform: translateY(-8px); }
+
+    .option-label {
+      font-size: 10px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #444;
+      font-weight: 400;
+    }
+
+    /* ── LOGO 1 — THE DIAMOND SHIELD ── */
+    #logo1 { width: 200px; height: 200px; }
+
+    .diamond-path {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: drawLine 2s ease forwards 0.3s;
+    }
+    .bfc-text-1 {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 1.8s;
+    }
+    .market-text-1 {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 2.4s;
+    }
+    .corner-dot {
+      opacity: 0;
+      animation: popIn 0.3s ease forwards;
+    }
+    .dot1 { animation-delay: 2s; }
+    .dot2 { animation-delay: 2.1s; }
+    .dot3 { animation-delay: 2.2s; }
+    .dot4 { animation-delay: 2.3s; }
+
+    /* ── LOGO 2 — THE HEXAGON ── */
+    #logo2 { width: 200px; height: 220px; }
+
+    .hex-outer {
+      stroke-dasharray: 700;
+      stroke-dashoffset: 700;
+      animation: drawLine 2.2s ease forwards 0.2s;
+    }
+    .hex-inner {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: drawLine 1.8s ease forwards 1s;
+    }
+    .bfc-text-2 {
+      opacity: 0;
+      animation: fadeInScale 0.7s ease forwards 2s;
+    }
+    .market-text-2 {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 2.6s;
+    }
+    .hex-glow {
+      animation: hexPulse 3s ease-in-out infinite 3s;
+    }
+
+    /* ── LOGO 3 — THE CIRCLE MONOGRAM ── */
+    #logo3 { width: 200px; height: 220px; }
+
+    .ring-outer {
+      stroke-dasharray: 628;
+      stroke-dashoffset: 628;
+      animation: drawLine 2s ease forwards 0.2s;
+    }
+    .ring-inner {
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      animation: drawLine 1.6s ease forwards 0.8s;
+    }
+    .arc-top {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: drawLine 1s ease forwards 1.6s;
+    }
+    .bfc-text-3 {
+      opacity: 0;
+      animation: fadeInScale 0.7s ease forwards 2s;
+    }
+    .market-text-3 {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 2.6s;
+    }
+    .orbit-dot {
+      animation: orbit 4s linear infinite 3s;
+      transform-origin: 100px 100px;
+    }
+
+    /* ── KEYFRAMES ── */
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes hexPulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.7; }
+    }
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(62px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(62px) rotate(-360deg); }
+    }
+    @keyframes shimmer {
+      0%   { stop-color: #c9a84c; }
+      50%  { stop-color: #f5d07a; }
+      100% { stop-color: #c9a84c; }
+    }
+
+    /* repeat animations on hover */
+    .logo-card:hover .diamond-path     { animation: drawLine 1.4s ease forwards; }
+    .logo-card:hover .hex-outer        { animation: drawLine 1.6s ease forwards; }
+    .logo-card:hover .hex-inner        { animation: drawLine 1.2s ease forwards 0.4s; }
+    .logo-card:hover .ring-outer       { animation: drawLine 1.4s ease forwards; }
+    .logo-card:hover .ring-inner       { animation: drawLine 1s ease forwards 0.4s; }
+  </style>
+</head>
+<body>
+
+  <p class="page-title">BFC Marketplace &mdash; Logo Concepts</p>
+
+  <div class="logos-grid">
+
+    <!-- ═══════════════════════════════════
+         LOGO 1 — THE DIAMOND SHIELD
+         Elegant, sharp, premium Amazon look
+    ═══════════════════════════════════ -->
+    <div class="logo-card">
+      <svg id="logo1" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gold1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#f5d07a"/>
+            <stop offset="50%"  stop-color="#c9a84c"/>
+            <stop offset="100%" stop-color="#8B6914"/>
+          </linearGradient>
+          <filter id="glow1">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Diamond shape -->
+        <polygon
+          class="diamond-path"
+          points="100,12 188,100 100,188 12,100"
+          stroke="url(#gold1)" stroke-width="1.5"
+          fill="none" filter="url(#glow1)"
+        />
+        <!-- Inner diamond -->
+        <polygon
+          class="diamond-path"
+          points="100,28 172,100 100,172 28,100"
+          stroke="#c9a84c" stroke-width="0.5"
+          fill="none" opacity="0.4"
+          style="animation-delay:0.8s"
+        />
+
+        <!-- Corner dots -->
+        <circle class="corner-dot dot1" cx="100" cy="12"  r="3" fill="#f5d07a"/>
+        <circle class="corner-dot dot2" cx="188" cy="100" r="3" fill="#f5d07a"/>
+        <circle class="corner-dot dot3" cx="100" cy="188" r="3" fill="#f5d07a"/>
+        <circle class="corner-dot dot4" cx="12"  cy="100" r="3" fill="#f5d07a"/>
+
+        <!-- BFC text -->
+        <text class="bfc-text-1"
+          x="100" y="96"
+          text-anchor="middle"
+          font-family="Cinzel, serif"
+          font-size="32" font-weight="900"
+          fill="url(#gold1)" filter="url(#glow1)"
+          letter-spacing="4"
+        >BFC</text>
+
+        <!-- MARKETPLACE text -->
+        <text class="market-text-1"
+          x="100" y="116"
+          text-anchor="middle"
+          font-family="Montserrat, sans-serif"
+          font-size="7.5" font-weight="300"
+          fill="#c9a84c" letter-spacing="5"
+        >MARKETPLACE</text>
+      </svg>
+
+      <span class="option-label">Opțiunea 1 — Diamond Shield</span>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         LOGO 2 — THE HEXAGON
+         Modern, tech, structured
+    ═══════════════════════════════════ -->
+    <div class="logo-card">
+      <svg id="logo2" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gold2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#f5d07a"/>
+            <stop offset="60%"  stop-color="#c9a84c"/>
+            <stop offset="100%" stop-color="#8B6914"/>
+          </linearGradient>
+          <filter id="glow2">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Outer hexagon -->
+        <polygon
+          class="hex-outer"
+          points="100,10 184,55 184,145 100,190 16,145 16,55"
+          stroke="url(#gold2)" stroke-width="1.5"
+          fill="none" filter="url(#glow2)"
+        />
+        <!-- Inner hexagon -->
+        <polygon
+          class="hex-inner"
+          points="100,26 168,63 168,137 100,174 32,137 32,63"
+          stroke="#c9a84c" stroke-width="0.5"
+          fill="none" opacity="0.35"
+        />
+
+        <!-- Glow fill -->
+        <polygon
+          class="hex-glow"
+          points="100,26 168,63 168,137 100,174 32,137 32,63"
+          fill="#c9a84c" opacity="0.03"
+        />
+
+        <!-- Horizontal accent lines -->
+        <line x1="32" y1="100" x2="68" y2="100" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"
+          style="stroke-dasharray:36; stroke-dashoffset:36; animation: drawLine 0.6s ease forwards 2s"/>
+        <line x1="132" y1="100" x2="168" y2="100" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"
+          style="stroke-dasharray:36; stroke-dashoffset:36; animation: drawLine 0.6s ease forwards 2s"/>
+
+        <!-- BFC text -->
+        <text class="bfc-text-2"
+          x="100" y="110"
+          text-anchor="middle"
+          font-family="Cinzel, serif"
+          font-size="34" font-weight="900"
+          fill="url(#gold2)" filter="url(#glow2)"
+          letter-spacing="4"
+        >BFC</text>
+
+        <!-- MARKETPLACE below hex -->
+        <text class="market-text-2"
+          x="100" y="210"
+          text-anchor="middle"
+          font-family="Montserrat, sans-serif"
+          font-size="7" font-weight="300"
+          fill="#c9a84c" letter-spacing="6"
+        >MARKETPLACE</text>
+      </svg>
+
+      <span class="option-label">Opțiunea 2 — Hexagon Power</span>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         LOGO 3 — THE ORBIT CIRCLE
+         Luxury, orbital, aspirational
+    ═══════════════════════════════════ -->
+    <div class="logo-card">
+      <svg id="logo3" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gold3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#f5d07a"/>
+            <stop offset="50%"  stop-color="#c9a84c"/>
+            <stop offset="100%" stop-color="#8B6914"/>
+          </linearGradient>
+          <filter id="glow3">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <!-- dashed gradient circle trick -->
+          <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#f5d07a" stop-opacity="0"/>
+            <stop offset="50%"  stop-color="#f5d07a"/>
+            <stop offset="100%" stop-color="#f5d07a" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Outer ring -->
+        <circle class="ring-outer" cx="100" cy="100" r="88"
+          stroke="url(#gold3)" stroke-width="1.5" fill="none" filter="url(#glow3)"
+          stroke-dasharray="628" stroke-dashoffset="628"
+        />
+        <!-- Inner ring -->
+        <circle class="ring-inner" cx="100" cy="100" r="70"
+          stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.3"
+          stroke-dasharray="440" stroke-dashoffset="440"
+        />
+
+        <!-- Cross-hair accents -->
+        <line x1="100" y1="12"  x2="100" y2="30"  stroke="#c9a84c" stroke-width="1" opacity="0.6"
+          style="stroke-dasharray:18; stroke-dashoffset:18; animation: drawLine 0.5s ease forwards 2s"/>
+        <line x1="100" y1="170" x2="100" y2="188" stroke="#c9a84c" stroke-width="1" opacity="0.6"
+          style="stroke-dasharray:18; stroke-dashoffset:18; animation: drawLine 0.5s ease forwards 2s"/>
+        <line x1="12"  y1="100" x2="30"  y2="100" stroke="#c9a84c" stroke-width="1" opacity="0.6"
+          style="stroke-dasharray:18; stroke-dashoffset:18; animation: drawLine 0.5s ease forwards 2s"/>
+        <line x1="170" y1="100" x2="188" y2="100" stroke="#c9a84c" stroke-width="1" opacity="0.6"
+          style="stroke-dasharray:18; stroke-dashoffset:18; animation: drawLine 0.5s ease forwards 2s"/>
+
+        <!-- Orbiting dot -->
+        <g class="orbit-dot">
+          <circle cx="100" cy="38" r="4" fill="#f5d07a" filter="url(#glow3)"/>
+        </g>
+
+        <!-- BFC text -->
+        <text class="bfc-text-3"
+          x="100" y="108"
+          text-anchor="middle"
+          font-family="Cinzel, serif"
+          font-size="34" font-weight="900"
+          fill="url(#gold3)" filter="url(#glow3)"
+          letter-spacing="4"
+        >BFC</text>
+
+        <!-- MARKETPLACE below circle -->
+        <text class="market-text-3"
+          x="100" y="210"
+          text-anchor="middle"
+          font-family="Montserrat, sans-serif"
+          font-size="7" font-weight="300"
+          fill="#c9a84c" letter-spacing="6"
+        >MARKETPLACE</text>
+      </svg>
+
+      <span class="option-label">Opțiunea 3 — Orbit Luxury</span>
+    </div>
+
+  </div>
+
+  <p class="page-title" style="font-size:10px; color:#333;">
+    hover pe logo pentru a relua animația &nbsp;|&nbsp; spune-mi numărul preferat
+  </p>
+
+</body>
+</html>
