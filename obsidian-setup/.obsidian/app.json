@@ -1,0 +1,18 @@
+{
+  "promptDelete": false,
+  "trashOption": "local",
+  "useMarkdownLinks": false,
+  "newLinkFormat": "shortest",
+  "defaultViewMode": "source",
+  "livePreview": true,
+  "showFrontmatter": false,
+  "foldHeading": false,
+  "foldIndent": false,
+  "spellcheck": false,
+  "spellcheckLanguages": ["ro"],
+  "theme": "obsidian",
+  "baseFontSize": 16,
+  "translucency": false,
+  "newFileLocation": "current",
+  "attachmentFolderPath": "Archive/attachments"
+}

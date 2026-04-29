@@ -1,0 +1,14 @@
+{
+  "claude-connector:claude-open-chat": [
+    { "modifiers": ["Ctrl", "Shift"], "key": "C" }
+  ],
+  "claude-connector:claude-ask-selection": [
+    { "modifiers": ["Ctrl", "Shift"], "key": "A" }
+  ],
+  "claude-connector:claude-summarize-note": [
+    { "modifiers": ["Ctrl", "Shift"], "key": "S" }
+  ],
+  "daily-notes": [
+    { "modifiers": ["Ctrl"], "key": "D" }
+  ]
+}

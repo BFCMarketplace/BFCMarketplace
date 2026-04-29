@@ -1,0 +1,11 @@
+{
+  "id": "claude-connector",
+  "name": "Claude Connector",
+  "version": "1.2.0",
+  "minAppVersion": "1.4.0",
+  "description": "Conecteaza Obsidian la Claude AI cu optimizare token si context per proiect (ElectroGestion, BFC Marketplace, Amazon FBA)",
+  "author": "BFC Workspace",
+  "authorUrl": "",
+  "fundingUrl": "",
+  "isDesktopOnly": true
+}
