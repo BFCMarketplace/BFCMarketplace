@@ -1,112 +1,188 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BFC Marketplace</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    header, footer {
-      background-color: #004080;
-      color: white;
-      padding: 1em;
-      text-align: center;
-    }
-    nav {
-      background-color: #e0e0e0;
-      padding: 1em;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-    }
-    nav a {
-      text-decoration: none;
-      color: #004080;
-      font-weight: bold;
-    }
-    .hero {
-      background-color: #cfe2f3;
-      padding: 3em 1em;
-      text-align: center;
-    }
-    .section {
-      padding: 2em 1em;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1em;
-    }
-    .product {
-      background: white;
-      padding: 1em;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    .cta-button {
-      background-color: #004080;
-      color: white;
-      padding: 0.7em 1.5em;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFC Marketplace | Partenerul tău în eCommerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <h1>BFC Marketplace</h1>
-    <p>Produits utiles, livraison rapide, confiance garantie.</p>
-  </header>
+<body class="bg-gray-50 text-gray-900">
 
-  <nav>
-    <a href="#">Beauté</a>
-    <a href="#">Soin personnel</a>
-    <a href="#">Maison</a>
-    <a href="#">Bébés</a>
-    <a href="#">À propos</a>
-    <a href="#">Contact</a>
-  </nav>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">BFC</span>
+                    <span class="text-2xl font-light text-gray-700 ml-1">Marketplace</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#acasa" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Acasă</a>
+                        <a href="#despre" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Despre noi</a>
+                        <a href="#servicii" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Servicii</a>
+                        <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-  <section class="hero">
-    <h2>Bienvenue chez BFC Marketplace</h2>
-    <p>Une sélection soignée de produits du quotidien, livrés avec sérieux.</p>
-    <button class="cta-button">Découvrir nos produits</button>
-  </section>
+    <!-- Hero Section -->
+    <section id="acasa" class="relative bg-white pt-20 pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+                    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                        <span class="block">Excelență în</span>
+                        <span class="block text-blue-600">Vânzări Online</span>
+                    </h1>
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                        Oferim soluții profesionale de marketplace și distribuție pentru a aduce cele mai bune produse direct la ușa clienților tăi. Performanță, integritate și viteză.
+                    </p>
+                    <div class="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
+                        <a href="#despre" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                            Află mai multe
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+                    <div class="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md overflow-hidden">
+                        <img class="w-full" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Echipa la lucru">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section class="section">
-    <h3>Produits en vedette</h3>
-    <div class="products">
-      <div class="product">
-        <h4>Lotion bébé douce</h4>
-        <p>Parfaite pour la peau sensible.</p>
-      </div>
-      <div class="product">
-        <h4>Crème hydratante visage</h4>
-        <p>Hydratation naturelle pour tous les types de peau.</p>
-      </div>
-      <div class="product">
-        <h4>Brosse de bain exfoliante</h4>
-        <p>Un moment spa à la maison.</p>
-      </div>
-    </div>
-  </section>
+    <!-- Services Section -->
+    <section id="servicii" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">De ce să ne alegi pe noi?</h2>
+            <p class="mt-4 text-xl text-gray-500">Valorile noastre ne definesc fiecare succes.</p>
 
-  <section class="section">
-    <h3>À propos de nous</h3>
-    <p>BFC Marketplace est une jeune entreprise française spécialisée dans la vente en ligne de produits utiles au quotidien. Nous sommes motivés, honnêtes et toujours prêts à apprendre.</p>
-  </section>
+            <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+                <!-- Value 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-shipping-fast text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Livrare Rapidă</h3>
+                    <p class="text-gray-600">Suntem dedicați eficienței logistice pentru a reduce timpii de așteptare la minim.</p>
+                </div>
 
-  <footer>
-    <p>&copy; 2025 BFC Marketplace - Tous droits réservés</p>
-    <p>Contact : contact@bfcmarketplace.fr</p>
-  </footer>
+                <!-- Value 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-shield-alt text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Încredere Garantată</h3>
+                    <p class="text-gray-600">Transparența și onestitatea sunt la baza fiecărei colaborări pe care o avem.</p>
+                </div>
+
+                <!-- Value 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-chart-line text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Orientare spre Rezultate</h3>
+                    <p class="text-gray-600">Optimizăm constant procesele pentru a oferi cele mai bune prețuri și servicii.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="despre" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:flex lg:items-center lg:space-x-12">
+                <div class="lg:w-1/2 mb-12 lg:mb-0">
+                    <img class="rounded-xl shadow-2xl" src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Afaceri online">
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Despre BFC Marketplace</h2>
+                    <p class="text-lg text-gray-600 mb-4">
+                        BFC Marketplace este o companie modernă, agilă și dedicată pieței din România. Ne-am început călătoria cu dorința de a simplifica experiența de cumpărături online, oferind produse de calitate superioară dintr-o varietate de categorii: de la îngrijire personală la articole pentru casă.
+                    </p>
+                    <p class="text-lg text-gray-600">
+                        Echipa noastră este formată din profesioniști pasionați, mereu gata să învețe și să se adapteze într-un mediu digital în continuă schimbare. Credem în parteneriate pe termen lung și în valoarea pe care o aducem fiecărui client.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-gray-900">Contactează-ne</h2>
+                <p class="mt-4 text-xl text-gray-500">Suntem aici să răspundem întrebărilor tale.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-10 bg-blue-600 text-white">
+                        <h3 class="text-2xl font-bold mb-6">Informații de contact</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope mr-4"></i>
+                                <span>contact@bfcmarketplace.ro</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone mr-4"></i>
+                                <span>+40 700 000 000</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt mr-4"></i>
+                                <span>București, România</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-10">
+                        <form action="#" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nume complet</label>
+                                <input type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Mesaj</label>
+                                <textarea rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-bold">Trimite Mesajul</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center items-center mb-8">
+                <span class="text-2xl font-bold text-blue-400">BFC</span>
+                <span class="text-2xl font-light ml-1">Marketplace</span>
+            </div>
+            <p class="text-gray-400 mb-8">&copy; 2025 BFC Marketplace. Toate drepturile rezervate.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
