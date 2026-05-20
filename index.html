@@ -1,112 +1,70 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ro">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BFC Marketplace</title>
+  <title>BFC Marketplace - Calitate și Încredere pe Amazon</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    header, footer {
-      background-color: #004080;
-      color: white;
-      padding: 1em;
-      text-align: center;
-    }
-    nav {
-      background-color: #e0e0e0;
-      padding: 1em;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-    }
-    nav a {
-      text-decoration: none;
-      color: #004080;
-      font-weight: bold;
-    }
-    .hero {
-      background-color: #cfe2f3;
-      padding: 3em 1em;
-      text-align: center;
-    }
-    .section {
-      padding: 2em 1em;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1em;
-    }
-    .product {
-      background: white;
-      padding: 1em;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    .cta-button {
-      background-color: #004080;
-      color: white;
-      padding: 0.7em 1.5em;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      font-family: 'Inter', sans-serif;
     }
   </style>
 </head>
-<body>
-  <header>
-    <h1>BFC Marketplace</h1>
-    <p>Produits utiles, livraison rapide, confiance garantie.</p>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-blue-900 text-white p-4 text-center">
+    <h1 class="text-2xl font-bold text-white">BFC Marketplace</h1>
+    <p>Produse utile, livrare rapidă, încredere garantată.</p>
   </header>
 
-  <nav>
-    <a href="#">Beauté</a>
-    <a href="#">Soin personnel</a>
-    <a href="#">Maison</a>
-    <a href="#">Bébés</a>
-    <a href="#">À propos</a>
-    <a href="#">Contact</a>
+  <nav class="bg-gray-200 p-4 flex justify-center gap-4">
+    <a href="#" class="text-blue-900 font-bold hover:underline">Frumusețe</a>
+    <a href="#" class="text-blue-900 font-bold hover:underline">Îngrijire personală</a>
+    <a href="#" class="text-blue-900 font-bold hover:underline">Casă</a>
+    <a href="#" class="text-blue-900 font-bold hover:underline">Bebeluși</a>
+    <a href="#" class="text-blue-900 font-bold hover:underline">Despre noi</a>
+    <a href="#" class="text-blue-900 font-bold hover:underline">Contact</a>
   </nav>
 
-  <section class="hero">
-    <h2>Bienvenue chez BFC Marketplace</h2>
-    <p>Une sélection soignée de produits du quotidien, livrés avec sérieux.</p>
-    <button class="cta-button">Découvrir nos produits</button>
+  <section class="bg-blue-100 py-12 px-4 text-center">
+    <h2 class="text-3xl font-bold mb-4">Bine ați venit la BFC Marketplace</h2>
+    <p class="text-lg mb-6">O selecție atentă de produse de zi cu zi, livrate cu seriozitate.</p>
+    <button class="bg-blue-900 text-white px-6 py-3 rounded font-semibold hover:bg-blue-800">Descoperă produsele noastre</button>
   </section>
 
-  <section class="section">
-    <h3>Produits en vedette</h3>
-    <div class="products">
-      <div class="product">
-        <h4>Lotion bébé douce</h4>
-        <p>Parfaite pour la peau sensible.</p>
+  <section class="max-w-5xl mx-auto py-8 px-4">
+    <h3 class="text-2xl font-bold mb-6">Produse în evidență</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+        <h4 class="text-xl font-bold mb-2">Loțiune delicată pentru bebeluși</h4>
+        <p class="text-gray-600">Perfectă pentru pielea sensibilă.</p>
       </div>
-      <div class="product">
-        <h4>Crème hydratante visage</h4>
-        <p>Hydratation naturelle pour tous les types de peau.</p>
+      <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+        <h4 class="text-xl font-bold mb-2">Cremă hidratantă pentru față</h4>
+        <p class="text-gray-600">Hidratare naturală pentru toate tipurile de ten.</p>
       </div>
-      <div class="product">
-        <h4>Brosse de bain exfoliante</h4>
-        <p>Un moment spa à la maison.</p>
+      <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+        <h4 class="text-xl font-bold mb-2">Perie de baie exfoliantă</h4>
+        <p class="text-gray-600">Un moment de spa la tine acasă.</p>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <h3>À propos de nous</h3>
-    <p>BFC Marketplace est une jeune entreprise française spécialisée dans la vente en ligne de produits utiles au quotidien. Nous sommes motivés, honnêtes et toujours prêts à apprendre.</p>
+  <section class="max-w-5xl mx-auto py-8 px-4">
+    <h3 class="text-2xl font-bold mb-4">Despre noi</h3>
+    <p class="text-gray-700 leading-relaxed">BFC Marketplace este o companie tânără specializată în vânzarea online de produse utile pentru viața de zi cu zi. Suntem motivați, onesti și mereu gata să învățăm pentru a vă oferi cea mai bună experiență de cumpărături pe Amazon.</p>
   </section>
 
-  <footer>
-    <p>&copy; 2025 BFC Marketplace - Tous droits réservés</p>
-    <p>Contact : contact@bfcmarketplace.fr</p>
+  <footer class="bg-blue-900 text-white p-8 text-center mt-12">
+    <p class="mb-2">&copy; 2025 BFC Marketplace - Toate drepturile rezervate</p>
+    <p>Contact: contact@bfcmarketplace.ro</p>
   </footer>
 </body>
 </html>
