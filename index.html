@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BFC Marketplace | Partenerul tău în eCommerce</title>
+    <title>BFC Marketplace | Votre partenaire eCommerce</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -11,9 +11,49 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        /* Language handling */
+        [data-ro], [data-en] { display: none; }
+        [data-fr] { display: inline; }
+
+        .lang-ro [data-fr], .lang-ro [data-en] { display: none; }
+        .lang-ro [data-ro] { display: inline; }
+
+        .lang-en [data-fr], .lang-en [data-ro] { display: none; }
+        .lang-en [data-en] { display: inline; }
+
+        /* Block elements display */
+        .lang-ro div[data-ro], .lang-ro section[data-ro], .lang-ro h1[data-ro], .lang-ro h2[data-ro], .lang-ro h3[data-ro], .lang-ro p[data-ro] { display: block; }
+        .lang-en div[data-en], .lang-en section[data-en], .lang-en h1[data-en], .lang-en h2[data-en], .lang-en h3[data-en], .lang-en p[data-en] { display: block; }
+        div[data-fr], section[data-fr], h1[data-fr], h2[data-fr], h3[data-fr], p[data-fr] { display: block; }
+
+        .lang-ro .fr-only, .lang-en .fr-only { display: none; }
+        .fr-only { display: block; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .service-card {
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900 transition-colors duration-300">
 
     <!-- Navigation -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
@@ -25,10 +65,33 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#acasa" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Acasă</a>
-                        <a href="#despre" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Despre noi</a>
-                        <a href="#servicii" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Servicii</a>
-                        <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Contact</a>
+                        <a href="#accueil" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                            <span data-fr>Accueil</span><span data-ro>Acasă</span><span data-en>Home</span>
+                        </a>
+                        <a href="#a-propos" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                            <span data-fr>À Propos</span><span data-ro>Despre Noi</span><span data-en>About</span>
+                        </a>
+                        <a href="#services" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                            <span data-fr>Services</span><span data-ro>Servicii</span><span data-en>Services</span>
+                        </a>
+                        <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+                            <span data-fr>Contact</span><span data-ro>Contact</span><span data-en>Contact</span>
+                        </a>
+                        <!-- Language Toggle -->
+                        <div class="relative inline-block text-left ml-4">
+                            <button id="lang-menu-button" class="flex items-center space-x-1 text-gray-600 hover:text-blue-600 border border-gray-300 rounded-md px-3 py-1 text-xs font-bold uppercase transition focus:outline-none">
+                                <i class="fas fa-globe"></i>
+                                <span id="current-lang-label">FR</span>
+                                <i class="fas fa-chevron-down ml-1"></i>
+                            </button>
+                            <div id="lang-dropdown" class="hidden origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                <div class="py-1">
+                                    <button onclick="setLanguage('fr')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">FR</button>
+                                    <button onclick="setLanguage('ro')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">RO</button>
+                                    <button onclick="setLanguage('en')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">EN</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,26 +99,37 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="acasa" class="relative bg-white pt-20 pb-32 overflow-hidden">
+    <section id="accueil" class="relative bg-white pt-20 pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
                 <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
                     <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                        <span class="block">Excelență în</span>
-                        <span class="block text-blue-600">Vânzări Online</span>
+                        <span class="block" data-fr>L'excellence dans la</span>
+                        <span class="block" data-ro>Excelență în</span>
+                        <span class="block" data-en>Excellence in</span>
+
+                        <span class="block text-blue-600" data-fr>Vente en Ligne</span>
+                        <span class="block text-blue-600" data-ro>Vânzări Online</span>
+                        <span class="block text-blue-600" data-en>Online Sales</span>
                     </h1>
-                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                        Oferim soluții profesionale de marketplace și distribuție pentru a aduce cele mai bune produse direct la ușa clienților tăi. Performanță, integritate și viteză.
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl" data-fr>
+                        Nous proposons des solutions professionnelles de marketplace et de distribution pour apporter les meilleurs produits directement à vos clients. Performance, intégrité et rapidité.
+                    </p>
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl" data-ro>
+                        Oferim soluții profesionale de marketplace și distribuție pentru a aduce cele mai bune produse direct clienților tăi. Performanță, integritate și rapiditate.
+                    </p>
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl" data-en>
+                        We offer professional marketplace and distribution solutions to bring the best products directly to your customers. Performance, integrity, and speed.
                     </p>
                     <div class="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
-                        <a href="#despre" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                            Află mai multe
+                        <a href="#a-propos" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                            <span data-fr>En savoir plus</span><span data-ro>Află mai multe</span><span data-en>Learn more</span>
                         </a>
                     </div>
                 </div>
                 <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
                     <div class="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md overflow-hidden">
-                        <img class="w-full" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Echipa la lucru">
+                        <img class="w-full" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Team at work">
                     </div>
                 </div>
             </div>
@@ -63,57 +137,98 @@
     </section>
 
     <!-- Services Section -->
-    <section id="servicii" class="py-20 bg-gray-50">
+    <section id="services" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">De ce să ne alegi pe noi?</h2>
-            <p class="mt-4 text-xl text-gray-500">Valorile noastre ne definesc fiecare succes.</p>
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl" data-fr>Pourquoi nous choisir ?</h2>
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl" data-ro>De ce să ne alegi?</h2>
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl" data-en>Why Choose Us?</h2>
+
+            <p class="mt-4 text-xl text-gray-500" data-fr>Nos valeurs définissent chacun de nos succès.</p>
+            <p class="mt-4 text-xl text-gray-500" data-ro>Valorile noastre definesc fiecare succes al nostru.</p>
+            <p class="mt-4 text-xl text-gray-500" data-en>Our values define each of our successes.</p>
 
             <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
                 <!-- Value 1 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg service-card transition duration-300">
                     <div class="text-blue-600 mb-4">
                         <i class="fas fa-shipping-fast text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Livrare Rapidă</h3>
-                    <p class="text-gray-600">Suntem dedicați eficienței logistice pentru a reduce timpii de așteptare la minim.</p>
+                    <h3 class="text-xl font-bold mb-2" data-fr>Livraison Rapide</h3>
+                    <h3 class="text-xl font-bold mb-2" data-ro>Livrare Rapidă</h3>
+                    <h3 class="text-xl font-bold mb-2" data-en>Fast Delivery</h3>
+
+                    <p class="text-gray-600" data-fr>Nous nous engageons à assurer l'efficacité logistique pour minimiser les délais d'attente.</p>
+                    <p class="text-gray-600" data-ro>Ne angajăm să asigurăm eficiența logistică pentru a minimiza timpii de așteptare.</p>
+                    <p class="text-gray-600" data-en>We are dedicated to logistical efficiency to minimize waiting times.</p>
                 </div>
 
                 <!-- Value 2 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg service-card transition duration-300">
                     <div class="text-blue-600 mb-4">
                         <i class="fas fa-shield-alt text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Încredere Garantată</h3>
-                    <p class="text-gray-600">Transparența și onestitatea sunt la baza fiecărei colaborări pe care o avem.</p>
+                    <h3 class="text-xl font-bold mb-2" data-fr>Confiance Garantie</h3>
+                    <h3 class="text-xl font-bold mb-2" data-ro>Încredere Garantată</h3>
+                    <h3 class="text-xl font-bold mb-2" data-en>Guaranteed Trust</h3>
+
+                    <p class="text-gray-600" data-fr>La transparence et l'honnêteté sont au cœur de chaque collaboration que nous entreprenons.</p>
+                    <p class="text-gray-600" data-ro>Transparența și onestitatea stau la baza fiecărei colaborări pe care o avem.</p>
+                    <p class="text-gray-600" data-en>Transparency and honesty are at the heart of every collaboration we have.</p>
                 </div>
 
                 <!-- Value 3 -->
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg service-card transition duration-300">
                     <div class="text-blue-600 mb-4">
                         <i class="fas fa-chart-line text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Orientare spre Rezultate</h3>
-                    <p class="text-gray-600">Optimizăm constant procesele pentru a oferi cele mai bune prețuri și servicii.</p>
+                    <h3 class="text-xl font-bold mb-2" data-fr>Orientation Résultats</h3>
+                    <h3 class="text-xl font-bold mb-2" data-ro>Orientare spre Rezultate</h3>
+                    <h3 class="text-xl font-bold mb-2" data-en>Results Oriented</h3>
+
+                    <p class="text-gray-600" data-fr>Nous optimisons constamment nos processus pour offrir les meilleurs prix et services.</p>
+                    <p class="text-gray-600" data-ro>Optimizăm constant procesele noastre pentru a oferi cele mai bune prețuri și servicii.</p>
+                    <p class="text-gray-600" data-en>We constantly optimize our processes to offer the best prices and services.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="despre" class="py-20 bg-white">
+    <section id="a-propos" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:flex lg:items-center lg:space-x-12">
                 <div class="lg:w-1/2 mb-12 lg:mb-0">
-                    <img class="rounded-xl shadow-2xl" src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Afaceri online">
+                    <img class="rounded-xl shadow-2xl" src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="Online business">
                 </div>
                 <div class="lg:w-1/2">
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Despre BFC Marketplace</h2>
-                    <p class="text-lg text-gray-600 mb-4">
-                        BFC Marketplace este o companie modernă, agilă și dedicată pieței din România. Ne-am început călătoria cu dorința de a simplifica experiența de cumpărături online, oferind produse de calitate superioară dintr-o varietate de categorii: de la îngrijire personală la articole pentru casă.
-                    </p>
-                    <p class="text-lg text-gray-600">
-                        Echipa noastră este formată din profesioniști pasionați, mereu gata să învețe și să se adapteze într-un mediu digital în continuă schimbare. Credem în parteneriate pe termen lung și în valoarea pe care o aducem fiecărui client.
-                    </p>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6" data-fr>À Propos de BFC Marketplace</h2>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6" data-ro>Despre BFC Marketplace</h2>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6" data-en>About BFC Marketplace</h2>
+
+                    <div data-fr>
+                        <p class="text-lg text-gray-600 mb-4">
+                            BFC Marketplace est une entreprise française moderne, agile et dédiée au marché. Nous avons commencé notre voyage avec le désir de simplifier l'expérience d'achat en ligne, en proposant des produits de haute qualité dans une variété de catégories : des soins personnels aux articles ménagers.
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            Notre équipe est composée de professionnels passionnés, toujours prêts à apprendre et à s'adapter dans un environnement numérique en constante évolution. Nous croyons aux partenariats à long terme et à la valeur que nous apportons à chaque client.
+                        </p>
+                    </div>
+                    <div data-ro>
+                        <p class="text-lg text-gray-600 mb-4">
+                            BFC Marketplace este o companie modernă, agilă și dedicată pieței. Ne-am început călătoria cu dorința de a simplifica experiența de cumpărături online, oferind produse de înaltă calitate într-o varietate de categorii: de la îngrijire personală la articole de uz casnic.
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            Echipa noastră este formată din profesioniști pasionați, mereu gata să învețe și să se adapteze într-un mediu digital în continuă evoluție. Credem în parteneriate pe termen lung și în valoarea pe care o aducem fiecărui client.
+                        </p>
+                    </div>
+                    <div data-en>
+                        <p class="text-lg text-gray-600 mb-4">
+                            BFC Marketplace is a modern, agile company dedicated to the market. We began our journey with the desire to simplify the online shopping experience, offering high-quality products across a variety of categories: from personal care to household items.
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            Our team consists of passionate professionals, always ready to learn and adapt in a constantly changing digital environment. We believe in long-term partnerships and the value we bring to each client.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,44 +238,62 @@
     <section id="contact" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold text-gray-900">Contactează-ne</h2>
-                <p class="mt-4 text-xl text-gray-500">Suntem aici să răspundem întrebărilor tale.</p>
+                <h2 class="text-3xl font-extrabold text-gray-900" data-fr>Contactez-nous</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900" data-ro>Contactează-ne</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900" data-en>Contact Us</h2>
+
+                <p class="mt-4 text-xl text-gray-500" data-fr>Nous sommes ici pour répondre à vos questions.</p>
+                <p class="mt-4 text-xl text-gray-500" data-ro>Suntem aici pentru a răspunde întrebărilor tale.</p>
+                <p class="mt-4 text-xl text-gray-500" data-en>We are here to answer your questions.</p>
             </div>
 
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-4xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="p-10 bg-blue-600 text-white">
-                        <h3 class="text-2xl font-bold mb-6">Informații de contact</h3>
+                        <h3 class="text-2xl font-bold mb-6" data-fr>Informations de Contact</h3>
+                        <h3 class="text-2xl font-bold mb-6" data-ro>Informații de Contact</h3>
+                        <h3 class="text-2xl font-bold mb-6" data-en>Contact Information</h3>
+
                         <div class="space-y-6">
                             <div class="flex items-center">
                                 <i class="fas fa-envelope mr-4"></i>
-                                <span>contact@bfcmarketplace.ro</span>
+                                <span>contact@bfcmarketplace.fr</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-phone mr-4"></i>
-                                <span>+40 700 000 000</span>
+                                <span>+33 1 00 00 00 00</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-map-marker-alt mr-4"></i>
-                                <span>București, România</span>
+                                <span data-fr>Paris, France</span>
+                                <span data-ro>București, România</span>
+                                <span data-en>London, UK</span>
                             </div>
                         </div>
                     </div>
                     <div class="p-10">
                         <form action="#" class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nume complet</label>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    <span data-fr>Nom Complet</span><span data-ro>Nume Complet</span><span data-en>Full Name</span>
+                                </label>
                                 <input type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    <span data-fr>Email</span><span data-ro>Email</span><span data-en>Email</span>
+                                </label>
                                 <input type="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Mesaj</label>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    <span data-fr>Message</span><span data-ro>Mesaj</span><span data-en>Message</span>
+                                </label>
                                 <textarea rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border"></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-bold">Trimite Mesajul</button>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-bold">
+                                <span data-fr>Envoyer le Message</span><span data-ro>Trimite Mesajul</span><span data-en>Send Message</span>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -175,14 +308,55 @@
                 <span class="text-2xl font-bold text-blue-400">BFC</span>
                 <span class="text-2xl font-light ml-1">Marketplace</span>
             </div>
-            <p class="text-gray-400 mb-8">&copy; 2025 BFC Marketplace. Toate drepturile rezervate.</p>
+            <p class="text-gray-400 mb-8">
+                <span data-fr>&copy; 2025 BFC Marketplace. Tous droits réservés.</span>
+                <span data-ro>&copy; 2025 BFC Marketplace. Toate drepturile rezervate.</span>
+                <span data-en>&copy; 2025 BFC Marketplace. All rights reserved.</span>
+            </p>
             <div class="flex justify-center space-x-6">
-                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
     </footer>
 
+    <script>
+        const langMenuButton = document.getElementById('lang-menu-button');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const currentLangLabel = document.getElementById('current-lang-label');
+        const html = document.documentElement;
+
+        const pageTitles = {
+            fr: "BFC Marketplace | Votre partenaire eCommerce",
+            ro: "BFC Marketplace | Partenerul tău în eCommerce",
+            en: "BFC Marketplace | Your eCommerce Partner"
+        };
+
+        langMenuButton.addEventListener('click', () => {
+            langDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!langMenuButton.contains(e.target) && !langDropdown.contains(e.target)) {
+                langDropdown.classList.add('hidden');
+            }
+        });
+
+        function setLanguage(lang) {
+            // Remove previous classes
+            document.body.classList.remove('lang-ro', 'lang-en');
+
+            if (lang !== 'fr') {
+                document.body.classList.add('lang-' + lang);
+            }
+
+            html.setAttribute('lang', lang);
+            document.title = pageTitles[lang];
+            currentLangLabel.textContent = lang.toUpperCase();
+            langDropdown.classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
