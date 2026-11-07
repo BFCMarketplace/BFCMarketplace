@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fafafa; --foreground: #111113; --surface: #ffffff;
+  --border: #e4e4e7; --muted: #71717a; --accent: #4f46e5; --accent-fg: #ffffff;
+  --danger: #dc2626; --success: #16a34a; --warn: #d97706;
+}
+:root[data-theme="dark"] {
+  --background: #0a0a0b; --foreground: #ededef; --surface: #111113;
+  --border: #26262b; --muted: #8b8b94; --accent: #818cf8; --accent-fg: #0a0a0b;
+  --danger: #f87171; --success: #4ade80; --warn: #fbbf24;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0a0a0b; --foreground: #ededef; --surface: #111113;
+    --border: #26262b; --muted: #8b8b94; --accent: #818cf8; --accent-fg: #0a0a0b;
+    --danger: #f87171; --success: #4ade80; --warn: #fbbf24;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground);
+  --color-surface: var(--surface); --color-border: var(--border); --color-muted: var(--muted);
+  --color-accent: var(--accent); --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger); --color-success: var(--success); --color-warn: var(--warn);
+  --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono);
+}
+
+body { background: var(--background); color: var(--foreground); font-family: var(--font-geist-sans), system-ui, sans-serif; }
+
+@layer components {
+  .card { @apply rounded-xl border border-border bg-surface p-5; }
+  .input { @apply w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-accent; }
+  .btn-primary { @apply rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-50; }
+  .btn-ghost { @apply rounded-lg border border-border px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/5; }
+  .btn-danger { @apply rounded-lg border border-danger/40 px-3 py-2 text-sm text-danger hover:bg-danger/10; }
+  code { @apply rounded bg-black/5 px-1 py-0.5 font-mono text-xs dark:bg-white/10; }
+}
