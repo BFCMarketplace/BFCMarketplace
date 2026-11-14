@@ -1,0 +1,125 @@
+# Single source of truth for the deepdive workflow phases.
+# Counts and phase lists in README/SKILL/docs are stamped FROM this file by
+# scripts/stamp_docs.py. Edit phases here, then: python scripts/stamp_docs.py --write
+#
+# depth_gate = the MINIMUM depth at which the phase is mandatory.
+#   shallow -> always mandatory.  medium -> mandatory for medium+deep.
+#   deep    -> mandatory only for deep.
+# model/effort = the MAIN-THREAD model. Phase 4/5 sub-agents use per-task routing.
+phases:
+  - id: "1"
+    name_ru: "Reframing"
+    name_en: "Reframing"
+    model: opus
+    effort: high
+    depth_gate: shallow
+  - id: "2"
+    name_ru: "Genre & block selection"
+    name_en: "Genre & block selection"
+    model: sonnet
+    effort: medium
+    depth_gate: shallow
+  - id: "3"
+    name_ru: "Plan"
+    name_en: "Plan"
+    model: opus
+    effort: medium
+    depth_gate: shallow
+  - id: "3.5"
+    name_ru: "Capability Discovery"
+    name_en: "Capability Discovery"
+    model: sonnet
+    effort: low
+    depth_gate: medium
+  # Phase 3.7 is the plan-review GATE: a single human-in-the-loop checkpoint
+  # before the expensive Search phase. It bundles reframing + hypotheses +
+  # genre + mode + channels into one compact block for the user to approve or
+  # edit. Blocking strength scales with depth (deep -> wait for explicit OK;
+  # medium -> soft pause; shallow -> skip). See references/plan_gate.md.
+  - id: "3.7"
+    name_ru: "Plan-review gate"
+    name_en: "Plan-review gate"
+    model: sonnet
+    effort: low
+    depth_gate: medium
+  # Phase 4 is an orchestrator-driven LOOP (round -> Opus eval -> optional
+  # bounded deviation round). The per-round search fan-out is sonnet/medium;
+  # the between-rounds evaluation runs at the strong tier. This is ONE phase
+  # whose internal behavior is a loop — no new phase id is introduced, so the
+  # phase count is unchanged. See references/phases/p4_search.md for the loop.
+  - id: "4"
+    name_ru: "Поиск"
+    name_en: "Search"
+    model: sonnet
+    effort: medium
+    depth_gate: shallow
+    loop: "true"
+  # Phase 5 includes a gap-wave LOOP after the first claims.csv pass: rows
+  # with status != triangulated get one targeted deepdive-fetcher (haiku/medium) each,
+  # max 2 rounds, else marked data-insufficient. Same convention as Phase 4 —
+  # no new phase id for the loop, see references/phases/p5_claims.md.
+  - id: "5"
+    name_ru: "Claims-ledger + триангуляция"
+    name_en: "Claims-ledger + triangulation"
+    model: haiku
+    effort: low
+    depth_gate: shallow
+    loop: "true"
+  # Phase 5.5 is the relevance-FILTER on the INPUT to synthesis (symmetric to
+  # 6.5, which verifies the OUTPUT). A CRAG-style evaluator classifies each
+  # (claim, source) pair keep/drop and extracts relevant-only quotes into a
+  # separate evidence/ layer — sources/NN.md stays untouched (archive/reuse).
+  # Naive "dump everything" hurts synthesis (Search-o1 33%->24%). Not a loop,
+  # so it gets its own id. See references/evidence_filter.md.
+  - id: "5.5"
+    name_ru: "Evidence-фильтр"
+    name_en: "Evidence filter"
+    model: sonnet
+    effort: low
+    depth_gate: medium
+  # Phase 5.7 confronts this run's claims with the cross-run wiki BEFORE synthesis, not
+  # after: a disagreement with an earlier research is something the report has to carry,
+  # and noticing it in Phase 7 would be noticing it too late to write about. Everything
+  # that needs no judgement — a merely newer figure, a unit mismatch, a different scope —
+  # is decided mechanically by wiki_pair.py, so only what survives that costs a model
+  # call and the expensive failure (a manufactured contradiction) has no path to the
+  # report. The wiki itself is written later, in finish-up, at every depth.
+  # See references/wiki.md.
+  - id: "5.7"
+    name_ru: "Сверка с вики"
+    name_en: "Wiki reconcile"
+    model: sonnet
+    effort: low
+    depth_gate: medium
+  - id: "6"
+    name_ru: "Синтез + multi-angle red team"
+    name_en: "Synthesis + multi-angle red team"
+    model: sonnet
+    model_deep: opus
+    effort: high
+    depth_gate: shallow
+  - id: "6.5"
+    name_ru: "Verify"
+    name_en: "Verify"
+    model: haiku
+    effort: low
+    depth_gate: medium
+  - id: "7"
+    name_ru: "Refresh targets"
+    name_en: "Refresh targets"
+    model: sonnet
+    effort: medium
+    depth_gate: medium
+  # Phase 8 is the Decision walkthrough: the report is not "discussed", it is
+  # EXECUTED — the agent walks the user through the Decision Spec forks one by one
+  # ("research shows X [s03][s11] — does fork A fire? your call?"). Mandatory at
+  # every depth (a research whose result changes nothing is the skill's primary
+  # failure mode); shallow runs a trimmed 1-fork version. Artifact: application.md
+  # (any status, incl. deferred — the gate requires the file, not a made decision).
+  # See references/decision_walkthrough.md.
+  - id: "8"
+    name_ru: "Decision walkthrough"
+    name_en: "Decision walkthrough"
+    model: opus
+    effort: high
+    depth_gate: shallow

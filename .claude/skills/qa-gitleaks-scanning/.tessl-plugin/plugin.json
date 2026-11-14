@@ -1,0 +1,9 @@
+{
+  "name": "testland/gitleaks-scanning",
+  "description": "Use when a team needs open-source secret scanning on commits and in CI, or is adopting it on a repo with existing leaks: gitleaks git, dir and stdin scans, custom rules and allowlists in .gitleaks.toml, pre-commit and GitHub Action setup, baselines, and TruffleHog live verification.",
+  "private": false,
+  "skills": [
+    "."
+  ],
+  "version": "1.2.16"
+}

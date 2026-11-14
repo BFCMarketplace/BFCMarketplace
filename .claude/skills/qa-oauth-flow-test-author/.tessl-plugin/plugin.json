@@ -1,0 +1,9 @@
+{
+  "name": "testland/oauth-flow-test-author",
+  "description": "Use whenever an OAuth 2.0 or OpenID Connect client or resource server needs tests, whatever the identity provider: auth code with PKCE, client credentials, refresh-token rotation and reuse detection, state and nonce checks, scopes and strict redirect-URI matching, per the RFCs.",
+  "private": false,
+  "skills": [
+    "."
+  ],
+  "version": "1.2.15"
+}

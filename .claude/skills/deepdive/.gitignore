@@ -1,0 +1,49 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Claude Code — рабочие заметки/сессии (не для публичного репо)
+.claude/
+
+# Python (если кто-то добавит scripts)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ruff_cache/
+
+# Node (если будет упаковщик)
+node_modules/
+package-lock.json
+
+# Build artifacts
+*.skill
+*.zip
+dist/
+build/
+
+# Test outputs
+research/
+*.tmp
+*.bak
+
+# Script outputs (committed only via GitHub Actions to reports/ branch)
+scripts/output/
+
+# Eval run artifacts (scorecards, judge inputs — regenerated per run)
+eval/output/*
+!eval/output/.gitkeep
+
+# Secrets (на всякий)
+.env
+.env.local
+*.key
+
+# Browser-automation artifacts (Playwright MCP screenshots/snapshots — per-session)
+.playwright-mcp/
+site-*.png

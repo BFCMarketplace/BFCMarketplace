@@ -1,0 +1,9 @@
+{
+  "name": "testland/playwright-testing",
+  "description": "Use for any question or task about Playwright tests, including quick how-to questions, one login or form test, and one flaky pasted test: role-based locators, web-first assertions instead of waitForTimeout, page objects, config and browser projects, traces, sharding a slow suite in CI. Has the anti-pattern table for flaky Playwright tests.",
+  "private": false,
+  "skills": [
+    "."
+  ],
+  "version": "1.9.10"
+}

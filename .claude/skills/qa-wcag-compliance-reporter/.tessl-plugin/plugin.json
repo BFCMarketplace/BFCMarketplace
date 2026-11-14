@@ -1,0 +1,9 @@
+{
+  "name": "testland/wcag-compliance-reporter",
+  "description": "Use after an accessibility scan across many pages (pa11y-ci, axe over a sitemap, Lighthouse batch) when the team needs a shareable conformance report. Groups violations by WCAG 2.2 success criterion and level, flags pages that were not scanned and writes a summary plus per-page detail.",
+  "private": false,
+  "skills": [
+    "."
+  ],
+  "version": "1.3.10"
+}
