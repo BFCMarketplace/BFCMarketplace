@@ -209,6 +209,7 @@ dialog::backdrop{background:rgba(10,12,25,.55)}
     <button type="button" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span data-i18n="nav_dashboard">Panou</span></button>
     <button type="button" data-view="subs"><i data-lucide="list"></i><span data-i18n="nav_subs">Abonamente</span></button>
     <button type="button" data-view="library"><i data-lucide="library"></i><span data-i18n="nav_library">Bibliotecă</span></button>
+    <button type="button" data-view="detect"><i data-lucide="scan-search"></i><span data-i18n="nav_detect">Din extras</span></button>
     <button type="button" data-view="savings"><i data-lucide="piggy-bank"></i><span data-i18n="nav_savings">Economii</span></button>
     <button type="button" data-view="settings"><i data-lucide="settings"></i><span data-i18n="nav_settings">Setări</span></button>
   </nav>
@@ -281,6 +282,25 @@ dialog::backdrop{background:rgba(10,12,25,.55)}
     </div>
     <div class="notice info" style="margin:0 0 18px"><i data-lucide="info"></i><span data-i18n="price_disclaimer">Prețurile din bibliotecă sunt doar orientative (planuri și tarife se schimbă). Verifică prețul real pe site-ul furnizorului și editează-l înainte de salvare.</span></div>
     <div id="libraryBody"></div>
+  </section>
+
+  <!-- DETECT -->
+  <section class="view" id="view-detect" aria-labelledby="h-detect" hidden>
+    <div class="view-head">
+      <div><h1 id="h-detect" data-i18n="det_title">Din extras de cont</h1><p data-i18n="det_sub">Încarcă un extras (3–6 luni) și găsesc plățile care se repetă.</p></div>
+    </div>
+    <div class="notice info" style="margin:0 0 14px"><i data-lucide="shield-check"></i><span data-i18n="det_privacy">Extrasul este citit doar în browserul tău.</span></div>
+    <div class="card mb">
+      <div class="btns"><button type="button" class="btn primary" id="detPick"><i data-lucide="file-up"></i><span data-i18n="det_pick">Alege extras (CSV)</span></button><span class="hint" id="detFileName"></span></div>
+      <input type="file" id="detFile" accept=".csv,.tsv,.txt,text/csv,text/plain" hidden>
+      <p class="hint" style="margin-bottom:0" data-i18n="det_hint">Exportă extrasul ca CSV.</p>
+    </div>
+    <div class="card mb" id="detMapCard" hidden>
+      <h2><i data-lucide="columns"></i><span data-i18n="det_map">Coloane detectate</span></h2>
+      <div class="rates" id="detMapGrid"></div>
+      <div class="btns" style="margin-top:12px"><button type="button" class="btn" id="detRun"><i data-lucide="refresh-cw"></i><span data-i18n="det_run">Reanalizează</span></button></div>
+    </div>
+    <div id="detResult" aria-live="polite"></div>
   </section>
 
   <!-- SAVINGS -->
@@ -434,7 +454,16 @@ const I18N = {
     e_start_req:'Alege data începerii.', e_start_inv:'Dată invalidă.', e_next_inv:'Dată invalidă.', e_next_before:'Trebuie să fie în ziua începerii sau după.', e_rate:'Introdu un număr mai mare decât 0.', e_budget:'Introdu un număr valid (0 = fără buget).',
     del_title:'Ștergi abonamentul?', del_msg:'„{name}” va fi șters definitiv. Poți dezactiva abonamentul în loc să îl ștergi.',
     csv_name:'Nume', csv_cat:'Categorie', csv_price:'Preț', csv_cur:'Monedă', csv_freq:'Frecvență', csv_start:'Data începerii', csv_next:'Următoarea plată', csv_active:'Activ', csv_monthly:'Echivalent lunar ({cur})', csv_annual:'Echivalent anual ({cur})', yes:'Da', no:'Nu',
-    exported:'Export finalizat.'
+    exported:'Export finalizat.',
+    nav_detect:'Din extras', det_title:'Din extras de cont', det_sub:'Încarcă un extras (3–6 luni) și găsesc plățile care se repetă.',
+    det_privacy:'Extrasul este citit doar în browserul tău: nu este trimis nicăieri și nu este salvat. Se păstrează doar abonamentele pe care le adaugi.',
+    det_pick:'Alege extras (CSV)', det_hint:'Exportă extrasul din internet banking ca CSV (sau TXT delimitat). PDF-urile nu sunt suportate. Abonamentele anuale nu pot fi detectate dintr-un extras scurt.',
+    det_map:'Coloane detectate (corectează dacă e nevoie)', col_date:'Data', col_desc:'Descriere', col_amount:'Sumă (cu semn)', col_debit:'Debit / retragere', col_credit:'Credit', col_cur:'Monedă', col_none:'— niciuna —', col_n:'Coloana {n}',
+    det_fmt:'Format dată', det_fmt_dmy:'zi/lună/an', det_fmt_mdy:'lună/zi/an', det_defcur:'Moneda extrasului (dacă lipsește coloana)', det_sign:'Cheltuielile apar ca', det_sign_auto:'Automat', det_sign_neg:'valori negative', det_sign_pos:'valori pozitive', det_run:'Reanalizează',
+    det_err_read:'Nu am putut citi fișierul.', det_err_cols:'Nu am identificat coloanele de dată și sumă. Alege-le manual mai sus.', det_err_none:'Nu am găsit cheltuieli valide în fișier. Verifică coloanele și formatul datei.',
+    det_summary:'Am analizat {n} cheltuieli, {from} – {to} ({m} luni). Plăți recurente găsite: {k}.', det_short:'Extrasul acoperă doar {m} luni. Pentru rezultate mai sigure încarcă 3–6 luni.',
+    det_none_found:'Nu am găsit plăți recurente lunare sau săptămânale.', det_seen:'{n} plăți în {m} din {M} luni', det_variable:'sumă variabilă', det_known:'instrument AI', det_exists:'deja în listă', det_sure:'sigur', det_maybe:'probabil',
+    det_add:'Adaugă {n} selectate', det_added:'{n} abonamente adăugate din extras.', det_skipped_dup:'{n} ignorate (nume duplicat).', det_last:'ultima plată {d}', det_name:'Nume', det_note:'Instrumentele AI cunoscute sunt bifate. Verifică și bifează manual restul.'
   },
   en: {}, // de completat
   fr: {}  // à compléter
@@ -641,7 +670,7 @@ function showView(v){
 
 /* ============ RENDER ============ */
 function renderAll(){
-  renderDashboard(); renderSubs(); renderLibrary(); renderSim(); renderSettings();
+  renderDashboard(); renderSubs(); renderLibrary(); renderSim(); renderSettings(); if (det && det.result) renderDetect();
   icons();
   if (currentView === 'dashboard') renderCharts();
 }
@@ -942,6 +971,221 @@ function applyTheme(){
 }
 function syncCurrencySelect(){ $('#mainCurrency').value = state.settings.currency; }
 
+
+/* ============ DETECTARE DIN EXTRAS DE CONT ============ */
+const AI_MATCH = [
+  ['chatgpt',/chatgpt|openai/],['claude',/anthropic|claude/],['gemini',/gemini|google one|google ai/],['perplexity',/perplexity/],
+  ['midjourney',/midjourney/],['canva',/canva/],['runway',/runway/],['elevenlabs',/eleven ?labs/],['cursor',/cursor|anysphere/],
+  ['copilot',/github|copilot/],['notionai',/notion/],['suno',/\bsuno\b/],['ideogram',/ideogram/],['leonardo',/leonardo/]
+];
+function parseDelimited(text){
+  text = String(text).replace(/^﻿/,'');
+  const sample = text.split(/\r\n|\n|\r/).filter(l => l.trim()).slice(0,30);
+  let delim = ',', best = -1;
+  for (const d of [';','\t',',','|']){ const sc = sample.filter(l => l.split(d).length-1 >= 2).length; if (sc > best){ best = sc; delim = d; } }
+  const rows = []; let row = [], cell = '', q = false;
+  const endRow = () => { row.push(cell); cell = ''; if (row.some(c => c.trim() !== '')) rows.push(row); row = []; };
+  for (let i = 0; i < text.length && rows.length < 20000; i++){
+    const ch = text[i];
+    if (q){ if (ch === '"'){ if (text[i+1] === '"'){ cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === delim){ row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r'){ if (ch === '\r' && text[i+1] === '\n') i++; endRow(); }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) endRow();
+  return rows.map(r => r.map(c => c.trim()));
+}
+function parseStmtDate(s, fmt){
+  s = String(s == null ? '' : s).trim(); let m, iso;
+  if ((m = s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})(?!\d)/))) iso = m[1]+'-'+pad(+m[2])+'-'+pad(+m[3]);
+  else if ((m = s.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4}|\d{2})(?!\d)/))){
+    const a = +m[1], b = +m[2], y = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+    iso = y+'-'+pad(fmt === 'mdy' ? a : b)+'-'+pad(fmt === 'mdy' ? b : a);
+  } else return '';
+  return isISO(iso) ? iso : '';
+}
+function parseStmtAmount(s){
+  let x = String(s == null ? '' : s).trim(); if (!x) return NaN;
+  let neg = false;
+  if (/^\(.*\)$/.test(x)){ neg = true; x = x.slice(1,-1); }
+  if (/^[-−–]/.test(x) || /[-−–]\s*$/.test(x)) neg = true;
+  x = x.replace(/[^\d.,]/g,''); if (!/\d/.test(x)) return NaN;
+  const lc = x.lastIndexOf(','), ld = x.lastIndexOf('.');
+  if (lc >= 0 && ld >= 0) x = lc > ld ? x.replace(/\./g,'').replace(',','.') : x.replace(/,/g,'');
+  else if (lc >= 0) x = (/,\d{1,2}$/.test(x) && x.split(',').length === 2) ? x.replace(',','.') : x.replace(/,/g,'');
+  else if (ld >= 0 && x.split('.').length > 2) x = x.replace(/\./g,'');
+  const n = Number(x); return Number.isFinite(n) ? (neg ? -n : n) : NaN;
+}
+function autoMap(rows, fmt){
+  fmt = fmt || 'dmy';
+  let ds = -1;
+  for (let i = 0; i < Math.min(rows.length, 30); i++){
+    if (rows[i].length >= 3 && rows[i].some(c => parseStmtDate(c, fmt))){ ds = i; break; }
+  }
+  if (ds < 0) return null;
+  const data = rows.slice(ds, ds+300), n = Math.max(...data.map(r => r.length));
+  const hdr = (ds > 0 && rows[ds-1].length >= 2 && !rows[ds-1].some(c => parseStmtDate(c, fmt))) ? rows[ds-1] : null;
+  const labels = Array.from({length:n}, (_,c) => (hdr && hdr[c]) ? hdr[c] : t('col_n',{n:c+1}));
+  const dateSc = [], numSc = [], lenSc = [];
+  for (let c = 0; c < n; c++){
+    let d = 0, nu = 0, len = 0, tx = 0;
+    for (const r of data){ const v = r[c] || ''; if (parseStmtDate(v, fmt)) d++; else if (Number.isFinite(parseStmtAmount(v)) && /^[\s\d.,()+\-−–A-Za-z€$£]{1,20}$/.test(v) && /\d/.test(v) && !/[A-Za-z]{4,}/.test(v)) nu++; else { len += v.length; tx++; } }
+    dateSc[c] = d; numSc[c] = nu; lenSc[c] = tx ? len/tx : 0;
+  }
+  const find = (re, ok) => { if (!hdr) return -1; for (let c = 0; c < n; c++) if (re.test(hdr[c]||'') && ok(c)) return c; return -1; };
+  const argmax = (arr, ok) => { let b = -1, bv = 0; arr.forEach((v,c) => { if (ok(c) && v > bv){ bv = v; b = c; } }); return b; };
+  let date = find(/^(data|date)|booking|tranzac|posting/i, c => dateSc[c] > 0); if (date < 0) date = argmax(dateSc, () => true);
+  const debit = find(/debit|retrag|plat[ăai]|withdraw|money out|paid out|cheltuieli/i, c => c !== date && numSc[c] > 0);
+  const credit = find(/credit|incas|încas|deposit|money in|paid in/i, c => c !== date && c !== debit && numSc[c] > 0);
+  let amount = -1;
+  if (debit < 0 && credit < 0){
+    amount = find(/suma|sumă|amount|valoare|value|\bsum\b/i, c => c !== date && numSc[c] > 0 && !/sold|balance|rest/i.test(hdr[c]));
+    if (amount < 0) amount = argmax(numSc, c => c !== date && !(hdr && /sold|balance|rest/i.test(hdr[c]||'')));
+  }
+  let cur = find(/valut|currency|moneda|ccy/i, c => c !== date);
+  let desc = find(/descr|detal|benefic|merchant|payee|explic|narr|nume|name|referin|title|counterpart|partener/i, c => ![date,amount,debit,credit,cur].includes(c));
+  if (desc < 0) desc = argmax(lenSc, c => ![date,amount,debit,credit,cur].includes(c));
+  return {dataStart:ds, labels, map:{date, desc, amount, debit, credit, cur}};
+}
+function merchantKey(desc){
+  let s = String(desc).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  s = s.replace(/\b\d{1,2}[./-]\d{1,2}([./-]\d{2,4})?\b/g,' ').replace(/[^a-z0-9 ]+/g,' ');
+  s = s.replace(/\b(card|pos|plata|payment|payments|purchase|debit|achizitie|tranzactie|transaction|online|www|http|https|com|ro|eu|ltd|srl|sa|inc|llc|ref|nr|visa|mastercard|recurring|subscription|abonament|la|de|cu|pe|paypal|stripe|sq)\b/g,' ');
+  s = s.replace(/\b\w*\d\w*\b/g,' ');
+  return s.split(/\s+/).filter(w => w.length > 1).slice(0,2).join(' ');
+}
+function median(a){ const b = a.slice().sort((x,y) => x-y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m-1]+b[m])/2; }
+function analyzeStatement(rows, info, opts){
+  opts = opts || {}; const fmt = opts.fmt || 'dmy', defCur = opts.defCur || state.settings.currency, today = opts.today || todayISO();
+  const m = info.map;
+  if (m.date < 0 || (m.amount < 0 && m.debit < 0 && m.credit < 0)) return {error:'cols'};
+  const raw = [];
+  for (const r of rows.slice(info.dataStart)){
+    const date = parseStmtDate(r[m.date], fmt); if (!date) continue;
+    const desc = (m.desc >= 0 ? r[m.desc] : '') || ''; if (!desc.trim()) continue;
+    let cur = defCur;
+    if (m.cur >= 0){ const c = String(r[m.cur]||'').trim().toUpperCase(); if (CURRENCIES.includes(c)) cur = c; }
+    let signed = NaN, exp = NaN;
+    if (m.amount >= 0) signed = parseStmtAmount(r[m.amount]);
+    else if (m.debit >= 0){ const d = parseStmtAmount(r[m.debit]); if (Number.isFinite(d) && d !== 0) exp = Math.abs(d); else continue; }
+    else continue;
+    raw.push({date, desc:desc.trim(), cur, signed, exp});
+  }
+  if (m.amount >= 0){
+    const mode = opts.sign && opts.sign !== 'auto' ? opts.sign : (raw.some(x => x.signed < 0) ? 'neg' : 'pos');
+    for (const x of raw) x.exp = Number.isFinite(x.signed) && x.signed !== 0 && (mode === 'neg' ? x.signed < 0 : x.signed > 0) ? Math.abs(x.signed) : NaN;
+  }
+  const txs = raw.filter(x => Number.isFinite(x.exp) && x.exp > 0 && x.exp <= MAX_PRICE);
+  if (!txs.length) return {error:'none'};
+  const dates = txs.map(x => x.date).sort(), from = dates[0], to = dates[dates.length-1];
+  const months = (Number(to.slice(0,4))*12+Number(to.slice(5,7))) - (Number(from.slice(0,4))*12+Number(from.slice(5,7))) + 1;
+  const groups = new Map();
+  for (const x of txs){
+    const low = x.desc.toLowerCase(); const hit = AI_MATCH.find(([,re]) => re.test(low));
+    const key = hit ? hit[0] : merchantKey(x.desc); if (!key) continue;
+    const gk = key+'|'+x.cur; if (!groups.has(gk)) groups.set(gk, {key, toolId:hit ? hit[0] : null, cur:x.cur, items:[]});
+    groups.get(gk).items.push(x);
+  }
+  const cands = [];
+  for (const g of groups.values()){
+    const it = g.items.slice().sort((a,b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+    if (it.length < 2) continue;
+    const gaps = it.slice(1).map((x,i) => dayNum(x.date)-dayNum(it[i].date));
+    const mg = median(gaps), monthsSeen = new Set(it.map(x => x.date.slice(0,7))).size;
+    let freq = null;
+    if (it.length >= 3 && mg >= 5 && mg <= 9) freq = 'weekly';
+    else if (mg >= 24 && mg <= 38 && monthsSeen >= 2) freq = 'monthly';
+    if (!freq) continue;
+    const amts = it.map(x => x.exp), md = median(amts), stable = (Math.max(...amts)-Math.min(...amts)) / md <= 0.2;
+    const lib = g.toolId ? LIBRARY.find(l => l.id === g.toolId) : null;
+    const last = it[it.length-1];
+    const name = lib ? lib.name : g.key.replace(/\b\w/g, c => c.toUpperCase()).slice(0,60);
+    const next = freq === 'weekly' ? nextOccurrence(addDays(last.date,7),'weekly',today) : nextOccurrence(addMonths(last.date,1),'monthly',today);
+    cands.push({key:g.key+'|'+g.cur, name, toolId:lib ? lib.id : null, category:lib ? lib.category : 'other', price:round2(stable ? last.exp : md), currency:g.cur, freq,
+      count:it.length, monthsSeen, first:it[0].date, last:last.date, next, stable, checked:!!lib && stable});
+  }
+  cands.sort((a,b) => (!!b.toolId - !!a.toolId) || (b.stable - a.stable) || (monthlyOf(b.price,b.freq) - monthlyOf(a.price,a.freq)));
+  return {candidates:cands, stats:{count:txs.length, from, to, months}};
+}
+function candExists(c){
+  const n = c.name.trim().toLowerCase();
+  return state.subs.some(s => (c.toolId && s.toolId === c.toolId) || s.name.toLowerCase() === n);
+}
+let det = null; // {rows, info, fmt, defCur, sign, result}
+function detOptions(){ return {fmt:$('#detDateFmt') ? $('#detDateFmt').value : 'dmy', defCur:$('#detDefCur') ? $('#detDefCur').value : state.settings.currency, sign:$('#detSign') ? $('#detSign').value : 'auto'}; }
+function renderDetMap(){
+  const cols = det.info.labels, m = det.info.map;
+  const opt = (sel) => `<option value="-1">${esc(t('col_none'))}</option>` + cols.map((l,i) => `<option value="${i}" ${sel===i?'selected':''}>${esc(l.slice(0,40))}</option>`).join('');
+  const f = (id, key, lbl) => `<label class="field" for="detCol-${id}"><span class="lbl">${esc(t(lbl))}</span><select id="detCol-${id}">${opt(m[key])}</select></label>`;
+  $('#detMapGrid').innerHTML = f('date','date','col_date') + f('desc','desc','col_desc') + f('amount','amount','col_amount') + f('debit','debit','col_debit') + f('credit','credit','col_credit') + f('cur','cur','col_cur') +
+    `<label class="field" for="detDateFmt"><span class="lbl">${esc(t('det_fmt'))}</span><select id="detDateFmt"><option value="dmy" ${det.fmt==='dmy'?'selected':''}>${esc(t('det_fmt_dmy'))}</option><option value="mdy" ${det.fmt==='mdy'?'selected':''}>${esc(t('det_fmt_mdy'))}</option></select></label>` +
+    `<label class="field" for="detDefCur"><span class="lbl">${esc(t('det_defcur'))}</span><select id="detDefCur">${CURRENCIES.map(c => `<option ${c===det.defCur?'selected':''}>${c}</option>`).join('')}</select></label>` +
+    `<label class="field" for="detSign"><span class="lbl">${esc(t('det_sign'))}</span><select id="detSign">${[['auto','det_sign_auto'],['neg','det_sign_neg'],['pos','det_sign_pos']].map(([v,k]) => `<option value="${v}" ${det.sign===v?'selected':''}>${esc(t(k))}</option>`).join('')}</select></label>`;
+  $('#detMapCard').hidden = false;
+}
+function runDetect(){
+  if (!det) return;
+  const o = detOptions(); det.fmt = o.fmt; det.defCur = o.defCur; det.sign = o.sign;
+  for (const k of ['date','desc','amount','debit','credit','cur']){ const el = $('#detCol-'+k); if (el) det.info.map[k] = Number(el.value); }
+  det.result = analyzeStatement(det.rows, det.info, o);
+  renderDetect(); icons();
+}
+function renderDetect(){
+  const box = $('#detResult');
+  if (!det || !det.result){ box.innerHTML = ''; return; }
+  const r = det.result;
+  if (r.error){ box.innerHTML = `<div class="notice over"><i data-lucide="alert-triangle"></i><span>${esc(t(r.error==='cols' ? 'det_err_cols' : 'det_err_none'))}</span></div>`; return; }
+  const cs = r.candidates, st = r.stats;
+  let h = `<div class="notice info" style="margin:0 0 10px"><i data-lucide="file-search"></i><span>${esc(t('det_summary',{n:st.count, from:fmtDate(st.from), to:fmtDate(st.to), m:st.months, k:cs.length}))}</span></div>`;
+  if (st.months < 3) h += `<div class="notice warn" style="margin:0 0 10px"><i data-lucide="alert-triangle"></i><span>${esc(t('det_short',{m:st.months}))}</span></div>`;
+  if (!cs.length){ box.innerHTML = h + `<div class="empty">${esc(t('det_none_found'))}</div>`; return; }
+  h += `<p class="hint">${esc(t('det_note'))}</p><div class="list" id="detList">` + cs.map((c,i) => {
+    const ex = candExists(c);
+    return `<div class="item ${ex?'inactive':''}" data-det="${i}">
+      <input type="checkbox" class="det-chk" style="width:20px;height:20px;accent-color:var(--accent)" data-det-chk="${i}" ${c.checked&&!ex?'checked':''} ${ex?'disabled':''} aria-label="${esc(c.name)}">
+      <div class="main">
+        <div class="name"><input type="text" class="det-name" data-det-name="${i}" value="${esc(c.name)}" maxlength="60" aria-label="${esc(t('det_name'))}" style="max-width:220px;min-height:34px;padding:4px 10px" ${ex?'disabled':''}>
+          ${c.toolId?`<span class="badge ok">${esc(t('det_known'))}</span>`:''}${ex?`<span class="badge">${esc(t('det_exists'))}</span>`:''}
+          <span class="badge ${c.stable&&c.count>=3?'ok':'warn'}">${esc(t(c.stable ? (c.count>=3?'det_sure':'det_maybe') : 'det_variable'))}</span></div>
+        <div class="meta"><span>${esc(t('freq_'+c.freq))}</span><span>${esc(t('det_seen',{n:c.count, m:c.monthsSeen, M:st.months}))}</span><span>${esc(t('det_last',{d:fmtDate(c.last)}))}</span><span>${esc(t('next_pay'))}: ${esc(fmtDate(c.next))}</span></div>
+      </div>
+      <div class="price-col"><b>${esc(priceLine(c))}</b><small>${esc(t('monthly_eq',{v:fmt(convert(monthlyOf(c.price,c.freq),c.currency,state.settings.currency),state.settings.currency)}))}</small></div></div>`;
+  }).join('') + `</div><div class="btns" style="margin-top:14px"><button type="button" class="btn primary" id="detAdd"><i data-lucide="plus"></i><span id="detAddLbl"></span></button></div>`;
+  box.innerHTML = h; updateDetAdd();
+}
+function updateDetAdd(){
+  const b = $('#detAdd'); if (!b || !det || !det.result || !det.result.candidates) return;
+  const n = det.result.candidates.filter(c => c.checked && !candExists(c)).length;
+  $('#detAddLbl').textContent = t('det_add',{n}); b.disabled = n === 0;
+}
+function addDetected(){
+  const names = new Set(state.subs.map(s => s.name.toLowerCase())); let added = 0, dup = 0;
+  for (const c of det.result.candidates){
+    if (!c.checked || candExists(c)) continue;
+    const name = c.name.trim(); if (!name || names.has(name.toLowerCase())){ dup++; continue; }
+    const rec = sanitizeSub({id:uid(), toolId:c.toolId, name, category:c.category, price:c.price, currency:c.currency, freq:c.freq, start:c.first, next:c.next, active:true});
+    if (!rec){ dup++; continue; }
+    state.subs.push(rec); names.add(name.toLowerCase()); added++;
+  }
+  persist(); renderAll(); toast(t('det_added',{n:added}) + (dup ? ' '+t('det_skipped_dup',{n:dup}) : ''));
+}
+function handleStatementFile(file){
+  if (!file) return;
+  if (file.size > 5*1024*1024){ toast(t('imp_err_size'), true); return; }
+  $('#detFileName').textContent = file.name;
+  const fr = new FileReader();
+  fr.onerror = () => toast(t('det_err_read'), true);
+  fr.onload = () => loadStatementText(String(fr.result));
+  fr.readAsText(file);
+}
+function loadStatementText(text){
+  const rows = parseDelimited(text), info = autoMap(rows, 'dmy');
+  if (!info){ det = null; $('#detMapCard').hidden = true; $('#detResult').innerHTML = `<div class="notice over"><i data-lucide="alert-triangle"></i><span>${esc(t('det_err_cols'))}</span></div>`; icons(); return; }
+  det = {rows, info, fmt:'dmy', defCur:state.settings.currency, sign:'auto', result:null};
+  renderDetMap(); runDetect();
+}
+
 /* ============ EVENIMENTE ============ */
 function init(){
   applyStaticI18n(); fillSelects(); syncCurrencySelect();
@@ -1005,6 +1249,12 @@ function init(){
   $('#impConfirm').addEventListener('click', () => applyImport($('input[name=impMode]:checked').value));
   $('#importDialog').addEventListener('close', () => { pendingImport = null; });
   $('#undoImport').addEventListener('click', undoImport);
+  $('#detPick').addEventListener('click', () => $('#detFile').click());
+  $('#detFile').addEventListener('change', e => { handleStatementFile(e.target.files[0]); e.target.value = ''; });
+  $('#detRun').addEventListener('click', runDetect);
+  $('#detResult').addEventListener('input', e => { const i = e.target.dataset.detName; if (i !== undefined){ det.result.candidates[+i].name = e.target.value; updateDetAdd(); } });
+  $('#detResult').addEventListener('change', e => { const i = e.target.dataset.detChk; if (i !== undefined){ det.result.candidates[+i].checked = e.target.checked; updateDetAdd(); } });
+  $('#detResult').addEventListener('click', e => { if (e.target.closest('#detAdd')) addDetected(); });
 
   if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener && matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!state.settings.theme) applyTheme(); });
   showView('dashboard'); applyTheme(); renderStorageWarn(); renderAll();
@@ -1013,7 +1263,7 @@ function init(){
 }
 
 // Expus pentru testare (nu are efect asupra utilizatorului)
-window.__tracker = {get state(){return state;}, monthlyOf, annualOf, nextOccurrence, sanitizeSub, parsePrice, buildCSV, buildJSON, importText, applyImport, computeTotals, convert, effectiveNext};
+window.__tracker = {parseDelimited, autoMap, analyzeStatement, parseStmtAmount, parseStmtDate, loadStatementText, get state(){return state;}, monthlyOf, annualOf, nextOccurrence, sanitizeSub, parsePrice, buildCSV, buildJSON, importText, applyImport, computeTotals, convert, effectiveNext};
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
