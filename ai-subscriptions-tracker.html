@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Subscriptions Tracker</title>
+<meta name="description" content="Urmărește abonamentele AI și vezi instant costurile lunare și anuale.">
+<style>
+:root{
+  --bg:#f5f6fa; --surface:#ffffff; --surface-2:#f0f2f8; --border:#e3e6ef;
+  --text:#14172b; --muted:#5d6382; --accent:#5b4bdb; --accent-2:#8a5cf6; --accent-soft:#ecebfc; --on-accent:#fff;
+  --ok:#0f8a5f; --ok-soft:#e1f5ec; --warn:#b26a00; --warn-soft:#fff1d6; --bad:#c62b3d; --bad-soft:#fde4e7;
+  --shadow:0 1px 2px rgba(20,23,43,.05),0 8px 24px rgba(20,23,43,.06);
+  --radius:16px; color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0d0f1a; --surface:#161929; --surface-2:#1d2135; --border:#2a2f48;
+  --text:#eceefa; --muted:#9aa0c3; --accent:#8f84ff; --accent-2:#b18cff; --accent-soft:#252248; --on-accent:#0d0f1a;
+  --ok:#3ecf9b; --ok-soft:#12302a; --warn:#f0b34a; --warn-soft:#3a2d12; --bad:#ff7b8b; --bad-soft:#3b1a22;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+h1,h2,h3{margin:0;line-height:1.2;letter-spacing:-.01em}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+svg.lucide{width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+
+/* Layout */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:12px max(16px,calc((100vw - 1120px)/2));background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.logo{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff}
+.nav{display:flex;gap:4px;margin-left:12px}
+.nav button{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:8px 12px;border-radius:10px;color:var(--muted);font-weight:600}
+.nav button:hover{background:var(--surface-2);color:var(--text)}
+.nav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+main{max-width:1120px;margin:0 auto;padding:24px 16px 96px}
+.view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.view-head h1{font-size:1.6rem}
+.view-head p{margin:4px 0 0;color:var(--muted)}
+
+/* Controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-weight:600;min-height:40px}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--border))}
+.btn.sm{padding:6px 10px;min-height:34px;border-radius:10px;font-size:.9rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.icon-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2)}
+.icon-btn.danger:hover{color:var(--bad)}
+input[type=text],input[type=date],input[type=search],select{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);min-height:40px}
+select.compact{width:auto;padding-right:6px;font-weight:600}
+input[aria-invalid="true"],select[aria-invalid="true"]{border-color:var(--bad)}
+label.field{display:block;font-weight:600;font-size:.88rem}
+label.field>span.lbl{display:block;margin-bottom:5px}
+.err{color:var(--bad);font-size:.82rem;font-weight:500;margin-top:4px;min-height:0}
+.hint{color:var(--muted);font-size:.82rem;font-weight:400;margin-top:4px}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.card h2{font-size:1.02rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.stat{display:flex;flex-direction:column;gap:6px;min-width:0}
+.stat .k{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;font-size:.85rem}
+.stat .k .ic{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent)}
+.stat .v{font-size:1.65rem;font-weight:750;letter-spacing:-.02em;overflow-wrap:anywhere}
+.stat .s{color:var(--muted);font-size:.84rem;overflow-wrap:anywhere}
+.v.neg{color:var(--bad)} .v.pos{color:var(--ok)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.mb{margin-bottom:14px}
+
+/* Budget */
+.bar{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--ok);transition:width .3s}
+.bar.warn>i{background:var(--warn)} .bar.over>i{background:var(--bad)}
+.budget-row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:14px}
+.budget-row .field{flex:1 1 200px;max-width:280px}
+.input-suffix{display:flex;align-items:center;gap:8px}
+.input-suffix b{color:var(--muted)}
+.notice{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border-radius:12px;font-weight:550;margin-top:12px;background:var(--ok-soft);color:var(--ok)}
+.notice.warn{background:var(--warn-soft);color:var(--warn)}
+.notice.over{background:var(--bad-soft);color:var(--bad)}
+.notice.info{background:var(--accent-soft);color:var(--accent)}
+.banner{margin-bottom:14px}
+.banner .notice{margin-top:0}
+.banner .notice+.notice{margin-top:8px}
+
+/* Lists */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.item.inactive{opacity:.65;background:var(--surface-2)}
+.avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;font-weight:700;color:#fff}
+.item .main{min-width:0}
+.item .name{font-weight:700;display:flex;flex-wrap:wrap;align-items:center;gap:8px;overflow-wrap:anywhere}
+.item .meta{color:var(--muted);font-size:.86rem;display:flex;flex-wrap:wrap;gap:4px 14px}
+.item .side{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.price-col{text-align:right;min-width:110px}
+.price-col b{display:block}
+.price-col small{color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:.74rem;font-weight:650;background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.badge.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.badge.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.badge.off{background:var(--surface-2);color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+.toolbar select{width:auto}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:8px 14px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.empty{text-align:center;padding:36px 16px;color:var(--muted);border:1px dashed var(--border);border-radius:14px}
+.empty h3{color:var(--text);margin-bottom:6px}
+
+/* Switch */
+.switch{position:relative;width:44px;height:26px;border-radius:99px;border:1px solid var(--border);background:var(--surface-2);padding:0;flex:none;transition:background .2s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s}
+.switch[aria-checked="true"]{background:var(--ok-soft);border-color:var(--ok)}
+.switch[aria-checked="true"]::after{transform:translateX(18px);background:var(--ok)}
+
+/* Library */
+.lib-cat{margin-bottom:22px}
+.lib-cat h2{font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.tool{display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.tool .top{display:flex;gap:12px;align-items:center}
+.tool .nm{font-weight:700}
+.tool .pl{color:var(--muted);font-size:.84rem}
+
+/* Simulator */
+.sim-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:start}
+.pick{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer;background:var(--surface)}
+.pick:hover{background:var(--surface-2)}
+.pick input{width:18px;height:18px;accent-color:var(--accent);flex:none}
+.pick .grow{flex:1;min-width:0;overflow-wrap:anywhere}
+.result{display:flex;flex-direction:column;gap:14px}
+.result .big{font-size:2rem;font-weight:800;color:var(--ok);letter-spacing:-.02em}
+.sticky{position:sticky;top:76px}
+
+/* Charts */
+.chart-box{position:relative;height:280px}
+.chart-box.tall{height:300px}
+.chart-empty{display:grid;place-items:center;height:100%;color:var(--muted);text-align:center}
+
+/* Tables simple */
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.kv:last-child{border-bottom:0}
+.kv span:first-child{color:var(--muted)}
+.rates{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+
+/* Dialog */
+dialog{border:1px solid var(--border);border-radius:20px;padding:0;background:var(--surface);color:var(--text);width:min(560px,calc(100vw - 24px));box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:calc(100vh - 24px)}
+dialog::backdrop{background:rgba(10,12,25,.55)}
+.dlg{padding:20px;display:flex;flex-direction:column;gap:14px}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.dlg-head h2{font-size:1.15rem}
+.dlg-foot{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px}
+.check{display:flex;align-items:center;gap:10px;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.radio{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--border);border-radius:12px;cursor:pointer}
+.radio input{margin-top:4px;accent-color:var(--accent)}
+.radio b{display:block}
+.radio small{color:var(--muted)}
+
+/* Toast */
+#toasts{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:60;width:min(440px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;background:var(--text);color:var(--bg);padding:11px 16px;border-radius:12px;box-shadow:var(--shadow);font-weight:550}
+.toast.bad{background:var(--bad);color:#fff}
+.foot{color:var(--muted);font-size:.82rem;margin-top:28px;text-align:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Responsive */
+@media (max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .cols,.sim-grid{grid-template-columns:1fr}
+  .sticky{position:static}
+}
+@media (max-width:720px){
+  .topbar{padding:10px 16px;gap:10px}
+  .brand span.t{display:none}
+  .nav{position:fixed;left:0;right:0;bottom:0;margin:0;z-index:30;justify-content:space-around;background:var(--surface);border-top:1px solid var(--border);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .nav button{flex-direction:column;gap:2px;font-size:.7rem;padding:6px 6px;flex:1}
+  .nav button svg{width:1.35em;height:1.35em}
+  .item{grid-template-columns:auto 1fr}
+  .item .side{grid-column:1 / -1;justify-content:space-between}
+  .price-col{text-align:left}
+}
+@media (max-width:480px){
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat .v{font-size:1.3rem}
+  .grid2{grid-template-columns:1fr}
+  .view-head h1{font-size:1.35rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="logo"><i data-lucide="wallet"></i></span><span class="t">AI Subscriptions Tracker</span></div>
+  <nav class="nav" id="nav" data-i18n-aria="nav_label" aria-label="Navigare">
+    <button type="button" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span data-i18n="nav_dashboard">Panou</span></button>
+    <button type="button" data-view="subs"><i data-lucide="list"></i><span data-i18n="nav_subs">Abonamente</span></button>
+    <button type="button" data-view="library"><i data-lucide="library"></i><span data-i18n="nav_library">Bibliotecă</span></button>
+    <button type="button" data-view="savings"><i data-lucide="piggy-bank"></i><span data-i18n="nav_savings">Economii</span></button>
+    <button type="button" data-view="settings"><i data-lucide="settings"></i><span data-i18n="nav_settings">Setări</span></button>
+  </nav>
+  <div class="top-actions">
+    <label class="sr" for="mainCurrency" data-i18n="main_currency">Moneda principală</label>
+    <select id="mainCurrency" class="compact" data-i18n-title="main_currency" title="Moneda principală"></select>
+    <button type="button" class="icon-btn" id="themeBtn" data-i18n-aria="toggle_theme" aria-label="Schimbă tema"><i data-lucide="moon"></i></button>
+  </div>
+</header>
+
+<main id="main">
+  <div id="storageWarn" class="banner" hidden></div>
+
+  <!-- DASHBOARD -->
+  <section class="view" id="view-dashboard" aria-labelledby="h-dashboard">
+    <div class="view-head">
+      <div><h1 id="h-dashboard" data-i18n="nav_dashboard">Panou</h1><p data-i18n="dash_sub">Costurile tale AI, calculate automat.</p></div>
+      <button type="button" class="btn primary" data-action="add-new"><i data-lucide="plus"></i><span data-i18n="add_sub">Adaugă abonament</span></button>
+    </div>
+    <div id="dashAlerts" class="banner"></div>
+    <div class="stats" id="dashStats"></div>
+    <div class="card mb" id="budgetCard">
+      <h2><i data-lucide="target"></i><span data-i18n="budget_title">Buget lunar</span></h2>
+      <div class="budget-row">
+        <label class="field" for="budgetInput"><span class="lbl" data-i18n="budget_set">Buget lunar (în moneda principală)</span>
+          <span class="input-suffix"><input type="text" inputmode="decimal" id="budgetInput" autocomplete="off" placeholder="0,00"><b id="budgetCur"></b></span>
+        </label>
+        <button type="button" class="btn" id="budgetSave"><i data-lucide="check"></i><span data-i18n="save">Salvează</span></button>
+      </div>
+      <div class="err" id="budgetErr" role="alert"></div>
+      <div id="budgetBarWrap"></div>
+    </div>
+    <div class="cols">
+      <div class="card"><h2><i data-lucide="calendar-clock"></i><span data-i18n="upcoming_title">Plăți apropiate (30 zile)</span></h2><div id="upcoming"></div></div>
+      <div class="card"><h2><i data-lucide="coins"></i><span data-i18n="bycur_title">Totaluri pe monede originale</span></h2><div id="byCurrency"></div></div>
+    </div>
+    <div class="cols">
+      <div class="card"><h2><i data-lucide="pie-chart"></i><span data-i18n="chart_cat">Cost lunar pe categorii</span></h2><div class="chart-box" id="boxCat"><canvas id="chartCat" role="img" data-i18n-aria="chart_cat" aria-label="Cost lunar pe categorii"></canvas></div></div>
+      <div class="card"><h2><i data-lucide="bar-chart-3"></i><span data-i18n="chart_top">Cele mai scumpe abonamente (lunar)</span></h2><div class="chart-box" id="boxTop"><canvas id="chartTop" role="img" data-i18n-aria="chart_top" aria-label="Cele mai scumpe abonamente"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- SUBSCRIPTIONS -->
+  <section class="view" id="view-subs" aria-labelledby="h-subs" hidden>
+    <div class="view-head">
+      <div><h1 id="h-subs" data-i18n="nav_subs">Abonamente</h1><p data-i18n="subs_sub">Adaugă, editează, dezactivează sau șterge.</p></div>
+      <button type="button" class="btn primary" data-action="add-new"><i data-lucide="plus"></i><span data-i18n="add_sub">Adaugă abonament</span></button>
+    </div>
+    <div class="toolbar">
+      <div class="seg" role="group" data-i18n-aria="filter_label" aria-label="Filtru stare" id="statusFilter">
+        <button type="button" data-filter="all" aria-pressed="true" data-i18n="f_all">Toate</button>
+        <button type="button" data-filter="active" aria-pressed="false" data-i18n="f_active">Active</button>
+        <button type="button" data-filter="inactive" aria-pressed="false" data-i18n="f_inactive">Inactive</button>
+      </div>
+      <label class="sr" for="sortSel" data-i18n="sort_label">Sortare</label>
+      <select id="sortSel">
+        <option value="name" data-i18n="sort_name">Nume (A–Z)</option>
+        <option value="cost" data-i18n="sort_cost">Cost lunar (descrescător)</option>
+        <option value="next" data-i18n="sort_next">Următoarea plată</option>
+      </select>
+    </div>
+    <div class="list" id="subsList"></div>
+  </section>
+
+  <!-- LIBRARY -->
+  <section class="view" id="view-library" aria-labelledby="h-library" hidden>
+    <div class="view-head">
+      <div><h1 id="h-library" data-i18n="nav_library">Bibliotecă</h1><p data-i18n="lib_sub">Alege instrumentele pentru care plătești. Prețurile sunt orientative și editabile.</p></div>
+      <button type="button" class="btn" data-action="add-new"><i data-lucide="plus"></i><span data-i18n="add_custom">Instrument personalizat</span></button>
+    </div>
+    <div class="notice info" style="margin:0 0 18px"><i data-lucide="info"></i><span data-i18n="price_disclaimer">Prețurile din bibliotecă sunt doar orientative (planuri și tarife se schimbă). Verifică prețul real pe site-ul furnizorului și editează-l înainte de salvare.</span></div>
+    <div id="libraryBody"></div>
+  </section>
+
+  <!-- SAVINGS -->
+  <section class="view" id="view-savings" aria-labelledby="h-savings" hidden>
+    <div class="view-head">
+      <div><h1 id="h-savings" data-i18n="nav_savings">Calculator economii</h1><p data-i18n="sim_sub">Bifează abonamentele pe care le-ai anula. Simularea nu modifică datele reale.</p></div>
+    </div>
+    <div class="sim-grid">
+      <div class="card">
+        <div class="toolbar" style="margin-bottom:12px">
+          <button type="button" class="btn sm" id="simAll"><i data-lucide="check-square"></i><span data-i18n="sim_all">Selectează tot</span></button>
+          <button type="button" class="btn sm" id="simNone"><i data-lucide="square"></i><span data-i18n="sim_none">Resetează</span></button>
+        </div>
+        <div class="list" id="simList"></div>
+      </div>
+      <div class="card sticky" id="simResult" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" id="view-settings" aria-labelledby="h-settings" hidden>
+    <div class="view-head">
+      <div><h1 id="h-settings" data-i18n="nav_settings">Setări & backup</h1><p data-i18n="set_sub">Cursuri valutare manuale, export și import.</p></div>
+    </div>
+    <div class="card mb">
+      <h2><i data-lucide="arrow-left-right"></i><span data-i18n="rates_title">Curs valutar (manual)</span></h2>
+      <p class="hint" style="margin-top:-6px;margin-bottom:12px" data-i18n="rates_hint">Totalurile convertite folosesc cursurile de mai jos, introduse de tine (valori orientative, nu actualizate automat). Totalurile pe monede originale rămân mereu separate, pe Panou.</p>
+      <div class="rates">
+        <label class="field" for="rateUSD"><span class="lbl">1 EUR = … USD</span><input type="text" inputmode="decimal" id="rateUSD" autocomplete="off"><div class="err" id="rateUSDErr"></div></label>
+        <label class="field" for="rateRON"><span class="lbl">1 EUR = … RON</span><input type="text" inputmode="decimal" id="rateRON" autocomplete="off"><div class="err" id="rateRONErr"></div></label>
+      </div>
+      <div class="btns" style="margin-top:12px"><button type="button" class="btn" id="ratesSave"><i data-lucide="check"></i><span data-i18n="save">Salvează</span></button></div>
+    </div>
+    <div class="card">
+      <h2><i data-lucide="hard-drive-download"></i><span data-i18n="backup_title">Export și backup</span></h2>
+      <p class="hint" style="margin-top:-6px;margin-bottom:12px" data-i18n="backup_hint">Datele se salvează automat în acest browser (LocalStorage). Exportă periodic un backup JSON.</p>
+      <div class="btns">
+        <button type="button" class="btn" id="expCsv"><i data-lucide="file-spreadsheet"></i><span data-i18n="exp_csv">Export CSV</span></button>
+        <button type="button" class="btn" id="expJson"><i data-lucide="download"></i><span data-i18n="exp_json">Export JSON</span></button>
+        <button type="button" class="btn" id="impJsonBtn"><i data-lucide="upload"></i><span data-i18n="imp_json">Import JSON</span></button>
+        <button type="button" class="btn" id="undoImport" hidden><i data-lucide="undo-2"></i><span data-i18n="undo_import">Anulează ultimul import</span></button>
+      </div>
+      <input type="file" id="impFile" accept=".json,application/json" hidden>
+    </div>
+    <p class="foot" data-i18n="price_disclaimer_short">Prețurile din bibliotecă sunt orientative și nu reprezintă oferte oficiale.</p>
+  </section>
+</main>
+
+<!-- Subscription dialog -->
+<dialog id="subDialog" aria-labelledby="subDlgTitle">
+  <form class="dlg" id="subForm" novalidate>
+    <div class="dlg-head"><h2 id="subDlgTitle"></h2><button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Închide"><i data-lucide="x"></i></button></div>
+    <input type="hidden" id="f-id"><input type="hidden" id="f-tool">
+    <label class="field" for="f-name"><span class="lbl" data-i18n="f_name">Nume instrument</span><input type="text" id="f-name" maxlength="60" autocomplete="off"><div class="err" id="e-name"></div></label>
+    <div class="grid2">
+      <label class="field" for="f-cat"><span class="lbl" data-i18n="f_cat">Categorie</span><select id="f-cat"></select></label>
+      <label class="field" for="f-freq"><span class="lbl" data-i18n="f_freq">Frecvență facturare</span><select id="f-freq"></select></label>
+    </div>
+    <div class="grid2">
+      <label class="field" for="f-price"><span class="lbl" data-i18n="f_price">Preț</span><input type="text" inputmode="decimal" id="f-price" autocomplete="off" placeholder="0,00"><div class="err" id="e-price"></div></label>
+      <label class="field" for="f-cur"><span class="lbl" data-i18n="f_cur">Monedă</span><select id="f-cur"></select></label>
+    </div>
+    <div class="grid2">
+      <label class="field" for="f-start"><span class="lbl" data-i18n="f_start">Data începerii</span><input type="date" id="f-start"><div class="err" id="e-start"></div></label>
+      <label class="field" for="f-next"><span class="lbl" data-i18n="f_next">Următoarea plată</span><input type="date" id="f-next"><div class="err" id="e-next"></div><div class="hint" data-i18n="f_next_hint">Lasă gol pentru calcul automat din data începerii.</div></label>
+    </div>
+    <label class="check" for="f-active"><input type="checkbox" id="f-active" checked><span data-i18n="f_active_lbl">Abonament activ</span></label>
+    <div class="dlg-foot">
+      <button type="button" class="btn" data-close data-i18n="cancel">Anulează</button>
+      <button type="submit" class="btn primary"><i data-lucide="check"></i><span data-i18n="save">Salvează</span></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Confirm dialog -->
+<dialog id="confirmDialog" aria-labelledby="confTitle">
+  <div class="dlg">
+    <h2 id="confTitle"></h2>
+    <p id="confMsg" style="margin:0;color:var(--muted)"></p>
+    <div class="dlg-foot">
+      <button type="button" class="btn" id="confNo" data-i18n="cancel">Anulează</button>
+      <button type="button" class="btn danger" id="confYes"></button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Import dialog -->
+<dialog id="importDialog" aria-labelledby="impTitle">
+  <div class="dlg">
+    <div class="dlg-head"><h2 id="impTitle" data-i18n="imp_title">Import JSON</h2><button type="button" class="icon-btn" data-close data-i18n-aria="close" aria-label="Închide"><i data-lucide="x"></i></button></div>
+    <div id="impSummary"></div>
+    <label class="radio"><input type="radio" name="impMode" value="merge" checked><span><b data-i18n="imp_merge">Îmbină cu datele existente (recomandat)</b><small data-i18n="imp_merge_d">Păstrează abonamentele curente și adaugă doar cele noi. Duplicatele (același nume) sunt ignorate.</small></span></label>
+    <label class="radio"><input type="radio" name="impMode" value="replace"><span><b data-i18n="imp_replace">Înlocuiește toate datele</b><small data-i18n="imp_replace_d">Datele curente sunt înlocuite. Se păstrează automat o copie, o poți restaura din Setări.</small></span></label>
+    <div class="dlg-foot">
+      <button type="button" class="btn" data-close data-i18n="cancel">Anulează</button>
+      <button type="button" class="btn primary" id="impConfirm"><i data-lucide="upload"></i><span data-i18n="imp_do">Importă</span></button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toasts" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+<script src="https://unpkg.com/lucide@0.294.0/dist/umd/lucide.min.js" defer></script>
+<script>
+(function(){
+'use strict';
+
+/* ============ I18N (RO complet; EN/FR pregătite: cheile lipsă cad pe RO) ============ */
+const I18N = {
+  ro: {
+    nav_label:'Navigare', nav_dashboard:'Panou', nav_subs:'Abonamente', nav_library:'Bibliotecă', nav_savings:'Economii', nav_settings:'Setări',
+    main_currency:'Moneda principală', toggle_theme:'Schimbă tema', close:'Închide', cancel:'Anulează', save:'Salvează', delete:'Șterge', edit:'Editează',
+    dash_sub:'Costurile tale AI, calculate automat.', add_sub:'Adaugă abonament', add_custom:'Instrument personalizat',
+    stat_monthly:'Total lunar', stat_annual:'Total anual', stat_active:'Abonamente active', stat_top:'Cel mai scump', stat_budget:'Buget lunar', stat_avail:'Disponibil din buget',
+    stat_active_sub:'din {total} în total', stat_none:'—', per_month:'/ lună', per_week:'/ săpt.', per_year:'/ an', stat_monthly_sub:'echivalent lunar, doar active', stat_annual_sub:'echivalent anual, doar active',
+    budget_title:'Buget lunar', budget_set:'Buget lunar (în moneda principală)', budget_not_set:'Nesetat', budget_hint:'Setează un buget lunar pentru a vedea progresul și avertizările.',
+    budget_ok:'În limita bugetului: {pct}% utilizat.', budget_warn:'Te apropii de limita bugetului: {pct}% utilizat.', budget_over:'Buget depășit cu {amount} ({pct}%).',
+    budget_used:'Folosit: {used} din {budget}', over_by:'Depășit cu {amount}', avail_na:'Setează un buget',
+    upcoming_title:'Plăți apropiate (30 zile)', upcoming_none:'Nicio plată în următoarele 30 de zile.', in_days:'în {n} zile', today:'astăzi', tomorrow:'mâine',
+    soon_alert:'{n} plată/plăți în următoarele 7 zile: {names}.',
+    bycur_title:'Totaluri pe monede originale', bycur_row:'{monthly} / lună · {annual} / an', bycur_none:'Niciun abonament activ.',
+    chart_cat:'Cost lunar pe categorii', chart_top:'Cele mai scumpe abonamente (lunar)', chart_none:'Nu există date de afișat.', chart_lib_missing:'Graficele nu s-au putut încărca (bibliotecă Chart.js indisponibilă).',
+    subs_sub:'Adaugă, editează, dezactivează sau șterge.', f_all:'Toate', f_active:'Active', f_inactive:'Inactive', filter_label:'Filtru stare', sort_label:'Sortare',
+    sort_name:'Nume (A–Z)', sort_cost:'Cost lunar (descrescător)', sort_next:'Următoarea plată',
+    empty_title:'Niciun abonament încă', empty_text:'Alege instrumente din bibliotecă sau adaugă unul personalizat.', empty_cta:'Deschide biblioteca', empty_filter:'Niciun abonament pentru acest filtru.',
+    status_active:'Activ', status_inactive:'Inactiv', toggle_active:'Activ / inactiv', next_pay:'Următoarea plată', no_next:'Inactiv, fără plată programată', monthly_eq:'echiv. lunar {v}',
+    freq_weekly:'Săptămânal', freq_monthly:'Lunar', freq_yearly:'Anual',
+    cat_chat:'Asistenți & cercetare', cat_image:'Imagini & design', cat_video:'Video', cat_audio:'Audio & muzică', cat_code:'Cod & dezvoltare', cat_productivity:'Productivitate', cat_other:'Altele',
+    lib_sub:'Alege instrumentele pentru care plătești. Prețurile sunt orientative și editabile.',
+    price_disclaimer:'Prețurile din bibliotecă sunt doar orientative (planuri și tarife se schimbă). Verifică prețul real pe site-ul furnizorului și editează-l înainte de salvare.',
+    price_disclaimer_short:'Prețurile din bibliotecă sunt orientative și nu reprezintă oferte oficiale.',
+    lib_plan:'Plan orientativ: {plan}', lib_add:'Adaugă', lib_added:'Adăugat', lib_exists:'Există deja în abonamentele tale.',
+    sim_sub:'Bifează abonamentele pe care le-ai anula. Simularea nu modifică datele reale.', sim_all:'Selectează tot', sim_none:'Resetează',
+    sim_empty:'Nu ai abonamente active de simulat.', sim_title:'Economii estimate', sim_month:'Economie lunară', sim_year:'Economie anuală', sim_selected:'{n} abonamente selectate', sim_after:'Total lunar după simulare', sim_before:'Total lunar curent', sim_pick:'Selectează cel puțin un abonament.',
+    set_sub:'Cursuri valutare manuale, export și import.', rates_title:'Curs valutar (manual)',
+    rates_hint:'Totalurile convertite folosesc cursurile de mai jos, introduse de tine (valori orientative, nu actualizate automat). Totalurile pe monede originale rămân mereu separate, pe Panou.',
+    backup_title:'Export și backup', backup_hint:'Datele se salvează automat în acest browser (LocalStorage). Exportă periodic un backup JSON.',
+    exp_csv:'Export CSV', exp_json:'Export JSON', imp_json:'Import JSON', undo_import:'Anulează ultimul import',
+    imp_title:'Import JSON', imp_merge:'Îmbină cu datele existente (recomandat)', imp_merge_d:'Păstrează abonamentele curente și adaugă doar cele noi. Duplicatele (același nume) sunt ignorate.',
+    imp_replace:'Înlocuiește toate datele', imp_replace_d:'Datele curente sunt înlocuite. Se păstrează automat o copie, o poți restaura din Setări.', imp_do:'Importă',
+    imp_summary:'Fișier valid: {valid} abonamente importabile, {invalid} invalide ignorate. Date curente: {cur} abonamente.',
+    imp_err_parse:'Fișierul nu este un JSON valid.', imp_err_shape:'Fișierul nu conține o listă de abonamente.', imp_err_none:'Niciun abonament valid în fișier. Nu s-a modificat nimic.', imp_err_size:'Fișier prea mare (maxim 2 MB).',
+    imp_done:'Import finalizat: {added} adăugate, {skipped} ignorate (duplicate).', imp_undone:'Importul a fost anulat, datele anterioare au fost restaurate.',
+    saved_ok:'Salvat.', deleted_ok:'Abonament șters.', rates_saved:'Cursuri salvate.', budget_saved:'Buget salvat.', toggled_on:'Abonament activat.', toggled_off:'Abonament dezactivat.',
+    storage_fail:'Atenție: datele nu pot fi salvate în acest browser (LocalStorage indisponibil). Exportă un backup JSON ca să nu pierzi informațiile.',
+    corrupt_data:'Datele salvate erau corupte și au fost ignorate (copia brută a fost păstrată în browser).',
+    dlg_add:'Adaugă abonament', dlg_edit:'Editează abonament', f_name:'Nume instrument', f_cat:'Categorie', f_freq:'Frecvență facturare', f_price:'Preț', f_cur:'Monedă', f_start:'Data începerii', f_next:'Următoarea plată',
+    f_next_hint:'Lasă gol pentru calcul automat din data începerii.', f_active_lbl:'Abonament activ',
+    e_name_req:'Introdu numele instrumentului.', e_name_dup:'Există deja un abonament cu acest nume.', e_price_req:'Introdu prețul (0 pentru gratuit).', e_price_inv:'Preț invalid. Folosește un număr pozitiv (ex. 19,99).',
+    e_start_req:'Alege data începerii.', e_start_inv:'Dată invalidă.', e_next_inv:'Dată invalidă.', e_next_before:'Trebuie să fie în ziua începerii sau după.', e_rate:'Introdu un număr mai mare decât 0.', e_budget:'Introdu un număr valid (0 = fără buget).',
+    del_title:'Ștergi abonamentul?', del_msg:'„{name}” va fi șters definitiv. Poți dezactiva abonamentul în loc să îl ștergi.',
+    csv_name:'Nume', csv_cat:'Categorie', csv_price:'Preț', csv_cur:'Monedă', csv_freq:'Frecvență', csv_start:'Data începerii', csv_next:'Următoarea plată', csv_active:'Activ', csv_monthly:'Echivalent lunar ({cur})', csv_annual:'Echivalent anual ({cur})', yes:'Da', no:'Nu',
+    exported:'Export finalizat.'
+  },
+  en: {}, // de completat
+  fr: {}  // à compléter
+};
+let LANG = 'ro';
+function t(key, vars){
+  let s = (I18N[LANG] && I18N[LANG][key]);
+  if (s === undefined) s = I18N.ro[key];
+  if (s === undefined) s = key;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m,k) => (k in vars ? vars[k] : m));
+  return s;
+}
+function applyStaticI18n(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  document.querySelectorAll('[data-i18n-title]').forEach(el => el.setAttribute('title', t(el.dataset.i18nTitle)));
+}
+
+/* ============ CONSTANTE ============ */
+const STORE_KEY = 'aiSubsTracker.v1', BACKUP_KEY = 'aiSubsTracker.v1.preImport', CORRUPT_KEY = 'aiSubsTracker.v1.corrupt';
+const CURRENCIES = ['EUR','USD','RON'];
+const FREQS = ['monthly','yearly','weekly'];
+const CATEGORIES = ['chat','image','video','audio','code','productivity','other'];
+const CAT_COLORS = {chat:'#5b4bdb',image:'#e0527a',video:'#e08a1e',audio:'#1aa6a0',code:'#2f7de1',productivity:'#7a8c1f',other:'#8a8fa8'};
+const DEFAULT_RATES = {EUR:1, USD:1.08, RON:4.97}; // orientativ, editabil
+const MAX_PRICE = 10000000;
+const SOON_DAYS = 7, UPCOMING_DAYS = 30;
+
+// Bibliotecă inițială: prețuri ORIENTATIVE, editabile (fără dubluri; id unic).
+const LIBRARY = [
+  {id:'chatgpt',    name:'ChatGPT',        category:'chat',         plan:'Plus',       price:20, currency:'USD', freq:'monthly'},
+  {id:'claude',     name:'Claude',         category:'chat',         plan:'Pro',        price:20, currency:'USD', freq:'monthly'},
+  {id:'gemini',     name:'Gemini',         category:'chat',         plan:'AI Pro',     price:20, currency:'USD', freq:'monthly'},
+  {id:'perplexity', name:'Perplexity',     category:'chat',         plan:'Pro',        price:20, currency:'USD', freq:'monthly'},
+  {id:'midjourney', name:'Midjourney',     category:'image',        plan:'Basic',      price:10, currency:'USD', freq:'monthly'},
+  {id:'dalle',      name:'DALL-E',         category:'image',        plan:'Credite API/ChatGPT', price:15, currency:'USD', freq:'monthly'},
+  {id:'canva',      name:'Canva',          category:'image',        plan:'Pro',        price:15, currency:'USD', freq:'monthly'},
+  {id:'ideogram',   name:'Ideogram',       category:'image',        plan:'Basic',      price:8,  currency:'USD', freq:'monthly'},
+  {id:'leonardo',   name:'Leonardo AI',    category:'image',        plan:'Apprentice', price:12, currency:'USD', freq:'monthly'},
+  {id:'runway',     name:'Runway',         category:'video',        plan:'Standard',   price:15, currency:'USD', freq:'monthly'},
+  {id:'elevenlabs', name:'ElevenLabs',     category:'audio',        plan:'Starter',    price:5,  currency:'USD', freq:'monthly'},
+  {id:'suno',       name:'Suno',           category:'audio',        plan:'Pro',        price:10, currency:'USD', freq:'monthly'},
+  {id:'cursor',     name:'Cursor',         category:'code',         plan:'Pro',        price:20, currency:'USD', freq:'monthly'},
+  {id:'copilot',    name:'GitHub Copilot', category:'code',         plan:'Pro',        price:10, currency:'USD', freq:'monthly'},
+  {id:'notionai',   name:'Notion AI',      category:'productivity', plan:'Add-on',     price:10, currency:'USD', freq:'monthly'}
+];
+
+/* ============ DATE ============ */
+const pad = n => String(n).padStart(2,'0');
+function todayISO(){ const d = new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function isISO(s){
+  if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [y,m,d] = s.split('-').map(Number);
+  const dt = new Date(Date.UTC(y,m-1,d));
+  return dt.getUTCFullYear()===y && dt.getUTCMonth()===m-1 && dt.getUTCDate()===d && y>=1970 && y<=2200;
+}
+function dayNum(iso){ const [y,m,d] = iso.split('-').map(Number); return Math.round(Date.UTC(y,m-1,d)/86400000); }
+function fromDayNum(n){ const d = new Date(n*86400000); return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
+function addDays(iso,n){ return fromDayNum(dayNum(iso)+n); }
+function daysInMonth(y,m){ return new Date(Date.UTC(y,m,0)).getUTCDate(); } // m: 1-12
+function addMonths(iso,n){
+  const [y,m,d] = iso.split('-').map(Number);
+  const total = y*12+(m-1)+n, ny = Math.floor(total/12), nm = total%12+1;
+  return ny+'-'+pad(nm)+'-'+pad(Math.min(d,daysInMonth(ny,nm)));
+}
+// Următoarea apariție a unei plăți, pornind de la o dată-ancoră (>= azi). Ancorat, fără derivă (31 ian → 28 feb → 31 mar).
+function nextOccurrence(anchor, freq, today){
+  today = today || todayISO();
+  if (anchor >= today) return anchor;
+  if (freq === 'weekly'){ const diff = dayNum(today)-dayNum(anchor); return addDays(anchor, Math.ceil(diff/7)*7); }
+  const step = freq === 'yearly' ? 12 : 1;
+  const [ay,am] = anchor.split('-').map(Number), [ty,tm] = today.split('-').map(Number);
+  let k = Math.max(1, Math.floor(((ty*12+tm)-(ay*12+am))/step) - 1);
+  let c = addMonths(anchor, k*step);
+  while (c < today) { k++; c = addMonths(anchor, k*step); if (k > 100000) break; }
+  return c;
+}
+function effectiveNext(sub, today){ return nextOccurrence(sub.next || sub.start, sub.freq, today); }
+function daysUntil(iso, today){ return dayNum(iso) - dayNum(today || todayISO()); }
+function fmtDate(iso){ if(!isISO(iso)) return '—'; const [y,m,d]=iso.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)).toLocaleDateString('ro-RO',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}); }
+
+/* ============ CALCULE ============ */
+function monthlyOf(price,freq){ return freq==='monthly' ? price : freq==='yearly' ? price/12 : price*52/12; }
+function annualOf(price,freq){ return freq==='yearly' ? price : freq==='monthly' ? price*12 : price*52; }
+function convert(amount, from, to, rates){ rates = rates || state.settings.rates; return from===to ? amount : amount / rates[from] * rates[to]; }
+function fmt(amount, cur){
+  try { return new Intl.NumberFormat('ro-RO',{style:'currency',currency:cur,minimumFractionDigits:2,maximumFractionDigits:2}).format(amount||0); }
+  catch(e){ return (amount||0).toFixed(2)+' '+cur; }
+}
+const round2 = n => Math.round((n+Number.EPSILON)*100)/100;
+function subMonthlyMain(s){ return convert(monthlyOf(s.price,s.freq), s.currency, state.settings.currency); }
+function subAnnualMain(s){ return convert(annualOf(s.price,s.freq), s.currency, state.settings.currency); }
+function budgetInMain(){ const b = state.settings.budget; return b.amount > 0 ? convert(b.amount, b.currency, state.settings.currency) : 0; }
+function computeTotals(){
+  const act = state.subs.filter(s => s.active);
+  let monthly = 0, annual = 0, top = null;
+  const byCur = {}, byCat = {};
+  for (const s of act){
+    const m = subMonthlyMain(s), a = subAnnualMain(s);
+    monthly += m; annual += a;
+    if (!top || m > top.m) top = {sub:s, m};
+    const c = byCur[s.currency] || (byCur[s.currency] = {monthly:0, annual:0});
+    c.monthly += monthlyOf(s.price,s.freq); c.annual += annualOf(s.price,s.freq);
+    byCat[s.category] = (byCat[s.category]||0) + m;
+  }
+  return {active:act, monthly, annual, top, byCur, byCat};
+}
+
+/* ============ STARE ============ */
+function uid(){ return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function defaultState(){ return {version:1, settings:{currency:'EUR', theme:null, budget:{amount:0,currency:'EUR'}, rates:{...DEFAULT_RATES}}, subs:[]}; }
+function parsePrice(v){
+  if (typeof v === 'number') return Number.isFinite(v) ? v : NaN;
+  if (typeof v !== 'string') return NaN;
+  const s = v.trim().replace(/\s/g,'');
+  if (!/^\d+([.,]\d+)?$/.test(s)) return NaN;
+  return Number(s.replace(',','.'));
+}
+function sanitizeSub(r){
+  if (!r || typeof r !== 'object') return null;
+  const name = String(r.name == null ? '' : r.name).trim().slice(0,60);
+  if (!name) return null;
+  const price = (r.price === null || r.price === '' || typeof r.price === 'boolean') ? NaN : Number(r.price);
+  if (!Number.isFinite(price) || price < 0 || price > MAX_PRICE) return null;
+  if (!CURRENCIES.includes(r.currency) || !FREQS.includes(r.freq)) return null;
+  const start = isISO(r.start) ? r.start : todayISO();
+  return {
+    id: (typeof r.id === 'string' && r.id && r.id.length <= 40) ? r.id : uid(),
+    toolId: LIBRARY.some(l => l.id === r.toolId) ? r.toolId : null,
+    name, category: CATEGORIES.includes(r.category) ? r.category : 'other',
+    price: round2(price), currency: r.currency, freq: r.freq,
+    start, next: isISO(r.next) && r.next >= start ? r.next : '',
+    active: !(r.active === false || r.active === 'false' || r.active === 0)
+  };
+}
+function sanitizeSettings(r, base){
+  const s = {currency:base.currency, theme:base.theme, budget:{...base.budget}, rates:{...base.rates}};
+  if (!r || typeof r !== 'object') return s;
+  if (CURRENCIES.includes(r.currency)) s.currency = r.currency;
+  if (r.theme === 'light' || r.theme === 'dark') s.theme = r.theme;
+  if (r.budget && typeof r.budget === 'object'){
+    const a = Number(r.budget.amount);
+    if (Number.isFinite(a) && a >= 0 && a <= MAX_PRICE && CURRENCIES.includes(r.budget.currency)) s.budget = {amount:round2(a), currency:r.budget.currency};
+  }
+  if (r.rates && typeof r.rates === 'object'){
+    for (const c of ['USD','RON']){ const v = Number(r.rates[c]); if (Number.isFinite(v) && v > 0 && v < 1e6) s.rates[c] = v; }
+  }
+  s.rates.EUR = 1;
+  return s;
+}
+function sanitizeState(raw){
+  const base = defaultState();
+  const out = {version:1, settings: sanitizeSettings(raw && raw.settings, base.settings), subs:[]};
+  const list = Array.isArray(raw && raw.subscriptions) ? raw.subscriptions : Array.isArray(raw && raw.subs) ? raw.subs : [];
+  const ids = new Set(); let invalid = 0;
+  for (const r of list){
+    const s = sanitizeSub(r);
+    if (!s){ invalid++; continue; }
+    if (ids.has(s.id)) s.id = uid();
+    ids.add(s.id); out.subs.push(s);
+  }
+  return {state:out, invalid, total:list.length};
+}
+let storageOk = true, corruptNotice = false;
+function load(){
+  let raw = null;
+  try { raw = localStorage.getItem(STORE_KEY); } catch(e){ storageOk = false; }
+  if (!raw) return defaultState();
+  try { return sanitizeState(JSON.parse(raw)).state; }
+  catch(e){ try { localStorage.setItem(CORRUPT_KEY, raw); } catch(_){} corruptNotice = true; return defaultState(); }
+}
+function persist(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify({version:1, settings:state.settings, subscriptions:state.subs})); storageOk = true; }
+  catch(e){ storageOk = false; }
+  renderStorageWarn();
+}
+let state = load();
+
+/* ============ UTILS UI ============ */
+const $ = (s, r) => (r||document).querySelector(s);
+const $$ = (s, r) => Array.from((r||document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function icons(){ try { if (window.lucide) window.lucide.createIcons(); } catch(e){} }
+function toast(msg, bad){
+  const el = document.createElement('div'); el.className = 'toast'+(bad?' bad':''); el.textContent = msg;
+  $('#toasts').appendChild(el); setTimeout(() => el.remove(), 3600);
+}
+function freqShort(f){ return t(f==='weekly'?'per_week':f==='yearly'?'per_year':'per_month'); }
+function catLabel(c){ return t('cat_'+c); }
+function initials(n){ return esc(n.trim().slice(0,2).toUpperCase()); }
+function priceLine(s){ return fmt(s.price, s.currency)+' '+freqShort(s.freq); }
+
+/* ============ NAVIGARE ============ */
+let currentView = 'dashboard';
+function showView(v){
+  currentView = v;
+  $$('.view').forEach(el => el.hidden = el.id !== 'view-'+v);
+  $$('#nav button').forEach(b => b.setAttribute('aria-current', b.dataset.view===v ? 'page' : 'false'));
+  if (v === 'dashboard') renderCharts();
+  if (v === 'settings') renderSettings();
+  window.scrollTo(0,0);
+}
+
+/* ============ RENDER ============ */
+function renderAll(){
+  renderDashboard(); renderSubs(); renderLibrary(); renderSim(); renderSettings();
+  icons();
+  if (currentView === 'dashboard') renderCharts();
+}
+function renderStorageWarn(){
+  const el = $('#storageWarn'); let html = '';
+  if (!storageOk) html += `<div class="notice over"><i data-lucide="alert-triangle"></i><span>${esc(t('storage_fail'))}</span></div>`;
+  if (corruptNotice) html += `<div class="notice warn"><i data-lucide="alert-triangle"></i><span>${esc(t('corrupt_data'))}</span></div>`;
+  el.hidden = !html; el.innerHTML = html; icons();
+}
+
+function renderDashboard(){
+  const cur = state.settings.currency, T = computeTotals();
+  const budget = budgetInMain(), hasBudget = budget > 0;
+  const avail = budget - T.monthly;
+  const stat = (icon, k, v, s, cls) => `<div class="card stat"><div class="k"><span class="ic"><i data-lucide="${icon}"></i></span>${esc(k)}</div><div class="v ${cls||''}">${v}</div><div class="s">${s||'&nbsp;'}</div></div>`;
+  $('#dashStats').innerHTML =
+    stat('calendar', t('stat_monthly'), esc(fmt(T.monthly,cur)), esc(t('stat_monthly_sub'))) +
+    stat('calendar-range', t('stat_annual'), esc(fmt(T.annual,cur)), esc(t('stat_annual_sub'))) +
+    stat('check-circle', t('stat_active'), String(T.active.length), esc(t('stat_active_sub',{total:state.subs.length}))) +
+    stat('trending-up', t('stat_top'), T.top ? esc(T.top.sub.name) : esc(t('stat_none')), T.top ? esc(fmt(T.top.m,cur)+' '+t('per_month')) : '') +
+    stat('target', t('stat_budget'), hasBudget ? esc(fmt(budget,cur)) : esc(t('budget_not_set')), hasBudget ? '' : esc(t('budget_hint'))) +
+    stat('piggy-bank', t('stat_avail'), hasBudget ? esc(fmt(avail,cur)) : esc(t('stat_none')), hasBudget ? (avail < 0 ? esc(t('over_by',{amount:fmt(-avail,cur)})) : '') : esc(t('avail_na')), hasBudget ? (avail < 0 ? 'neg' : 'pos') : '');
+
+  // Buget
+  $('#budgetCur').textContent = cur;
+  const bi = $('#budgetInput');
+  if (document.activeElement !== bi) bi.value = hasBudget ? String(round2(budget)).replace('.',',') : '';
+  let bw = '';
+  if (hasBudget){
+    const pct = Math.round(T.monthly / budget * 100), level = pct > 100 ? 'over' : pct >= 80 ? 'warn' : 'ok';
+    const msg = level==='over' ? t('budget_over',{amount:fmt(T.monthly-budget,cur), pct}) : level==='warn' ? t('budget_warn',{pct}) : t('budget_ok',{pct});
+    const ic = level==='ok' ? 'check-circle' : 'alert-triangle';
+    bw = `<div class="bar ${level==='ok'?'':level}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(pct,100)}" aria-label="${esc(t('budget_title'))}"><i style="width:${Math.min(pct,100)}%"></i></div>
+      <div class="hint" style="margin-top:6px">${esc(t('budget_used',{used:fmt(T.monthly,cur), budget:fmt(budget,cur)}))}</div>
+      <div class="notice ${level==='ok'?'':level}"><i data-lucide="${ic}"></i><span>${esc(msg)}</span></div>`;
+  } else bw = `<div class="notice info"><i data-lucide="info"></i><span>${esc(t('budget_hint'))}</span></div>`;
+  $('#budgetBarWrap').innerHTML = bw;
+
+  // Plăți apropiate
+  const today = todayISO();
+  const ups = T.active.map(s => ({s, next:effectiveNext(s,today)})).map(o => ({...o, d:daysUntil(o.next,today)}))
+    .filter(o => o.d >= 0 && o.d <= UPCOMING_DAYS).sort((a,b) => a.d-b.d);
+  $('#upcoming').innerHTML = ups.length ? `<div class="list">${ups.map(o => {
+    const soon = o.d <= SOON_DAYS;
+    const when = o.d===0 ? t('today') : o.d===1 ? t('tomorrow') : t('in_days',{n:o.d});
+    return `<div class="kv"><span style="color:var(--text);font-weight:600">${esc(o.s.name)}<br><small style="color:var(--muted);font-weight:400">${esc(fmtDate(o.next))} · ${esc(priceLine(o.s))}</small></span><span class="badge ${soon?'warn':''}">${esc(when)}</span></div>`;
+  }).join('')}</div>` : `<div class="empty">${esc(t('upcoming_none'))}</div>`;
+  const soonList = ups.filter(o => o.d <= SOON_DAYS);
+  $('#dashAlerts').innerHTML = soonList.length ? `<div class="notice warn"><i data-lucide="bell"></i><span>${esc(t('soon_alert',{n:soonList.length, names:soonList.map(o=>o.s.name).join(', ')}))}</span></div>` : '';
+
+  // Pe monede
+  const curs = CURRENCIES.filter(c => T.byCur[c]);
+  $('#byCurrency').innerHTML = curs.length ? curs.map(c => `<div class="kv"><span>${c}</span><b>${esc(t('bycur_row',{monthly:fmt(T.byCur[c].monthly,c), annual:fmt(T.byCur[c].annual,c)}))}</b></div>`).join('') : `<div class="empty">${esc(t('bycur_none'))}</div>`;
+}
+
+let chartCat = null, chartTop = null;
+function renderCharts(){
+  const boxCat = $('#boxCat'), boxTop = $('#boxTop');
+  if (chartCat){ chartCat.destroy(); chartCat = null; }
+  if (chartTop){ chartTop.destroy(); chartTop = null; }
+  const T = computeTotals(), cur = state.settings.currency;
+  const ensureCanvas = (box, id) => { if (!$('#'+id, box)) box.innerHTML = `<canvas id="${id}" role="img" aria-label="${esc(t(id==='chartCat'?'chart_cat':'chart_top'))}"></canvas>`; };
+  const showMsg = (box, msg) => { box.innerHTML = `<div class="chart-empty">${esc(msg)}</div>`; };
+  const cats = Object.keys(T.byCat).filter(c => T.byCat[c] > 0);
+  const tops = T.active.map(s => ({n:s.name, v:subMonthlyMain(s), c:s.category})).filter(o => o.v > 0).sort((a,b) => b.v-a.v).slice(0,8);
+  if (!window.Chart){ showMsg(boxCat, t('chart_lib_missing')); showMsg(boxTop, t('chart_lib_missing')); return; }
+  const css = getComputedStyle(document.documentElement);
+  const txt = css.getPropertyValue('--muted').trim(), grid = css.getPropertyValue('--border').trim(), surf = css.getPropertyValue('--surface').trim();
+  Chart.defaults.color = txt; Chart.defaults.font.family = 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+  const tip = {callbacks:{label:ctx => ' '+fmt(ctx.parsed.x !== undefined && ctx.chart.config.type==='bar' ? ctx.parsed.x : ctx.parsed, cur)}};
+  if (!cats.length) showMsg(boxCat, t('chart_none'));
+  else {
+    ensureCanvas(boxCat,'chartCat');
+    chartCat = new Chart($('#chartCat'), {type:'doughnut',
+      data:{labels:cats.map(catLabel), datasets:[{data:cats.map(c => round2(T.byCat[c])), backgroundColor:cats.map(c => CAT_COLORS[c]), borderColor:surf, borderWidth:3}]},
+      options:{responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{legend:{position:'bottom'}, tooltip:tip}}});
+  }
+  if (!tops.length) showMsg(boxTop, t('chart_none'));
+  else {
+    ensureCanvas(boxTop,'chartTop');
+    chartTop = new Chart($('#chartTop'), {type:'bar',
+      data:{labels:tops.map(o => o.n), datasets:[{data:tops.map(o => round2(o.v)), backgroundColor:tops.map(o => CAT_COLORS[o.c]), borderRadius:6}]},
+      options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:tip},
+        scales:{x:{beginAtZero:true, grid:{color:grid}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit:6, callback:v => new Intl.NumberFormat('ro-RO',{maximumFractionDigits:0}).format(v)}}, y:{grid:{display:false}}}}});
+  }
+}
+
+let filterStatus = 'all', sortBy = 'name';
+function renderSubs(){
+  const today = todayISO();
+  let list = state.subs.filter(s => filterStatus==='all' || (filterStatus==='active') === s.active);
+  const cmp = {
+    name:(a,b) => a.name.localeCompare(b.name,'ro',{sensitivity:'base'}),
+    cost:(a,b) => subMonthlyMain(b)-subMonthlyMain(a) || a.name.localeCompare(b.name,'ro'),
+    next:(a,b) => (a.active===b.active ? 0 : a.active ? -1 : 1) || (effectiveNext(a,today) < effectiveNext(b,today) ? -1 : effectiveNext(a,today) > effectiveNext(b,today) ? 1 : 0)
+  }[sortBy];
+  list = list.slice().sort(cmp);
+  const cur = state.settings.currency;
+  if (!state.subs.length){
+    $('#subsList').innerHTML = `<div class="empty"><h3>${esc(t('empty_title'))}</h3><p>${esc(t('empty_text'))}</p><button type="button" class="btn primary" data-view-go="library"><i data-lucide="library"></i>${esc(t('empty_cta'))}</button></div>`;
+  } else if (!list.length){
+    $('#subsList').innerHTML = `<div class="empty">${esc(t('empty_filter'))}</div>`;
+  } else {
+    $('#subsList').innerHTML = list.map(s => {
+      const nx = effectiveNext(s,today), d = daysUntil(nx,today);
+      const soon = s.active && d <= SOON_DAYS;
+      return `<div class="item ${s.active?'':'inactive'}" data-id="${esc(s.id)}">
+        <div class="avatar" style="background:${CAT_COLORS[s.category]}">${initials(s.name)}</div>
+        <div class="main">
+          <div class="name">${esc(s.name)} <span class="badge ${s.active?'ok':'off'}">${esc(t(s.active?'status_active':'status_inactive'))}</span></div>
+          <div class="meta"><span>${esc(catLabel(s.category))}</span><span>${esc(t('freq_'+s.freq))}</span>
+            <span>${s.active ? esc(t('next_pay'))+': '+esc(fmtDate(nx))+(soon?' <span class="badge warn">'+esc(d===0?t('today'):d===1?t('tomorrow'):t('in_days',{n:d}))+'</span>':'') : esc(t('no_next'))}</span></div>
+        </div>
+        <div class="side">
+          <div class="price-col"><b>${esc(priceLine(s))}</b><small>${esc(t('monthly_eq',{v:fmt(subMonthlyMain(s),cur)}))}</small></div>
+          <button type="button" class="switch" role="switch" aria-checked="${s.active}" data-action="toggle" aria-label="${esc(t('toggle_active'))}: ${esc(s.name)}"></button>
+          <button type="button" class="icon-btn" data-action="edit" aria-label="${esc(t('edit'))}: ${esc(s.name)}" title="${esc(t('edit'))}"><i data-lucide="pencil"></i></button>
+          <button type="button" class="icon-btn danger" data-action="delete" aria-label="${esc(t('delete'))}: ${esc(s.name)}" title="${esc(t('delete'))}"><i data-lucide="trash-2"></i></button>
+        </div></div>`;
+    }).join('');
+  }
+}
+
+function renderLibrary(){
+  const taken = new Set(state.subs.map(s => s.toolId).filter(Boolean));
+  const takenNames = new Set(state.subs.map(s => s.name.toLowerCase()));
+  $('#libraryBody').innerHTML = CATEGORIES.filter(c => LIBRARY.some(l => l.category===c)).map(c => `
+    <div class="lib-cat"><h2>${esc(catLabel(c))}</h2><div class="lib-grid">${LIBRARY.filter(l => l.category===c).map(l => {
+      const has = taken.has(l.id) || takenNames.has(l.name.toLowerCase());
+      return `<div class="tool"><div class="top"><div class="avatar" style="background:${CAT_COLORS[l.category]}">${initials(l.name)}</div>
+        <div><div class="nm">${esc(l.name)}</div><div class="pl">${esc(t('lib_plan',{plan:l.plan}))} · ~${esc(fmt(l.price,l.currency))} ${esc(freqShort(l.freq))}</div></div></div>
+        ${has ? `<button type="button" class="btn sm" disabled><i data-lucide="check"></i>${esc(t('lib_added'))}</button>`
+              : `<button type="button" class="btn primary sm" data-action="lib-add" data-tool="${esc(l.id)}"><i data-lucide="plus"></i>${esc(t('lib_add'))}</button>`}</div>`;
+    }).join('')}</div></div>`).join('');
+}
+
+const simSel = new Set();
+function renderSim(){
+  const cur = state.settings.currency;
+  const act = state.subs.filter(s => s.active).sort((a,b) => subMonthlyMain(b)-subMonthlyMain(a));
+  for (const id of Array.from(simSel)) if (!act.some(s => s.id===id)) simSel.delete(id);
+  $('#simList').innerHTML = act.length ? act.map(s => `<label class="pick"><input type="checkbox" data-sim="${esc(s.id)}" ${simSel.has(s.id)?'checked':''}>
+      <span class="grow"><b>${esc(s.name)}</b><br><small style="color:var(--muted)">${esc(priceLine(s))}</small></span><b>${esc(fmt(subMonthlyMain(s),cur))}</b></label>`).join('')
+    : `<div class="empty">${esc(t('sim_empty'))}</div>`;
+  const sel = act.filter(s => simSel.has(s.id));
+  const m = sel.reduce((a,s) => a+subMonthlyMain(s), 0), y = sel.reduce((a,s) => a+subAnnualMain(s), 0);
+  const total = act.reduce((a,s) => a+subMonthlyMain(s), 0);
+  $('#simResult').innerHTML = `<h2><i data-lucide="sparkles"></i>${esc(t('sim_title'))}</h2><div class="result">
+    <div><div class="hint">${esc(t('sim_month'))}</div><div class="big">${esc(fmt(m,cur))}</div></div>
+    <div><div class="hint">${esc(t('sim_year'))}</div><div class="big">${esc(fmt(y,cur))}</div></div>
+    <div class="kv"><span>${esc(t('sim_before'))}</span><b>${esc(fmt(total,cur))}</b></div>
+    <div class="kv"><span>${esc(t('sim_after'))}</span><b>${esc(fmt(total-m,cur))}</b></div>
+    <div class="hint">${esc(sel.length ? t('sim_selected',{n:sel.length}) : t('sim_pick'))}</div></div>`;
+}
+
+function renderSettings(){
+  const r = state.settings.rates;
+  const u = $('#rateUSD'), n = $('#rateRON');
+  if (document.activeElement !== u) u.value = String(r.USD).replace('.',',');
+  if (document.activeElement !== n) n.value = String(r.RON).replace('.',',');
+  let hasBackup = false; try { hasBackup = !!localStorage.getItem(BACKUP_KEY); } catch(e){}
+  $('#undoImport').hidden = !hasBackup;
+}
+
+/* ============ MODAL ABONAMENT ============ */
+const dlg = $('#subDialog');
+function fillSelects(){
+  $('#mainCurrency').innerHTML = CURRENCIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  $('#f-cur').innerHTML = CURRENCIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  $('#f-freq').innerHTML = FREQS.map(f => `<option value="${f}">${esc(t('freq_'+f))}</option>`).join('');
+  $('#f-cat').innerHTML = CATEGORIES.map(c => `<option value="${c}">${esc(catLabel(c))}</option>`).join('');
+}
+function clearErrors(){ $$('#subForm .err').forEach(e => e.textContent=''); $$('#subForm [aria-invalid]').forEach(e => e.removeAttribute('aria-invalid')); }
+function openForm(sub, preset){
+  clearErrors();
+  const s = sub || preset || {name:'', category:'chat', price:'', currency:state.settings.currency, freq:'monthly', start:todayISO(), next:'', active:true};
+  $('#subDlgTitle').textContent = t(sub ? 'dlg_edit' : 'dlg_add');
+  $('#f-id').value = sub ? sub.id : '';
+  $('#f-tool').value = (preset && preset.toolId) || (sub && sub.toolId) || '';
+  $('#f-name').value = s.name; $('#f-cat').value = s.category; $('#f-freq').value = s.freq;
+  $('#f-price').value = s.price === '' ? '' : String(s.price).replace('.',',');
+  $('#f-cur').value = s.currency; $('#f-start').value = s.start || todayISO();
+  $('#f-next').value = sub && sub.active ? effectiveNext(sub) : (sub ? sub.next : (s.next||''));
+  $('#f-active').checked = s.active;
+  if (!dlg.open) dlg.showModal();
+  icons();
+  setTimeout(() => $('#f-name').focus(), 30);
+}
+function setErr(field, msg){ $('#e-'+field).textContent = msg; const el = $('#f-'+field); if (el) el.setAttribute('aria-invalid','true'); }
+function submitForm(e){
+  e.preventDefault(); clearErrors();
+  const id = $('#f-id').value;
+  const name = $('#f-name').value.trim(), priceRaw = $('#f-price').value.trim(), start = $('#f-start').value, next = $('#f-next').value;
+  let ok = true;
+  if (!name){ setErr('name', t('e_name_req')); ok = false; }
+  else if (state.subs.some(s => s.id !== id && s.name.toLowerCase() === name.toLowerCase())){ setErr('name', t('e_name_dup')); ok = false; }
+  let price = NaN;
+  if (!priceRaw){ setErr('price', t('e_price_req')); ok = false; }
+  else { price = parsePrice(priceRaw); if (!Number.isFinite(price) || price < 0 || price > MAX_PRICE){ setErr('price', t('e_price_inv')); ok = false; } }
+  if (!start){ setErr('start', t('e_start_req')); ok = false; }
+  else if (!isISO(start)){ setErr('start', t('e_start_inv')); ok = false; }
+  if (next){
+    if (!isISO(next)){ setErr('next', t('e_next_inv')); ok = false; }
+    else if (isISO(start) && next < start){ setErr('next', t('e_next_before')); ok = false; }
+  }
+  if (!ok){ const first = $('#subForm [aria-invalid="true"]'); if (first) first.focus(); return; }
+  const freq = $('#f-freq').value;
+  const rec = sanitizeSub({id: id || uid(), toolId: $('#f-tool').value || null, name, category:$('#f-cat').value, price, currency:$('#f-cur').value, freq, start, next: next || nextOccurrence(start, freq), active:$('#f-active').checked});
+  if (!rec){ toast(t('e_price_inv'), true); return; }
+  if (id){ const i = state.subs.findIndex(s => s.id === id); if (i >= 0) state.subs[i] = rec; else state.subs.push(rec); }
+  else state.subs.push(rec);
+  persist(); dlg.close(); renderAll(); toast(t('saved_ok'));
+}
+
+/* ============ CONFIRM ============ */
+function confirmDialog(title, msg, okLabel){
+  return new Promise(res => {
+    const d = $('#confirmDialog');
+    $('#confTitle').textContent = title; $('#confMsg').textContent = msg; $('#confYes').textContent = okLabel;
+    const done = v => { d.close(); $('#confYes').onclick = $('#confNo').onclick = null; d.onclose = null; res(v); };
+    $('#confYes').onclick = () => done(true); $('#confNo').onclick = () => done(false);
+    d.onclose = () => res(false);
+    d.showModal();
+  });
+}
+
+/* ============ EXPORT / IMPORT ============ */
+function download(filename, mime, text){
+  const blob = new Blob([text], {type:mime}), url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function csvCell(v){
+  let s = String(v == null ? '' : v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; // protecție împotriva formulelor în foi de calcul
+  return /[",\n\r;]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function buildCSV(){
+  const cur = state.settings.currency;
+  const head = [t('csv_name'),t('csv_cat'),t('csv_price'),t('csv_cur'),t('csv_freq'),t('csv_start'),t('csv_next'),t('csv_active'),t('csv_monthly',{cur}),t('csv_annual',{cur})];
+  const rows = state.subs.map(s => [s.name, catLabel(s.category), s.price.toFixed(2), s.currency, t('freq_'+s.freq), s.start, s.active ? effectiveNext(s) : '', t(s.active?'yes':'no'), s.active ? round2(subMonthlyMain(s)).toFixed(2) : '0.00', s.active ? round2(subAnnualMain(s)).toFixed(2) : '0.00']);
+  return '﻿' + [head].concat(rows).map(r => r.map(csvCell).join(',')).join('\r\n');
+}
+function buildJSON(){ return JSON.stringify({app:'ai-subscriptions-tracker', version:1, exportedAt:new Date().toISOString(), settings:state.settings, subscriptions:state.subs}, null, 2); }
+let pendingImport = null;
+function handleImportFile(file){
+  if (!file) return;
+  if (file.size > 2*1024*1024){ toast(t('imp_err_size'), true); return; }
+  const fr = new FileReader();
+  fr.onerror = () => toast(t('imp_err_parse'), true);
+  fr.onload = () => importText(String(fr.result));
+  fr.readAsText(file);
+}
+function importText(text){
+  let data;
+  try { data = JSON.parse(text); } catch(e){ toast(t('imp_err_parse'), true); return false; }
+  if (Array.isArray(data)) data = {subscriptions:data};
+  if (!data || typeof data !== 'object' || !Array.isArray(data.subscriptions)){ toast(t('imp_err_shape'), true); return false; }
+  const res = sanitizeState(data);
+  if (!res.state.subs.length){ toast(t('imp_err_none'), true); return false; }
+  pendingImport = res;
+  $('#impSummary').innerHTML = `<div class="notice info" style="margin-top:0"><i data-lucide="file-check"></i><span>${esc(t('imp_summary',{valid:res.state.subs.length, invalid:res.invalid, cur:state.subs.length}))}</span></div>`;
+  $('input[name=impMode][value=merge]').checked = true;
+  $('#importDialog').showModal(); icons();
+  return true;
+}
+function applyImport(mode){
+  if (!pendingImport) return;
+  const imp = pendingImport.state;
+  try { localStorage.setItem(BACKUP_KEY, JSON.stringify({version:1, settings:state.settings, subscriptions:state.subs})); } catch(e){}
+  let base = mode === 'replace' ? [] : state.subs.slice();
+  const names = new Set(base.map(s => s.name.toLowerCase())), ids = new Set(base.map(s => s.id));
+  let added = 0, skipped = 0;
+  for (const s of imp.subs){
+    if (names.has(s.name.toLowerCase())){ skipped++; continue; }
+    if (ids.has(s.id)) s.id = uid();
+    names.add(s.name.toLowerCase()); ids.add(s.id); base.push(s); added++;
+  }
+  state.subs = base;
+  if (mode === 'replace') state.settings = imp.settings;
+  pendingImport = null;
+  persist(); $('#importDialog').close(); renderAll(); applyTheme(); syncCurrencySelect();
+  toast(t('imp_done',{added, skipped}));
+}
+function undoImport(){
+  let raw; try { raw = localStorage.getItem(BACKUP_KEY); } catch(e){}
+  if (!raw) return;
+  try { state = sanitizeState(JSON.parse(raw)).state; localStorage.removeItem(BACKUP_KEY); } catch(e){ return; }
+  persist(); renderAll(); applyTheme(); syncCurrencySelect(); toast(t('imp_undone'));
+}
+
+/* ============ TEMA / MONEDĂ ============ */
+function currentTheme(){ return state.settings.theme || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+function applyTheme(){
+  const th = currentTheme();
+  document.documentElement.setAttribute('data-theme', th);
+  $('#themeBtn').innerHTML = `<i data-lucide="${th==='dark'?'sun':'moon'}"></i>`; icons();
+  if (currentView === 'dashboard') renderCharts();
+}
+function syncCurrencySelect(){ $('#mainCurrency').value = state.settings.currency; }
+
+/* ============ EVENIMENTE ============ */
+function init(){
+  applyStaticI18n(); fillSelects(); syncCurrencySelect();
+  $('#nav').addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) showView(b.dataset.view); });
+  document.addEventListener('click', e => {
+    const go = e.target.closest('[data-view-go]'); if (go){ showView(go.dataset.viewGo); return; }
+    const add = e.target.closest('[data-action="add-new"]'); if (add){ openForm(null); return; }
+    const cl = e.target.closest('[data-close]'); if (cl){ const d = cl.closest('dialog'); if (d) d.close(); return; }
+    const lib = e.target.closest('[data-action="lib-add"]');
+    if (lib){ const l = LIBRARY.find(x => x.id === lib.dataset.tool); if (l) openForm(null, {name:l.name, category:l.category, price:l.price, currency:l.currency, freq:l.freq, start:todayISO(), next:'', active:true, toolId:l.id}); return; }
+    const row = e.target.closest('.item[data-id]'), act = e.target.closest('[data-action]');
+    if (row && act){
+      const s = state.subs.find(x => x.id === row.dataset.id); if (!s) return;
+      if (act.dataset.action === 'toggle'){ s.active = !s.active; persist(); renderAll(); toast(t(s.active?'toggled_on':'toggled_off')); }
+      else if (act.dataset.action === 'edit') openForm(s);
+      else if (act.dataset.action === 'delete'){
+        confirmDialog(t('del_title'), t('del_msg',{name:s.name}), t('delete')).then(ok => {
+          if (!ok) return; state.subs = state.subs.filter(x => x.id !== s.id); simSel.delete(s.id); persist(); renderAll(); toast(t('deleted_ok'));
+        });
+      }
+    }
+  });
+  $$('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+  $('#subForm').addEventListener('submit', submitForm);
+  $('#themeBtn').addEventListener('click', () => { state.settings.theme = currentTheme()==='dark' ? 'light' : 'dark'; persist(); applyTheme(); });
+  $('#mainCurrency').addEventListener('change', e => { if (CURRENCIES.includes(e.target.value)){ state.settings.currency = e.target.value; persist(); renderAll(); } });
+  $('#statusFilter').addEventListener('click', e => { const b = e.target.closest('button[data-filter]'); if (!b) return; filterStatus = b.dataset.filter; $$('#statusFilter button').forEach(x => x.setAttribute('aria-pressed', String(x===b))); renderSubs(); icons(); });
+  $('#sortSel').addEventListener('change', e => { sortBy = e.target.value; renderSubs(); icons(); });
+
+  // Buget
+  const saveBudget = () => {
+    const raw = $('#budgetInput').value.trim(); let v = 0;
+    if (raw){ v = parsePrice(raw); if (!Number.isFinite(v) || v < 0 || v > MAX_PRICE){ $('#budgetErr').textContent = t('e_budget'); $('#budgetInput').setAttribute('aria-invalid','true'); return; } }
+    $('#budgetErr').textContent = ''; $('#budgetInput').removeAttribute('aria-invalid');
+    state.settings.budget = {amount: round2(v), currency: state.settings.currency}; persist(); $('#budgetInput').blur(); renderAll(); toast(t('budget_saved'));
+  };
+  $('#budgetSave').addEventListener('click', saveBudget);
+  $('#budgetInput').addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); saveBudget(); } });
+
+  // Simulator
+  $('#simList').addEventListener('change', e => { const id = e.target.dataset.sim; if (!id) return; e.target.checked ? simSel.add(id) : simSel.delete(id); renderSim(); icons(); });
+  $('#simAll').addEventListener('click', () => { state.subs.filter(s => s.active).forEach(s => simSel.add(s.id)); renderSim(); icons(); });
+  $('#simNone').addEventListener('click', () => { simSel.clear(); renderSim(); icons(); });
+
+  // Cursuri
+  $('#ratesSave').addEventListener('click', () => {
+    const out = {}; let ok = true;
+    for (const c of ['USD','RON']){
+      const v = parsePrice($('#rate'+c).value); const err = $('#rate'+c+'Err');
+      if (!Number.isFinite(v) || v <= 0 || v >= 1e6){ err.textContent = t('e_rate'); ok = false; } else { err.textContent = ''; out[c] = v; }
+    }
+    if (!ok) return;
+    state.settings.rates = {EUR:1, USD:out.USD, RON:out.RON}; persist(); renderAll(); toast(t('rates_saved'));
+  });
+
+  // Export / Import
+  $('#expCsv').addEventListener('click', () => { download('abonamente-ai-'+todayISO()+'.csv','text/csv;charset=utf-8', buildCSV()); toast(t('exported')); });
+  $('#expJson').addEventListener('click', () => { download('abonamente-ai-'+todayISO()+'.json','application/json', buildJSON()); toast(t('exported')); });
+  $('#impJsonBtn').addEventListener('click', () => $('#impFile').click());
+  $('#impFile').addEventListener('change', e => { handleImportFile(e.target.files[0]); e.target.value = ''; });
+  $('#impConfirm').addEventListener('click', () => applyImport($('input[name=impMode]:checked').value));
+  $('#importDialog').addEventListener('close', () => { pendingImport = null; });
+  $('#undoImport').addEventListener('click', undoImport);
+
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener && matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!state.settings.theme) applyTheme(); });
+  showView('dashboard'); applyTheme(); renderStorageWarn(); renderAll();
+  // Bibliotecile CDN se încarcă defer: redesenează iconițele și graficele când sunt gata.
+  window.addEventListener('load', () => { icons(); if (currentView === 'dashboard') renderCharts(); });
+}
+
+// Expus pentru testare (nu are efect asupra utilizatorului)
+window.__tracker = {get state(){return state;}, monthlyOf, annualOf, nextOccurrence, sanitizeSub, parsePrice, buildCSV, buildJSON, importText, applyImport, computeTotals, convert, effectiveNext};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>
