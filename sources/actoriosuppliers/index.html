@@ -1,0 +1,2176 @@
+<!DOCTYPE html><html lang="ro"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style rel="stylesheet" type="text/css">@charset "utf-8";
+
+:root { --bg: #0d0f0e; --panel: #151917; --panel2: #1c211e; --line: #2a302c; --ink: #e8ede9; --muted: #8b968f; --dim: #5f6a63; --lime: #c6f24e; --lime-dim: #94b83a; --red: #ff5c5c; --amber: #ffb454; --blue: #6ea8ff; --mono: 'JetBrains Mono',monospace; --body: 'Archivo',sans-serif; --disp: 'Syne',sans-serif; }
+
+* { box-sizing: border-box; margin: 0px; padding: 0px; }
+
+body { background-position-x: ; background-position-y: ; background-size: ; background-repeat: ; background-attachment: ; background-origin: ; background-clip: ; background-color: ; color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; background-image: radial-gradient(circle at 15% 0%, rgba(198, 242, 78, 0.05), transparent 40%), radial-gradient(circle at 90% 100%, rgba(110, 168, 255, 0.04), transparent 45%); min-height: 100vh; }
+
+.wrap { max-width: 1120px; margin: 0px auto; padding: 28px 20px 80px; }
+
+header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+
+.logo { font-family: var(--disp); font-weight: 800; font-size: 30px; letter-spacing: -0.02em; }
+
+.logo b { color: var(--lime); }
+
+.tag { color: var(--dim); font-size: 13px; font-family: var(--mono); }
+
+.sub { color: var(--muted); font-size: 13.5px; margin-bottom: 22px; max-width: 640px; }
+
+.searchbar { display: flex; gap: 10px; flex-wrap: wrap; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-bottom: 22px; }
+
+.searchbar input { flex: 1 1 0%; min-width: 200px; background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); font-size: 15px; padding: 12px 14px; border-radius: 9px; outline: none; }
+
+.searchbar input:focus { border-color: var(--lime-dim); }
+
+.searchbar select { background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); padding: 0px 12px; border-radius: 9px; outline: none; cursor: pointer; }
+
+.btn { background: var(--lime); color: rgb(18, 22, 12); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; font-family: var(--disp); font-weight: 700; font-size: 15px; padding: 12px 22px; border-radius: 9px; cursor: pointer; transition: 0.15s; white-space: nowrap; }
+
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
+
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+@media (max-width: 820px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; animation: 0.4s ease 0s 1 normal both running rise; }
+
+@keyframes rise { 
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: none; }
+}
+
+.card h3 { font-family: var(--disp); font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+
+.prodhead { display: flex; gap: 14px; margin-bottom: 16px; }
+
+.prodhead img { width: 70px; height: 70px; object-fit: contain; background: rgb(255, 255, 255); border-radius: 8px; flex-shrink: 0; }
+
+.prodhead .t { font-family: var(--disp); font-weight: 700; font-size: 16px; line-height: 1.25; }
+
+.prodhead .m { color: var(--dim); font-family: var(--mono); font-size: 12px; margin-top: 4px; }
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-radius: 10px; overflow: hidden; }
+
+.stat { background: var(--panel2); padding: 12px 14px; }
+
+.stat .k { color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.stat .v { font-family: var(--mono); font-size: 20px; font-weight: 500; margin-top: 2px; }
+
+.v.good { color: var(--lime); }
+
+.v.bad { color: var(--red); }
+
+.v.warn { color: var(--amber); }
+
+.flag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; margin-top: 14px; }
+
+.flag.g { background: rgba(198, 242, 78, 0.12); color: var(--lime); }
+
+.flag.a { background: rgba(255, 180, 84, 0.12); color: var(--amber); }
+
+.flag.r { background: rgba(255, 92, 92, 0.12); color: var(--red); }
+
+label.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 13.5px; color: var(--muted); }
+
+label.row input { width: 110px; background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); text-align: right; padding: 7px 10px; border-radius: 7px; outline: none; }
+
+label.row input:focus { border-color: var(--lime-dim); }
+
+.toggle { display: flex; gap: 6px; background: var(--panel2); border-radius: 8px; padding: 4px; }
+
+.toggle button { flex: 1 1 0%; background: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; color: var(--muted); font-family: var(--mono); font-size: 12px; padding: 7px; border-radius: 6px; cursor: pointer; }
+
+.toggle button.on { background: var(--line); color: var(--ink); }
+
+.verdict { margin-top: 16px; border-radius: 12px; padding: 16px; text-align: center; }
+
+.verdict .big { font-family: var(--disp); font-weight: 800; font-size: 26px; letter-spacing: -0.01em; }
+
+.verdict .nums { font-family: var(--mono); font-size: 14px; margin-top: 6px; opacity: 0.85; }
+
+.verdict.g { background: rgba(198, 242, 78, 0.1); border: 1px solid rgba(198, 242, 78, 0.3); }
+
+.verdict.g .big { color: var(--lime); }
+
+.verdict.a { background: rgba(255, 180, 84, 0.1); border: 1px solid rgba(255, 180, 84, 0.3); }
+
+.verdict.a .big { color: var(--amber); }
+
+.verdict.r { background: rgba(255, 92, 92, 0.1); border: 1px solid rgba(255, 92, 92, 0.3); }
+
+.verdict.r .big { color: var(--red); }
+
+.feebreak { margin-top: 12px; font-family: var(--mono); font-size: 12.5px; }
+
+.feebreak div { display: flex; justify-content: space-between; padding: 5px 2px; color: var(--muted); }
+
+.feebreak div span { color: var(--dim); }
+
+.feebreak div.tot { border-top: 1px solid var(--line); margin-top: 3px; padding-top: 8px; color: var(--ink); }
+
+.feebreak div.tot b { color: var(--lime); }
+
+.supplier { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 9px; }
+
+.supplier .top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+
+.supplier a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 14px; }
+
+.supplier a:hover { color: var(--lime); }
+
+.supplier .src { color: var(--dim); font-family: var(--mono); font-size: 11px; margin-top: 2px; }
+
+.supplier .snip { color: var(--muted); font-size: 12.5px; margin-top: 6px; line-height: 1.4; }
+
+.badge { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+
+.badge.b2b { background: rgba(198, 242, 78, 0.14); color: var(--lime); }
+
+.badge.price { background: rgba(110, 168, 255, 0.14); color: var(--blue); }
+
+.badge.use { background: var(--line); color: var(--muted); cursor: pointer; }
+
+.empty { color: var(--dim); font-size: 13.5px; text-align: center; padding: 26px 10px; font-family: var(--mono); }
+
+.err { color: var(--red); font-family: var(--mono); font-size: 13px; background: rgba(255, 92, 92, 0.08); border: 1px solid rgba(255, 92, 92, 0.25); border-radius: 9px; padding: 12px 14px; margin-bottom: 16px; }
+
+.note { color: var(--dim); font-size: 11.5px; margin-top: 12px; line-height: 1.5; font-style: italic; }
+
+.tokens { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+
+.watch { margin-top: 22px; }
+
+.wl-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 10px 13px; margin-bottom: 7px; }
+
+.wl-item .wt { font-size: 13.5px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.wl-item .wm { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+
+.x { background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; color: var(--dim); cursor: pointer; font-size: 16px; padding: 2px 6px; }
+
+.x:hover { color: var(--red); }
+
+.spin { display: inline-block; width: 14px; height: 14px; border-top-style: ; border-top-width: ; border-right-color: ; border-right-style: ; border-right-width: ; border-bottom-color: ; border-bottom-style: ; border-bottom-width: ; border-left-color: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; border-top-color: var(--lime); border-radius: 50%; animation: 0.7s linear 0s infinite normal none running sp; vertical-align: -2px; }
+
+@keyframes sp { 
+  100% { transform: rotate(360deg); }
+}
+
+table.bulk { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+
+table.bulk th { text-align: left; color: var(--dim); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+
+table.bulk td { padding: 9px 10px; border-bottom: 1px solid var(--line); font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+
+table.bulk td.prod { font-family: var(--body); white-space: normal; min-width: 180px; max-width: 260px; }
+
+table.bulk tr:hover td { background: var(--panel2); }
+
+.vtag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+
+.vtag.g { background: rgba(198, 242, 78, 0.14); color: var(--lime); }
+
+.vtag.a { background: rgba(255, 180, 84, 0.14); color: var(--amber); }
+
+.vtag.r { background: rgba(255, 92, 92, 0.14); color: var(--red); }
+
+#scanModal { display: none; position: fixed; inset: 0px; background: rgba(8, 10, 9, 0.88); z-index: 100; align-items: center; justify-content: center; padding: 18px; }
+
+#scanModal.on { display: flex; }
+
+.scanbox { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; width: 100%; max-width: 420px; }
+
+.scanhead { display: flex; justify-content: space-between; align-items: center; font-family: var(--disp); font-weight: 700; font-size: 15px; margin-bottom: 14px; }
+
+#reader { border-radius: 12px; overflow: hidden; }
+
+.chartwrap { margin-top: 14px; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+
+.charttitle { display: flex; gap: 14px; align-items: center; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 8px; flex-wrap: wrap; }
+
+.charttitle .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 0px; }
+
+.dot.lime { background: var(--lime); }
+
+.dot.blue { background: var(--blue); }
+
+.chartaxis { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--dim); margin-top: 4px; }
+
+.wl-alert { font-family: var(--mono); font-size: 11px; padding: 2px 7px; border-radius: 5px; margin-left: 6px; }
+
+.wl-alert.drop { background: rgba(198, 242, 78, 0.14); color: var(--lime); }
+
+.wl-alert.up { background: rgba(255, 180, 84, 0.14); color: var(--amber); }
+
+.wl-alert.sell { background: rgba(255, 92, 92, 0.14); color: var(--red); }
+
+#dropzone { border: 1.5px dashed var(--line); border-radius: 12px; padding: 26px 16px; text-align: center; cursor: pointer; transition: 0.15s; background: var(--panel2); }
+
+#dropzone:hover, #dropzone.drag { border-color: var(--lime-dim); background: rgba(198, 242, 78, 0.05); }
+
+#dropzone .dz-big { font-family: var(--disp); font-weight: 700; font-size: 15px; color: var(--ink); }
+
+#dropzone .dz-sub { color: var(--dim); font-family: var(--mono); font-size: 12px; margin-top: 6px; }
+
+.mapgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0px; }
+
+.mapf { display: flex; flex-direction: column; gap: 5px; }
+
+.mapf label { font-family: var(--mono); font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.mapf label b { color: var(--lime); }
+
+.mapf select { background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); font-size: 12.5px; padding: 8px 10px; border-radius: 8px; outline: none; cursor: pointer; }
+
+.mapf select:focus { border-color: var(--lime-dim); }
+
+.filterbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; padding: 12px 14px; margin: 6px 0px 14px; }
+
+.filterbar .ff { display: flex; flex-direction: column; gap: 5px; }
+
+.filterbar .ff span { font-family: var(--mono); font-size: 10.5px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.filterbar input, .filterbar select { background: var(--bg); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); font-size: 12.5px; padding: 7px 9px; border-radius: 7px; outline: none; }
+
+.filterbar input { width: 96px; text-align: right; }
+
+.filterbar input.wide { width: 180px; text-align: left; }
+
+.filterbar input:focus, .filterbar select:focus { border-color: var(--lime-dim); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0px 12px; }
+
+.chip { font-family: var(--mono); font-size: 11px; padding: 5px 10px; border-radius: 16px; cursor: pointer; background: var(--panel2); border: 1px solid var(--line); color: var(--muted); transition: 0.12s; user-select: none; }
+
+.chip:hover { border-color: var(--lime-dim); }
+
+.chip.on { background: rgba(198, 242, 78, 0.14); border-color: var(--lime-dim); color: var(--lime); }
+
+.imp-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0px 12px; }
+
+.imp-stat { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.imp-stat b { color: var(--lime); }
+
+.catwrap { max-height: 460px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+
+table.cat { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+table.cat th { position: sticky; top: 0px; background: var(--panel); text-align: left; color: var(--dim); font-weight: 500; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; z-index: 2; }
+
+table.cat td { padding: 7px 10px; border-bottom: 1px solid var(--line); font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+
+table.cat td.name { font-family: var(--body); white-space: normal; min-width: 170px; max-width: 280px; }
+
+table.cat tr:hover td { background: var(--panel2); }
+
+table.cat tr.nocode td { opacity: 0.5; }
+
+table.cat tr.done td { background: rgba(198, 242, 78, 0.04); }
+
+table.cat tr.done td.name { color: var(--muted); }
+
+table.cat input[type="checkbox"] { accent-color: var(--lime); cursor: pointer; }
+
+.nocode-tag { font-family: var(--mono); font-size: 10px; color: var(--amber); margin-left: 5px; }
+
+.done-tag { font-family: var(--mono); font-size: 10px; color: var(--lime); margin-left: 5px; }
+
+.batch-lbl { font-family: var(--mono); font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.04em; }
+
+#bulkNumFilters { background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; padding: 11px 13px; }
+
+.rfg { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+
+.rfg input { width: 62px; background: var(--bg); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); font-size: 11.5px; padding: 5px 7px; border-radius: 6px; outline: none; text-align: right; }
+
+.rfg input:focus { border-color: var(--lime-dim); }
+
+.rfg .dash { color: var(--dim); }
+
+table.hist { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+table.hist th { text-align: left; color: var(--dim); font-weight: 500; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; padding: 7px 9px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+
+table.hist td { padding: 7px 9px; border-bottom: 1px solid var(--line); font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+
+table.hist td.t { font-family: var(--body); white-space: normal; min-width: 170px; max-width: 280px; }
+
+table.hist tr:hover td { background: var(--panel2); }
+
+.star { cursor: pointer; color: var(--dim); font-size: 15px; background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; padding: 0px 2px; }
+
+.star.on { color: var(--amber); }
+
+.hist-act { background: var(--line); color: var(--muted); border-width: medium; border-style: none; border-color: currentcolor; border-image: none; font-family: var(--mono); font-size: 10.5px; padding: 3px 7px; border-radius: 6px; cursor: pointer; }
+
+.hist-act:hover { color: var(--ink); }
+
+.sellerbox { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+
+.sellerhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+
+.sellername { font-family: var(--disp); font-weight: 700; font-size: 16px; }
+
+.sellerid { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+.sstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 1px; background: var(--line); border-radius: 9px; overflow: hidden; margin-top: 12px; }
+
+.sstat { background: var(--panel); padding: 10px 12px; }
+
+.sstat .k { color: var(--dim); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.sstat .v { font-family: var(--mono); font-size: 17px; margin-top: 2px; }
+
+.signal { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; padding: 6px 11px; border-radius: 20px; margin-top: 12px; }
+
+.signal.good { background: rgba(198, 242, 78, 0.12); color: var(--lime); }
+
+.signal.mid { background: rgba(255, 180, 84, 0.12); color: var(--amber); }
+
+.signal.big { background: rgba(110, 168, 255, 0.12); color: var(--blue); }
+
+#histModal { display: none; position: fixed; inset: 0px; background: rgba(8, 10, 9, 0.88); z-index: 110; align-items: flex-start; justify-content: center; padding: 22px 16px; overflow-y: auto; }
+
+#histModal.on { display: flex; }
+
+.hmbox { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; width: 100%; max-width: 600px; margin: auto; animation: 0.25s ease 0s 1 normal both running rise; }
+
+.hmhead { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+
+.hmhead img { width: 62px; height: 62px; object-fit: contain; background: rgb(255, 255, 255); border-radius: 9px; flex-shrink: 0; }
+
+.hmhead .t { font-family: var(--disp); font-weight: 700; font-size: 15px; line-height: 1.3; }
+
+.hmhead .m { color: var(--dim); font-family: var(--mono); font-size: 11px; margin-top: 3px; }
+
+.hmgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 1px; background: var(--line); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+
+.hmgrid .c { background: var(--panel2); padding: 9px 11px; }
+
+.hmgrid .c .k { color: var(--dim); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.hmgrid .c .v { font-family: var(--mono); font-size: 15px; margin-top: 2px; }
+
+.hmgrid .c .v.good { color: var(--lime); }
+
+.hmgrid .c .v.bad { color: var(--red); }
+
+.hmgrid .c .v.warn { color: var(--amber); }
+
+.hmnote { width: 100%; background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-family: var(--body); font-size: 13px; padding: 10px 12px; border-radius: 9px; outline: none; resize: vertical; }
+
+.hmnote:focus { border-color: var(--lime-dim); }
+
+.hmlinks { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0px; }
+
+.hmact { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; border-top: 1px solid var(--line); padding-top: 13px; }
+
+table.hist tbody tr { cursor: pointer; }
+
+.pcard { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; animation: 0.35s ease 0s 1 normal both running rise; }
+
+.phead { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 13px; }
+
+.phead img { width: 58px; height: 58px; object-fit: contain; background: rgb(255, 255, 255); border-radius: 8px; flex-shrink: 0; }
+
+.phead .t { font-family: var(--disp); font-weight: 700; font-size: 15px; line-height: 1.25; }
+
+.phead .m { color: var(--dim); font-family: var(--mono); font-size: 11px; margin-top: 3px; }
+
+.pbig { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border-radius: 11px; overflow: hidden; margin-bottom: 11px; }
+
+.pbig .b { background: var(--panel2); padding: 11px 13px; }
+
+.pbig .b .k { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.pbig .b .v { font-family: var(--mono); font-size: 27px; font-weight: 500; margin-top: 1px; line-height: 1.1; }
+
+.pbig .b .v.good { color: var(--lime); }
+
+.pbig .b .v.bad { color: var(--red); }
+
+.pbig .b .v.warn { color: var(--amber); }
+
+.pmain { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+
+@media (max-width: 760px) {
+  .pmain { grid-template-columns: 1fr; }
+  .pbig .b .v { font-size: 23px; }
+}
+
+.pbox { background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; padding: 12px 13px; }
+
+.pbox h4 { font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 9px; font-weight: 400; }
+
+.pcost { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+
+.pcost label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+.pcost input { flex: 1 1 0%; min-width: 0px; background: var(--bg); border: 1px solid var(--lime-dim); color: var(--lime); font-family: var(--mono); font-size: 19px; text-align: right; padding: 9px 11px; border-radius: 8px; outline: none; }
+
+.prow { display: flex; justify-content: space-between; align-items: center; gap: 9px; margin-bottom: 7px; font-size: 12px; color: var(--muted); }
+
+.prow input { width: 82px; background: var(--bg); border: 1px solid var(--line); color: var(--ink); font-family: var(--mono); font-size: 12.5px; text-align: right; padding: 6px 9px; border-radius: 7px; outline: none; }
+
+.prow input:focus { border-color: var(--lime-dim); }
+
+.padv { margin-top: 9px; border-top: 1px solid var(--line); padding-top: 9px; }
+
+.padv summary { cursor: pointer; font-family: var(--mono); font-size: 11px; color: var(--dim); list-style: none; padding: 3px 0px; user-select: none; }
+
+.padv summary::-webkit-details-marker { display: none; }
+
+.padv summary:hover { color: var(--muted); }
+
+.padv[open] summary { margin-bottom: 8px; color: var(--muted); }
+
+.pstats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--line); border-radius: 9px; overflow: hidden; }
+
+.pstats .s { background: var(--panel); padding: 8px 9px; }
+
+.pstats .s .k { color: var(--dim); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.pstats .s .v { font-family: var(--mono); font-size: 14px; margin-top: 1px; }
+
+.pstats .s .v.good { color: var(--lime); }
+
+.pstats .s .v.bad { color: var(--red); }
+
+.pstats .s .v.warn { color: var(--amber); }
+
+.pverdict { border-radius: 10px; padding: 10px 13px; display: flex; align-items: center; justify-content: space-between; gap: 11px; flex-wrap: wrap; margin-bottom: 11px; }
+
+.pverdict .lbl { font-family: var(--disp); font-weight: 800; font-size: 19px; letter-spacing: -0.01em; }
+
+.pverdict .why { font-family: var(--mono); font-size: 11px; opacity: 0.8; text-align: right; flex: 1 1 0%; min-width: 0px; }
+
+.pverdict.g { background: rgba(198, 242, 78, 0.1); border: 1px solid rgba(198, 242, 78, 0.3); }
+
+.pverdict.g .lbl { color: var(--lime); }
+
+.pverdict.a { background: rgba(255, 180, 84, 0.1); border: 1px solid rgba(255, 180, 84, 0.3); }
+
+.pverdict.a .lbl { color: var(--amber); }
+
+.pverdict.r { background: rgba(255, 92, 92, 0.1); border: 1px solid rgba(255, 92, 92, 0.3); }
+
+.pverdict.r .lbl { color: var(--red); }
+
+.tabs { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 5px; margin-bottom: 20px; overflow-x: auto; }
+
+.tabs button { flex: 1 1 0%; min-width: 96px; background: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; color: var(--muted); cursor: pointer; font-family: var(--disp); font-weight: 700; font-size: 13.5px; padding: 10px 14px; border-radius: 8px; transition: 0.14s; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 7px; }
+
+.tabs button:hover { color: var(--ink); background: var(--panel2); }
+
+.tabs button.on { background: var(--lime); color: rgb(18, 22, 12); }
+
+.tabs .tabi { font-style: normal; font-size: 13px; opacity: 0.85; }
+
+.tabcount { font-family: var(--mono); font-size: 10.5px; background: rgba(0, 0, 0, 0.18); padding: 1px 6px; border-radius: 9px; }
+
+.tabs button:not(.on) .tabcount { background: var(--line); color: var(--muted); }
+
+.tabpane { display: none; animation: 0.28s ease 0s 1 normal both running rise; }
+
+.tabpane.on { display: block; }
+
+.tabpane > .card:first-child, .tabpane > .searchbar:first-child { margin-top: 0px !important; }
+
+table.bulk td { padding: 6px 9px; font-size: 11.5px; }
+
+table.bulk th { padding: 6px 9px; }
+
+table.bulk td.prod { min-width: 150px; max-width: 230px; font-size: 12px; }
+
+table.cat td { padding: 5px 9px; font-size: 11.5px; }
+
+table.cat td.name { min-width: 150px; max-width: 240px; }
+
+table.hist td { padding: 5px 9px; font-size: 11.5px; }
+
+@media (max-width: 680px) {
+  .wrap { padding: 16px 12px 60px; }
+  .tabs button { font-size: 12.5px; padding: 9px 10px; min-width: auto; }
+  .tabs .tabi { display: none; }
+  .stats, .sstats { grid-template-columns: 1fr 1fr; }
+  .searchbar { padding: 10px; }
+  .filterbar { gap: 9px; padding: 10px; }
+  .imp-toolbar { gap: 7px; }
+  .imp-toolbar .btn { flex: 1 1 0%; }
+}</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOURCER — terminal de sourcing FBA</title>
+<link rel="manifest" href="https://actoriosuppliers.netlify.app/manifest.json">
+<meta name="theme-color" content="#0d0f0e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sourcer">
+<link rel="apple-touch-icon" href="https://actoriosuppliers.netlify.app/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://actoriosuppliers.netlify.app/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Archivo:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">SOUR<b>CER</b></div>
+    <div class="tag">// terminal de sourcing FBA · EU · <span id="buildTag" style="color:var(--lime-dim)">v4</span></div>
+    <span style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn ghost" title="Golește cache-ul și reîncarcă versiunea nouă" style="padding:8px 13px;font-size:12px">↻ Cache</button>
+      <button class="btn" id="installBtn" style="display:none;padding:8px 16px;font-size:13px">⤓ Instalează</button>
+    </span>
+  </header>
+  <div class="sub">Dai un ASIN sau EAN → trag datele Amazon (preț, BSR, stabilitate) din Keepa, caut furnizori B2B pe web și calculez marja reală în funcție de regimul tău TVA. Verdictul îți spune dacă merită înainte să investești un cent.</div>
+
+  <nav class="tabs" id="tabnav">
+    <button data-t="produs" class="on"><i class="tabi">⌕</i>Produs</button>
+    <button data-t="sourcing"><i class="tabi">⇩</i>Sourcing</button>
+    <button data-t="analiza"><i class="tabi">▤</i>Rezultate<span class="tabcount" id="tabCountAnaliza"></span></button>
+    <button data-t="istoric"><i class="tabi">◷</i>Istoric<span class="tabcount" id="tabCountIstoric">30</span></button>
+  </nav>
+
+  <section class="tabpane on" data-pane="produs">
+  <div class="searchbar">
+    <input id="q" placeholder="ASIN (ex. B09JKFD2P7) sau EAN (ex. 5702017153124)" autocomplete="off">
+    <select id="domain">
+      <option value="4">🇫🇷 Amazon.fr</option>
+      <option value="3">🇩🇪 Amazon.de</option>
+      <option value="8">🇮🇹 Amazon.it</option>
+      <option value="9">🇪🇸 Amazon.es</option>
+      <option value="2">🇬🇧 Amazon.co.uk</option>
+      <option value="ro">🇷🇴 România (fără Keepa)</option>
+    </select>
+    <button class="btn ghost" id="scanBtn" title="Scanează cod de bare cu camera">📷 Scan</button>
+    <button class="btn" id="go">Analizează</button>
+  </div>
+
+  <div id="err"></div>
+  <div id="results"></div>
+
+  <div class="watch card" style="display:none" id="watchCard">
+    <h3>Watchlist <button class="btn ghost" id="rescan" style="padding:6px 12px;font-size:12px">Re-verifică tot</button></h3>
+    <div id="watchlist"></div>
+  </div>
+
+  <div class="watch card" style="display:none" id="exportCard">
+    <h3>Listă export
+      <span style="display:flex;gap:8px">
+        <button class="btn" id="doExport" style="padding:6px 14px;font-size:12px">⭳ Export Excel</button>
+        <button class="btn ghost" id="clearExport" style="padding:6px 12px;font-size:12px">Golește</button>
+      </span>
+    </h3>
+    <div id="exportList"></div>
+  </div>
+  </section>
+
+  <section class="tabpane" data-pane="sourcing">
+  <div class="card" id="sellerCard" style="margin-top:22px">
+    <h3>Spionează seller <span class="tokens">1 token / storefront</span></h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lipește un <b style="color:var(--ink)">seller ID</b> (ex. <span style="font-family:var(--mono)">A1X2Y3Z4W5V6U7</span>) sau direct link-ul lui de storefront. Îți aduc tot ce vinde. Vânzătorii cu <b style="color:var(--ink)">puține feedback-uri</b> sunt semnalul bun: dacă un cont nou vinde acolo, categoria e probabil ungated.</div>
+    <div class="searchbar" style="margin-bottom:14px">
+      <input id="sellerInput" placeholder="Seller ID sau link storefront (amazon.fr/sp?seller=...)" autocomplete="off">
+      <select id="sellerDomain">
+        <option value="4">🇫🇷 Amazon.fr</option>
+        <option value="3">🇩🇪 Amazon.de</option>
+        <option value="8">🇮🇹 Amazon.it</option>
+        <option value="9">🇪🇸 Amazon.es</option>
+        <option value="2">🇬🇧 Amazon.co.uk</option>
+      </select>
+      <button class="btn" id="sellerGo">Adu catalogul</button>
+    </div>
+    <div id="sellerInfo"></div>
+  </div>
+
+  <div class="card" id="importCard" style="margin-top:22px">
+    <h3>Import catalog furnizor <span class="tokens" id="impMeta"></span></h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Trage un fișier <b style="color:var(--ink)">XLSX / XLS / CSV</b> de la furnizor. Detectez coloanele automat, filtrezi ce te interesează, apoi trimiți selecția la analiza în masă Keepa.</div>
+
+    <div id="dropzone">
+      <div class="dz-big">⭱ Trage fișierul aici sau click ca să alegi</div>
+      <div class="dz-sub">.xlsx · .xls · .csv · .tsv — rămâne local în browser, nu se urcă nicăieri</div>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.tsv" style="display:none">
+
+    <div id="sheetPick" style="display:none;margin-top:12px">
+      <label class="row" style="color:var(--muted)">Foaie
+        <select id="sheetSel" style="width:auto;min-width:160px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);padding:7px 10px;border-radius:7px;outline:none;cursor:pointer"></select>
+      </label>
+    </div>
+
+    <div id="mapArea" style="display:none">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:14px">Mapare coloane <span style="text-transform:none;color:var(--muted)">— corectează dacă am ghicit greșit</span></div>
+      <div class="mapgrid" id="mapGrid"></div>
+    </div>
+
+    <div id="filterArea" style="display:none">
+      <div class="filterbar">
+        <div class="ff"><span>Caută (nume / cod)</span><input id="fSearch" class="wide" type="text" placeholder="text liber…" style="text-align:left"></div>
+        <div class="ff"><span>Cost min</span><input id="fCostMin" type="number" step="0.01" placeholder="—"></div>
+        <div class="ff"><span>Cost max</span><input id="fCostMax" type="number" step="0.01" placeholder="—"></div>
+        <div class="ff"><span>Stoc min</span><input id="fStockMin" type="number" step="1" placeholder="—"></div>
+        <div class="ff"><span>Brand</span><select id="fBrand"><option value="">toate</option></select></div>
+        <div class="ff"><span style="text-transform:none">&nbsp;</span><label style="display:flex;gap:6px;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);cursor:pointer;padding-bottom:6px"><input id="fOnlyCode" type="checkbox" style="width:auto;accent-color:var(--lime)"> doar cu cod valid</label></div>
+      </div>
+      <div class="chips" id="catChips"></div>
+
+      <div class="imp-toolbar">
+        <span class="batch-lbl">Selectează în loturi:</span>
+        <button class="btn ghost batch-n" data-n="25" style="padding:8px 12px;font-size:12px">▸ 25</button>
+        <button class="btn ghost batch-n" data-n="50" style="padding:8px 12px;font-size:12px">▸ 50</button>
+        <button class="btn ghost batch-n" data-n="100" style="padding:8px 12px;font-size:12px">▸ 100</button>
+        <span class="imp-stat" id="batchStat" style="margin-left:4px"></span>
+        <span style="flex:1"></span>
+        <button class="btn ghost" id="batchReset" style="padding:8px 12px;font-size:12px" title="Uită ce coduri au fost trimise deja">↺ reset progres</button>
+      </div>
+
+      <div class="imp-toolbar" style="margin-top:0">
+        <span class="imp-stat" id="impStat"></span>
+        <span style="flex:1"></span>
+        <button class="btn ghost" id="selAll" style="padding:8px 12px;font-size:12px">Tot filtrat</button>
+        <button class="btn ghost" id="selNone" style="padding:8px 12px;font-size:12px">Deselectează</button>
+        <button class="btn ghost" id="impExport" style="padding:8px 12px;font-size:12px">⭳ Export selecție</button>
+        <button class="btn" id="impSend" style="padding:8px 16px;font-size:13px">→ Trimite la analiză în masă</button>
+      </div>
+
+      <div class="catwrap"><div id="catTable"></div></div>
+    </div>
+  </div>
+
+  </section>
+
+  <section class="tabpane" data-pane="analiza">
+  <div class="card" id="bulkCard" style="margin-top:22px">
+    <h3>Analiză în masă <span class="tokens">1 token Keepa / produs</span></h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Lipește ASIN-uri sau EAN-uri, unul pe rând. Opțional adaugi costul furnizorului după virgulă sau punct-și-virgulă — ex: <span style="font-family:var(--mono);color:var(--ink)">B077XHJTHM;0.70</span></div>
+    <textarea id="bulkInput" rows="5" placeholder="B077XHJTHM;0.70
+3121970169089;1.20
+B09JKFD2P7" style="width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:13px;padding:12px;border-radius:9px;outline:none;resize:vertical"></textarea>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap">
+      <select id="bulkDomain" style="background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);padding:9px 12px;border-radius:9px;outline:none;cursor:pointer">
+        <option value="4">🇫🇷 Amazon.fr</option>
+        <option value="3">🇩🇪 Amazon.de</option>
+        <option value="8">🇮🇹 Amazon.it</option>
+        <option value="9">🇪🇸 Amazon.es</option>
+        <option value="2">🇬🇧 Amazon.co.uk</option>
+      </select>
+      <button class="btn" id="bulkGo">Analizează lista</button>
+      <span id="bulkProgress" class="tokens"></span>
+      <span class="toggle" id="bulkFilter" style="display:none;text-transform:none">
+        <button data-f="all" class="on">Toate</button>
+        <button data-f="ok">Doar oportunități</button>
+      </span>
+      <button class="btn ghost" id="bulkExport" style="display:none;padding:9px 14px;font-size:13px">⭳ Export Excel</button>
+    </div>
+    <div id="bulkNumFilters" style="display:none;gap:14px 18px;align-items:center;margin-top:12px;flex-wrap:wrap">
+      <span class="batch-lbl">Filtre rezultate:</span>
+      <span class="rfg">Buy Box <input id="fBB_min" type="number" step="0.5" placeholder="min"><span class="dash">–</span><input id="fBB_max" type="number" step="0.5" placeholder="max"> €</span>
+      <span class="rfg">BSR <input id="fBSR_min" type="number" step="1000" placeholder="min"><span class="dash">–</span><input id="fBSR_max" type="number" step="1000" placeholder="max"></span>
+      <span class="rfg">Selleri <input id="fSEL_min" type="number" step="1" placeholder="min"><span class="dash">–</span><input id="fSEL_max" type="number" step="1" placeholder="max"></span>
+      <span class="rfg">Marjă <input id="fMAR_min" type="number" step="1" placeholder="min"><span class="dash">–</span><input id="fMAR_max" type="number" step="1" placeholder="max"> %</span>
+      <span class="rfg">ROI <input id="fROI_min" type="number" step="5" placeholder="min"><span class="dash">–</span><input id="fROI_max" type="number" step="5" placeholder="max"> %</span>
+      <span class="rfg">Amazon pe listare
+        <span class="toggle" id="fAmz" style="text-transform:none;padding:3px">
+          <button data-a="all" class="on" style="font-size:11px;padding:5px 9px">toate</button>
+          <button data-a="no" style="font-size:11px;padding:5px 9px">fără</button>
+          <button data-a="yes" style="font-size:11px;padding:5px 9px">doar cu</button>
+        </span>
+      </span>
+      <button class="badge use" id="bulkNumClear" style="cursor:pointer">golește</button>
+    </div>
+    <div id="bulkResults" style="margin-top:14px;overflow-x:auto"></div>
+  </div>
+
+  </section>
+
+  <section class="tabpane" data-pane="istoric">
+  <div class="watch card" id="historyCard" style="margin-top:22px">
+    <h3 id="histToggle" style="cursor:pointer;margin-bottom:0">
+      <span style="display:flex;align-items:center;gap:9px">
+        <span id="histChev" style="color: var(--lime); font-size: 11px; transition: transform 0.18s; transform: none;">▶</span>
+        Istoric scanări
+      </span>
+      <span style="display:flex;align-items:center;gap:8px">
+        <span id="histStatus" class="tokens">30 salvate · <span style="color:var(--lime)">1 oportunități</span></span>
+        <button class="btn ghost" id="histReload" style="padding:6px 12px;font-size:12px">↻</button>
+      </span>
+    </h3>
+    <div id="histBody" style="display:none;margin-top:14px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px">
+        <input id="histSearch" type="text" placeholder="caută nume / cod / ASIN…" style="flex:1;min-width:180px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:12.5px;padding:8px 11px;border-radius:8px;outline:none">
+        <span class="toggle" id="histVerdict" style="text-transform:none">
+          <button data-v="all" class="on">Toate</button>
+          <button data-v="ok">Oportunități</button>
+          <button data-v="star">★ Favorite</button>
+        </span>
+        <button class="btn ghost" id="histExport" style="padding:8px 12px;font-size:12px">⭳ Export</button>
+      </div>
+      <div id="histList" style="overflow-x:auto"><div class="empty">Se încarcă istoricul din cloud…</div></div>
+    </div>
+  </div>
+
+  </section>
+
+  <div id="histModal"><div class="hmbox" id="histModalBox"></div></div>
+
+  <div id="scanModal">
+    <div class="scanbox">
+      <div class="scanhead">Scanează codul de bare
+        <button class="x" id="scanClose" style="font-size:22px">✕</button>
+      </div>
+      <div id="reader" style="width:100%"></div>
+      <div id="scanStatus" class="tokens" style="margin-top:10px;text-align:center"></div>
+      <div style="color:var(--dim);font-size:12px;text-align:center;margin-top:6px">Ține codul EAN în cadru, cu lumină bună. La produse mici/lucioase, apropie încet.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const FN = "/.netlify/functions";
+let current = null; // produsul analizat curent
+
+// Starea istoricului — declarată AICI, sus, pentru că switchTab() o poate atinge
+// la pornire (dacă ultimul tab folosit a fost „Istoric"). Declarată mai jos,
+// ar fi în „temporal dead zone" și ar opri execuția întregului script.
+let HIST = [];
+let histVerdict = 'all';
+
+// ---------- helpers ----------
+const fmt = (n, d=2) => n===null||n===undefined||isNaN(n) ? "—" : Number(n).toFixed(d);
+const money = n => n===null||n===undefined||isNaN(n) ? "—" : Number(n).toFixed(2)+" €";
+const isASIN = s => /^[A-Z0-9]{10}$/i.test(s) && /[A-Z]/i.test(s);
+
+// ---------- margin engine ----------
+function computeMargin(o){
+  const sale = parseFloat(o.sale)||0;        // preț vânzare TTC (Buy Box)
+  const costRaw = parseFloat(o.cost)||0;     // cost furnizor brut (TTC — cât plătești)
+  const cbPct = (parseFloat(o.cashback)||0)/100; // cashback % din cost (Rakuten/iGraal...)
+  const cashback = costRaw * cbPct;
+  const cost = costRaw - cashback;           // cost real după cashback
+  const refPct = (parseFloat(o.ref)||0)/100;
+  const fba = parseFloat(o.fba)||0;          // FBA fulfilment fee HT (din SellerAmp)
+  const close = parseFloat(o.close)||0;      // frais de clôture HT
+  const dsfPct = (parseFloat(o.dsf)||0)/100; // Digital Services Fee %
+  const vat = (parseFloat(o.vat)||0)/100;
+  const prep = parseFloat(o.prep)||0;
+  const other = parseFloat(o.other)||0;     // alte costuri manuale (stocare, transport furnizor, etc.)
+
+  const referral = sale * refPct;                    // comision (HT)
+  const dsf = (referral + fba + close) * dsfPct;     // DSF = % din (comision+FBA+clôture)
+  const feesBase = referral + fba + close + dsf;     // total taxe HT
+  const feesVat = feesBase * vat;                    // TVA 20% pe taxe
+  const feesTotal = feesBase + feesVat;              // taxe TTC
+  const amazonPayout = sale - feesTotal;             // ce-ți varsă Amazon în cont
+
+  let net, revBase;
+  if(o.regime === 'reel'){
+    const saleHT = sale/(1+vat);
+    const costHT = cost/(1+vat);
+    net = saleHT - costHT - feesBase - prep - other;
+    revBase = saleHT;
+  } else {
+    net = sale - cost - feesTotal - prep - other;
+    revBase = sale;
+  }
+  const margin = revBase>0 ? (net/revBase)*100 : 0;
+  const roi = cost>0 ? (net/cost)*100 : 0;
+  return {net, margin, roi, referral, fba, close, dsf, feesBase, feesVat, feesTotal, amazonPayout, cashback, cost, other};
+}
+
+function verdict(m, k, thr){
+  const reasons = [];
+  let level = 'g';
+  if(m.margin < thr.margin){ level='r'; reasons.push(`marjă ${fmt(m.margin,0)}% < prag ${thr.margin}%`); }
+  else if(m.roi < thr.roi){ level='a'; reasons.push(`ROI ${fmt(m.roi,0)}% < prag ${thr.roi}%`); }
+  // competiție & stabilitate din Keepa
+  if(k){
+    if(k.amazonOnListing){ if(level==='g')level='a'; reasons.push('Amazon vinde direct (Buy Box greu)'); }
+    if(k.offerCountNow!==null && k.offerCountNow > 12){ if(level==='g')level='a'; reasons.push(`${k.offerCountNow} selleri (aglomerat)`); }
+    if(k.priceDeltaPct!==null && k.priceDeltaPct < -12){ level='r'; reasons.push(`preț cu ${k.priceDeltaPct}% sub media 90z (în cădere)`); }
+    if(k.salesRankNow!==null && k.salesRankNow > 150000){ if(level==='g')level='a'; reasons.push(`BSR #${k.salesRankNow} (rotație lentă)`); }
+    if(k.salesPerMonth!=null && k.salesPerMonth < 3){ if(level==='g')level='a'; reasons.push(`~${k.salesPerMonth} vânzări/lună (rotație mică)`); }
+  }
+  const labels={g:'MERITĂ',a:'ATENȚIE',r:'EVITĂ'};
+  return {level,label:labels[level],reasons};
+}
+
+// ---------- render ----------
+function historyChart(k){
+  const P = k.priceHist||[], O = k.offerHist||[];
+  if(P.length<2) return '<div class="empty" style="padding:16px 8px">Fără istoric de preț pe 90 de zile.</div>';
+  const W=560,H=120,pad=8;
+  const ts = P.map(p=>p.t);
+  const t0=Math.min(...ts), t1=Math.max(...ts), tr=(t1-t0)||1;
+  const xs = t => pad + (W-2*pad)*((t-t0)/tr);
+  const pv = P.map(p=>p.v);
+  const pmin=Math.min(...pv), pmax=Math.max(...pv), pr=(pmax-pmin)||1;
+  const yP = v => (H-pad) - (H-2*pad)*((v-pmin)/pr);
+  const pathP = P.map((p,i)=>(i?'L':'M')+xs(p.t).toFixed(1)+' '+yP(p.v).toFixed(1)).join(' ');
+  let pathO='';
+  if(O.length>1){
+    const ov=O.map(o=>o.v); const omin=Math.min(...ov), omax=Math.max(...ov), or=(omax-omin)||1;
+    const yO = v => (H-pad) - (H-2*pad)*((v-omin)/or);
+    pathO=O.map((o,i)=>(i?'L':'M')+xs(o.t).toFixed(1)+' '+yO(o.v).toFixed(1)).join(' ');
+  }
+  return `
+    <div class="charttitle"><span><i class="dot lime"></i>Preț Buy Box</span>${O.length>1?'<span><i class="dot blue"></i>Nr. selleri</span>':''}<span style="color:var(--dim)">90 zile</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:120px;display:block">
+      ${pathO?`<path d="${pathO}" fill="none" stroke="var(--blue)" stroke-width="1.3" opacity=".55"/>`:''}
+      <path d="${pathP}" fill="none" stroke="var(--lime)" stroke-width="1.8"/>
+    </svg>
+    <div class="chartaxis"><span>min ${money(pmin)}</span><span>max ${money(pmax)}</span></div>`;
+}
+function render(k){
+  current = k;
+  const box = $("#results");
+  const stab = k.priceDeltaPct===null ? {cls:'',txt:'—'} :
+    k.priceDeltaPct < -12 ? {cls:'bad',txt:k.priceDeltaPct+'%'} :
+    k.priceDeltaPct > 12  ? {cls:'warn',txt:'+'+k.priceDeltaPct+'%'} :
+    {cls:'good',txt:(k.priceDeltaPct>=0?'+':'')+k.priceDeltaPct+'%'};
+
+  box.innerHTML = `
+    <div class="pcard">
+      <div class="phead">
+        ${k.image?`<img src="${k.image}" onerror="this.style.display='none'"/>`:''}
+        <div style="min-width:0;flex:1">
+          <div class="t">${k.title||'(fără titlu)'}</div>
+          <div class="m">${k.asin||''} ${k.ean?('· EAN '+k.ean):''} ${k.brand?('· '+k.brand):''}</div>
+        </div>
+        <span class="tokens" style="flex-shrink:0">${k.tokensLeft!==null?('tokens: '+k.tokensLeft):''}</span>
+      </div>
+
+      <div class="pbig">
+        <div class="b"><div class="k">Profit net</div><div class="v" id="m_profit">—</div></div>
+        <div class="b"><div class="k">ROI</div><div class="v" id="m_roi">—</div></div>
+        <div class="b"><div class="k">Marjă</div><div class="v" id="m_margin">—</div></div>
+      </div>
+
+      <div id="verdictBox"></div>
+
+      <div class="pmain">
+        <div class="pbox">
+          <h4>Cost și taxe</h4>
+          <div class="pcost">
+            <label for="i_cost">Cost furnizor €</label>
+            <input id="i_cost" type="number" step="0.01" placeholder="ex 9.74">
+          </div>
+          <div class="prow"><span>Preț vânzare TTC €</span><input id="i_sale" type="number" step="0.01" value="${k.buyBoxNow??''}"></div>
+          <div class="prow"><span>Taxă FBA € ${k.fbaFee!=null?'<span style="color:var(--lime);font-size:10px">Keepa</span>':'<span style="color:var(--dim);font-size:10px">SellerAmp</span>'}</span><input id="i_fba" type="number" step="0.01" value="${k.fbaFee ?? 4.79}"></div>
+          <div class="prow"><span>Comision Amazon %</span><input id="i_ref" type="number" step="0.1" value="${k.referralPercent ?? 15}"></div>
+
+          <details class="padv">
+            <summary>▸ taxe și setări avansate</summary>
+            <div class="prow"><span>Cashback % (Rakuten/iGraal)</span><input id="i_cashback" type="number" step="0.1" value="0"></div>
+            <div class="prow"><span>Frais de clôture €</span><input id="i_close" type="number" step="0.01" value="0.99"></div>
+            <div class="prow"><span>Digital Services Fee %</span><input id="i_dsf" type="number" step="0.1" value="3"></div>
+            <div class="prow"><span>Prep / manoperă €</span><input id="i_prep" type="number" step="0.01" value="0.50"></div>
+            <div class="prow"><span>Alte costuri €</span><input id="i_other" type="number" step="0.01" value="0"></div>
+            <div class="prow"><span>TVA %</span><input id="i_vat" type="number" step="0.1" value="20"></div>
+            <div class="prow"><span>Regim TVA</span>
+              <span class="toggle" id="regime" style="text-transform:none">
+                <button data-r="franchise" class="on" style="font-size:11px;padding:5px 8px">Franchise</button>
+                <button data-r="reel" style="font-size:11px;padding:5px 8px">Réel</button>
+              </span>
+            </div>
+            <div class="prow"><span>Praguri minime · marjă / ROI</span>
+              <span style="display:flex;gap:5px;align-items:center">
+                <input id="t_margin" type="number" value="20" style="width:48px">%
+                <input id="t_roi" type="number" value="30" style="width:48px">%
+              </span>
+            </div>
+          </details>
+
+          <div id="feeBox"></div>
+        </div>
+
+        <div class="pbox">
+          <h4>Piață</h4>
+          <div class="pstats">
+            <div class="s"><div class="k">Buy Box</div><div class="v good">${money(k.buyBoxNow)}</div></div>
+            <div class="s"><div class="k">Medie 90z</div><div class="v">${money(k.buyBoxAvg90)}</div></div>
+            <div class="s"><div class="k">Δ vs 90z</div><div class="v ${stab.cls}">${stab.txt}</div></div>
+            <div class="s"><div class="k">BSR</div><div class="v">${k.salesRankNow!==null?('#'+k.salesRankNow.toLocaleString()):'—'}</div></div>
+            <div class="s"><div class="k">Selleri</div><div class="v ${k.offerCountNow>12?'warn':''}">${k.offerCountNow!==null?k.offerCountNow:'—'}</div></div>
+            <div class="s"><div class="k">Vânz/lună</div><div class="v ${k.salesPerMonth!=null&&k.salesPerMonth<3?'warn':(k.salesPerMonth>=10?'good':'')}">${k.salesPerMonth!=null?('~'+k.salesPerMonth):'—'}</div></div>
+          </div>
+          ${k.amazonOnListing?'<div class="flag r" style="width:100%;justify-content:center;margin-top:9px">⚠ Amazon vinde direct pe listing</div>':''}
+          <div class="chartwrap" style="margin-top:9px;padding:9px">${historyChart(k)}</div>
+          <div style="display:flex;gap:7px;margin-top:9px">
+            <button class="btn ghost" style="flex:1;font-size:12px;padding:9px" onclick="addWatch()">+ Watchlist</button>
+            <button class="btn ghost" style="flex:1;font-size:12px;padding:9px" onclick="addExport()">+ Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:10px">Model calibrat pe deconturile tale reale Amazon.fr (comision 15% + FBA + clôture 0.99€ + DSF 3% + TVA 20% pe taxe). Taxa FBA variază după mărime/greutate — ia cifra exactă din SellerAmp pentru fiecare produs. Nu e consultanță fiscală; „franchise en base" = tot TTC, fără recuperare TVA; „réel" = recuperezi TVA pe taxe și achiziție.</div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>Furnizori găsiți
+        <span style="display:flex;align-items:center;gap:10px">
+          <span id="supStatus" class="tokens"></span>
+          <span class="toggle" id="supMode" style="text-transform:none">
+            <button data-m="b2b" class="on">Doar B2B</button>
+            <button data-m="all">Toate sursele</button>
+            <button data-m="ro">🇷🇴 România</button>
+          </span>
+        </span>
+      </h3>
+      <div id="supLinks" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+      <div id="suppliers"><div class="empty">Caut furnizori pe web…</div></div>
+    </div>
+  `;
+
+  // wire margin inputs
+  const recalc = ()=>{
+    const regime = document.querySelector('#regime .on').dataset.r;
+    const m = computeMargin({
+      sale:$("#i_sale").value, cost:$("#i_cost").value, cashback:$("#i_cashback").value, ref:$("#i_ref").value,
+      fba:$("#i_fba").value, close:$("#i_close").value, dsf:$("#i_dsf").value,
+      prep:$("#i_prep").value, other:$("#i_other").value, vat:$("#i_vat").value, regime
+    });
+    const thr = {margin:parseFloat($("#t_margin").value)||0, roi:parseFloat($("#t_roi").value)||0};
+    const v = verdict(m, current, thr);
+    if(current){ current._m = m; current._verdict = v; }
+
+    // cifrele mari din capul panoului
+    const hasCost = parseFloat($("#i_cost").value) > 0;
+    const cls = l => l==='g'?'good':(l==='a'?'warn':'bad');
+    $("#m_profit").textContent = hasCost ? money(m.net) : '—';
+    $("#m_profit").className   = 'v ' + (hasCost ? (m.net>0?'good':'bad') : '');
+    $("#m_roi").textContent    = hasCost ? fmt(m.roi,0)+'%' : '—';
+    $("#m_roi").className      = 'v ' + (hasCost ? cls(v.level) : '');
+    $("#m_margin").textContent = hasCost ? fmt(m.margin,0)+'%' : '—';
+    $("#m_margin").className   = 'v ' + (hasCost ? cls(v.level) : '');
+
+    $("#verdictBox").innerHTML = hasCost ? `
+      <div class="pverdict ${v.level}">
+        <span class="lbl">${v.label}</span>
+        <span class="why">${v.reasons.length? v.reasons.join(' · ') : 'trece toate pragurile'}</span>
+      </div>` : `
+      <div class="pverdict" style="background:var(--panel2);border:1px solid var(--line)">
+        <span class="lbl" style="color:var(--dim);font-size:15px">Pune costul furnizorului</span>
+        <span class="why">verdictul apare imediat ce știu cât te costă</span>
+      </div>`;
+
+    $("#feeBox").innerHTML = `
+      <div class="feebreak">
+        <div><span>Comision</span><b>${money(m.referral)}</b></div>
+        <div><span>FBA</span><b>${money(m.fba)}</b></div>
+        <div><span>Clôture</span><b>${money(m.close)}</b></div>
+        <div><span>DSF</span><b>${money(m.dsf)}</b></div>
+        <div><span>TVA pe taxe</span><b>${money(m.feesVat)}</b></div>
+        <div class="tot"><span>Total taxe Amazon</span><b>${money(m.feesTotal)}</b></div>
+        <div class="tot"><span>Amazon îți varsă</span><b>${money(m.amazonPayout)}</b></div>
+        ${m.cashback>0?`<div><span>Cashback</span><b style="color:var(--lime)">−${money(m.cashback)}</b></div><div><span>Cost real după cashback</span><b>${money(m.cost)}</b></div>`:''}
+        ${m.other>0?`<div><span>Alte costuri</span><b>${money(m.other)}</b></div>`:''}
+      </div>`;
+    queueSaveCurrent();
+  };
+  box.querySelectorAll('input').forEach(el=>el.addEventListener('input',recalc));
+  box.querySelectorAll('#regime button').forEach(b=>b.addEventListener('click',()=>{
+    box.querySelectorAll('#regime button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); recalc();
+  }));
+  recalc();
+
+  // wire supplier mode toggle
+  box.querySelectorAll('#supMode button').forEach(b=>b.addEventListener('click',()=>{
+    box.querySelectorAll('#supMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    loadSuppliers(current.ean, current.title, b.dataset.m);
+  }));
+
+  // fetch suppliers
+  loadSuppliers(k.ean, k.title, 'b2b');
+  renderSupLinks();
+}
+
+async function loadSuppliers(ean, name, mode){
+  mode = mode || 'b2b';
+  const isRO = mode === 'ro';
+  const el = $("#suppliers");
+  const label = isRO ? 'în magazine din România' : (mode==='all'?'toate sursele':'furnizori B2B');
+  el.innerHTML = `<div class="empty">Caut ${label}…</div>`;
+  if(!ean){ el.innerHTML=`<div class="empty">Fără EAN — nu pot căuta. Introdu direct EAN-ul în bara de sus.</div>`; return; }
+  try{
+    const r = await fetch(`${FN}/find-suppliers?ean=${encodeURIComponent(ean)}&name=${encodeURIComponent((name||'').slice(0,40))}&mode=${mode}`);
+    const d = await r.json();
+    if(d.error){ el.innerHTML=`<div class="err">${d.error}${d.detail?(' — '+d.detail):''}</div>`; return; }
+    if(!d.suppliers||!d.suppliers.length){ el.innerHTML=`<div class="empty">${isRO?'Niciun magazin RO găsit pentru acest EAN. Verifică EAN-ul sau caută manual pe eMAG.':(mode==='all'?'Niciun rezultat pentru acest EAN.':'Niciun furnizor B2B găsit. Încearcă „Toate sursele" sau caută manual pe Qogita/eany.')}</div>`; return; }
+    const cur = d.currency === 'RON' ? 'lei' : '€';
+    $("#supStatus").textContent = d.count+" candidați";
+    el.innerHTML = d.suppliers.map(s=>`
+      <div class="supplier">
+        <div class="top">
+          <div>
+            <a href="${s.link}" target="_blank" rel="noopener">${s.title}</a>
+            <div class="src">${s.source}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            ${s.b2bScore>=2?'<span class="badge b2b">B2B</span>':''}
+            ${s.price?`<span class="badge price">${s.price} ${cur}</span>${isRO?'':`<span class="badge use" onclick="useCost('${s.price}')">→ cost</span>`}`:''}
+          </div>
+        </div>
+        ${s.snippet?`<div class="snip">${s.snippet}</div>`:''}
+      </div>`).join('');
+
+    // cel mai mic preț detectat. Pentru RO (lei) NU auto-completăm costul € și nu
+    // suprascriem furnizorul de arbitraj din căutarea în €.
+    const priced = d.suppliers
+      .filter(s=>s.price!==null)
+      .map(s=>({src:s.source, p:parseFloat(s.price)}))
+      .filter(s=>!isNaN(s.p));
+    if(priced.length){
+      priced.sort((a,b)=>a.p-b.p);
+      const low = priced[0];
+      if(current && !isRO){ current._low = low; current._low2 = priced[1]||null; }
+      if(!isRO){
+        const costEl = $("#i_cost");
+        if(costEl && !costEl.value){
+          costEl.value = low.p.toFixed(2);
+          costEl.dispatchEvent(new Event('input'));
+        }
+      }
+      $("#supStatus").innerHTML = d.count+` candidați · <span style="color:var(--lime)">cel mai mic ${low.p.toFixed(2)} ${cur} · ${low.src}</span>`;
+    }
+    return;
+  }catch(e){
+    el.innerHTML=`<div class="err">Căutare eșuată: ${e}</div>`;
+  }
+}
+
+function useCost(p){ const el=$("#i_cost"); if(el){ el.value=p; el.dispatchEvent(new Event('input')); el.scrollIntoView({behavior:'smooth',block:'center'}); } }
+
+// ---------- main search ----------
+async function search(){
+  const raw = $("#q").value.trim();
+  if(!raw) return;
+  $("#err").innerHTML=""; 
+  const btn=$("#go"); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
+  const domain = $("#domain").value;
+
+  // ROMÂNIA: fără Keepa (Amazon nu există în RO) — caut direct magazine RO după EAN.
+  if(domain === 'ro'){
+    btn.disabled=false; btn.textContent='Analizează';
+    if(isASIN(raw)){
+      $("#err").innerHTML=`<div class="err">Pentru <b>România</b> caută după <b>EAN</b> (codul de bare de pe produs), nu ASIN — Amazon nu există în RO.</div>`;
+      return;
+    }
+    renderRO(raw);
+    return;
+  }
+
+  const param = isASIN(raw) ? `asin=${encodeURIComponent(raw)}` : `code=${encodeURIComponent(raw)}`;
+  try{
+    const r = await fetch(`${FN}/keepa?${param}&domain=${domain}`);
+    const d = await r.json();
+    if(d.error){ $("#err").innerHTML=`<div class="err">${d.error}</div>`; }
+    else if(!d.found){ $("#err").innerHTML=`<div class="err">Produs negăsit pe Keepa (tokens rămași: ${d.tokensLeft??'?'}).</div>`; }
+    else render(d);
+  }catch(e){
+    $("#err").innerHTML=`<div class="err">Eroare: ${e}. Ai deployat funcțiile și setat env vars?</div>`;
+  }finally{
+    btn.disabled=false; btn.textContent='Analizează';
+  }
+}
+$("#go").addEventListener('click',search);
+$("#q").addEventListener('keydown',e=>{if(e.key==='Enter')search();});
+
+// ---------- România: analiză fără Keepa (magazine RO după EAN) ----------
+function renderRO(ean){
+  current = { ean, asin:'', title:'', domain:'ro' };
+  const box = $("#results");
+  const q = encodeURIComponent(ean);
+  box.innerHTML = `
+    <div class="pcard">
+      <div class="phead">
+        <div style="min-width:0;flex:1">
+          <div class="t">🇷🇴 Căutare România</div>
+          <div class="m">EAN ${ean} · fără Keepa · prețuri din magazine RO (lei)</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Magazine RO găsite
+          <span style="display:flex;align-items:center;gap:10px">
+            <span id="supStatus" class="tokens"></span>
+          </span>
+        </h3>
+        <div id="supLinks" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <a class="badge use" href="https://www.google.com/search?tbm=shop&gl=ro&hl=ro&q=${q}" target="_blank" rel="noopener">Google Shopping RO ↗</a>
+          <a class="badge use" href="https://www.emag.ro/search/${q}" target="_blank" rel="noopener">eMAG ↗</a>
+          <a class="badge use" href="https://www.google.com/search?gl=ro&hl=ro&q=${q}" target="_blank" rel="noopener">Google RO ↗</a>
+        </div>
+        <div id="suppliers"><div class="empty">Caut în magazine din România…</div></div>
+      </div>
+    </div>`;
+  if(typeof switchTab==='function') switchTab('produs');
+  loadSuppliers(ean, '', 'ro');
+}
+
+// ---------- Scanare cod de bare (cameră) ----------
+let html5Qr = null;
+async function startScan(){
+  const modal = $("#scanModal");
+  modal.classList.add('on');
+  $("#scanStatus").textContent = 'Pornesc camera…';
+  if(typeof Html5Qrcode === 'undefined'){ $("#scanStatus").textContent = 'Biblioteca de scanare nu s-a încărcat (verifică internetul).'; return; }
+  try{
+    html5Qr = new Html5Qrcode("reader");
+    const fmts = [
+      Html5QrcodeSupportedFormats.EAN_13,
+      Html5QrcodeSupportedFormats.EAN_8,
+      Html5QrcodeSupportedFormats.UPC_A,
+      Html5QrcodeSupportedFormats.UPC_E
+    ];
+    await html5Qr.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 260, height: 160 }, formatsToSupport: fmts },
+      onScan,
+      ()=>{} // ignorăm erorile per-cadru (normal cât cauți codul)
+    );
+    $("#scanStatus").textContent = 'Aliniază codul de bare în cadru…';
+  }catch(e){
+    $("#scanStatus").textContent = 'Nu pot porni camera: '+e+'. Verifică permisiunea camerei în browser.';
+  }
+}
+function onScan(text){
+  const code = String(text||'').trim();
+  if(!code) return;
+  $("#scanStatus").innerHTML = '<span style="color:var(--lime)">Găsit: '+code+'</span>';
+  stopScan();
+  $("#q").value = code;
+  search();
+}
+async function stopScan(){
+  if(html5Qr){
+    try{ await html5Qr.stop(); html5Qr.clear(); }catch(e){}
+    html5Qr = null;
+  }
+  $("#scanModal").classList.remove('on');
+}
+$("#scanBtn").addEventListener('click',startScan);
+$("#scanClose").addEventListener('click',stopScan);
+
+// ---------- watchlist (localStorage) ----------
+function getWatch(){ try{return JSON.parse(localStorage.getItem('sourcer_watch')||'[]')}catch{return[]} }
+function setWatch(w){ localStorage.setItem('sourcer_watch',JSON.stringify(w)); renderWatch(); }
+function addWatch(){
+  if(!current) return;
+  const w=getWatch();
+  if(w.find(x=>x.asin===current.asin)) return;
+  w.unshift({asin:current.asin,ean:current.ean,title:current.title,domain:current.domain,
+    buyBox:current.buyBoxNow,bsr:current.salesRankNow,offers:current.offerCountNow,ts:Date.now(),alert:null});
+  setWatch(w.slice(0,50));
+}
+function delWatch(asin){ setWatch(getWatch().filter(x=>x.asin!==asin)); }
+function renderWatch(){
+  const w=getWatch(); const card=$("#watchCard"); const list=$("#watchlist");
+  if(!w.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  list.innerHTML=w.map(x=>`
+    <div class="wl-item">
+      <div style="min-width:0">
+        <div class="wt">${x.title||x.asin}${x.alert?`<span class="wl-alert ${x.alert.cls}">${x.alert.txt}</span>`:''}</div>
+        <div class="wm">${x.asin} · Buy Box ${money(x.buyBox)} · BSR ${x.bsr?('#'+x.bsr):'—'} · ${x.offers!=null?x.offers+' selleri':''}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <button class="badge use" onclick="reload('${x.asin}','${x.domain}')">re-analiză</button>
+        <button class="x" onclick="delWatch('${x.asin}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+function reload(asin,domain){ $("#q").value=asin; $("#domain").value=domain||'4'; if(typeof switchTab==='function') switchTab('produs'); search(); }
+async function rescanAll(){
+  const w=getWatch(); const btn=$("#rescan"); btn.disabled=true; btn.textContent='…';
+  for(const x of w){
+    try{
+      const r=await fetch(`${FN}/keepa?asin=${x.asin}&domain=${x.domain||4}`);
+      const d=await r.json();
+      if(d.found){
+        // detectează schimbări față de ultima verificare
+        let alert=null;
+        if(x.buyBox && d.buyBoxNow){
+          const dp=Math.round(((d.buyBoxNow-x.buyBox)/x.buyBox)*100);
+          if(dp<=-8) alert={cls:'drop',txt:`↓ preț ${dp}%`};
+          else if(dp>=8) alert={cls:'up',txt:`↑ preț +${dp}%`};
+        }
+        if(!alert && x.offers!=null && d.offerCountNow!=null && d.offerCountNow>x.offers){
+          alert={cls:'sell',txt:`+${d.offerCountNow-x.offers} selleri noi`};
+        }
+        x.buyBox=d.buyBoxNow; x.bsr=d.salesRankNow; x.offers=d.offerCountNow; x.alert=alert;
+      }
+    }catch{}
+    await new Promise(res=>setTimeout(res,1300)); // respectă rate limit Keepa
+  }
+  setWatch(w); btn.disabled=false; btn.textContent='Re-verifică tot';
+}
+$("#rescan").addEventListener('click',rescanAll);
+renderWatch();
+
+// ---------- Listă export (Excel — coloane esențiale) ----------
+const EXPORT_COLS = ["Produs","ASIN","Pret Amazon","Cost furnizor","Profit final","Furnizor 1","Furnizor 2"];
+const NUMERIC_COLS = new Set(["Pret Amazon","Cost furnizor","Profit final"]);
+const COL_WIDTHS = {"Produs":46,"ASIN":13,"Pret Amazon":13,"Cost furnizor":13,"Profit final":12,"Furnizor 1":26,"Furnizor 2":26};
+function supCell(s){ return s ? `${s.src} (${Number(s.p).toFixed(2).replace('.',',')} €)` : ''; }
+function getExport(){ try{return JSON.parse(localStorage.getItem('sourcer_export')||'[]')}catch{return[]} }
+function setExport(a){ localStorage.setItem('sourcer_export', JSON.stringify(a)); renderExport(); }
+function clearExport(){ if(confirm('Golești lista de export?')) setExport([]); }
+function buildRow(){
+  if(!current) return null;
+  const m = current._m || {};
+  const num = x => (x==null||isNaN(x))?'':Number(x).toFixed(2);
+  return {
+    "Produs": current.title||'',
+    "ASIN": current.asin||'',
+    "Pret Amazon": num(parseFloat($("#i_sale").value)||0),
+    "Cost furnizor": num(m.cost),
+    "Profit final": num(m.net),
+    "Furnizor 1": supCell(current._low),
+    "Furnizor 2": supCell(current._low2)
+  };
+}
+function addExport(){
+  const row = buildRow();
+  if(!row){ alert('Analizează întâi un produs.'); return; }
+  const a = getExport();
+  const i = a.findIndex(x=>x.ASIN===row.ASIN);
+  if(i>=0) a[i]=row; else a.unshift(row);
+  setExport(a.slice(0,500));
+}
+function delExport(asin){ setExport(getExport().filter(x=>x.ASIN!==asin)); }
+function renderExport(){
+  const rows = getExport(); const card=$("#exportCard"); const list=$("#exportList");
+  if(!rows.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  list.innerHTML = rows.map(r=>`
+    <div class="wl-item">
+      <div style="min-width:0">
+        <div class="wt">${r.Produs||r.ASIN}</div>
+        <div class="wm">${r.ASIN} · vânz ${r["Pret Amazon"]}€ · cost ${r["Cost furnizor"]}€ · profit ${r["Profit final"]}€</div>
+      </div>
+      <button class="x" onclick="delExport('${r.ASIN}')">✕</button>
+    </div>`).join('');
+}
+$("#doExport").addEventListener('click',downloadXLSX);
+$("#clearExport").addEventListener('click',clearExport);
+renderExport();
+
+// ---------- Export Excel real (.xlsx) ----------
+function toSheetRows(rows){
+  return rows.map(r=>{
+    const o={};
+    EXPORT_COLS.forEach(c=>{
+      let v=r[c];
+      if(NUMERIC_COLS.has(c)){
+        v=(v===''||v==null)?null:parseFloat(String(v).replace(',','.'));
+        if(isNaN(v)) v=null;
+      } else {
+        v=String(v==null?'':v).replace(/[\t\r\n]+/g,' ').replace(/\s{2,}/g,' ').trim();
+      }
+      o[c]=v;
+    });
+    return o;
+  });
+}
+function writeXLSX(rows, filename, sheetName){
+  if(typeof XLSX==='undefined'){ alert('Biblioteca Excel nu s-a încărcat (verifică internetul).'); return; }
+  const ws=XLSX.utils.json_to_sheet(toSheetRows(rows),{header:EXPORT_COLS});
+  ws['!cols']=EXPORT_COLS.map(c=>({wch:COL_WIDTHS[c]||14}));
+  const lastCol=XLSX.utils.encode_col(EXPORT_COLS.length-1);
+  ws['!autofilter']={ref:`A1:${lastCol}${rows.length+1}`}; // dropdown-uri de filtrare pe antet
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName||'Sourcing');
+  XLSX.writeFile(wb, filename);
+}
+function downloadXLSX(){
+  const rows=getExport();
+  if(!rows.length){ alert('Lista de export e goală.'); return; }
+  writeXLSX(rows, 'sourcer-'+new Date().toISOString().slice(0,10)+'.xlsx', 'Sourcing');
+}
+
+// ---------- PWA: instalare ca aplicație ----------
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+// golește tot cache-ul și service worker-ul, apoi reîncarcă curat
+async function hardReset(){
+  if(!confirm('Golesc tot cache-ul aplicației și reîncarc. Datele din cloud nu se ating. Continui?')) return;
+  try{
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.unregister()));
+    }
+    if(window.caches){
+      const keys=await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+  }catch(e){}
+  location.replace(location.pathname+'?fresh='+Date.now());
+}
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  const b=$("#installBtn"); if(b) b.style.display='inline-flex';
+});
+function doInstall(){
+  if(!deferredInstall){
+    alert('Dacă butonul nu funcționează: în Chrome pe Android apasă meniul ⋮ → „Adaugă la ecranul de pornire".');
+    return;
+  }
+  deferredInstall.prompt();
+  deferredInstall.userChoice.finally(()=>{ deferredInstall=null; const b=$("#installBtn"); if(b) b.style.display='none'; });
+}
+window.addEventListener('appinstalled',()=>{ const b=$("#installBtn"); if(b) b.style.display='none'; });
+
+// ---------- Tab-uri ----------
+function switchTab(name){
+  document.querySelectorAll('#tabnav button').forEach(b=>b.classList.toggle('on', b.dataset.t===name));
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('on', p.dataset.pane===name));
+  localStorage.setItem('sourcer_tab', name);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='istoric' && typeof loadHistory==='function' && !HIST.length) loadHistory();
+}
+function updateTabCounts(){
+  const a=$("#tabCountAnaliza"), i=$("#tabCountIstoric");
+  if(a) a.textContent = bulkRows.length ? bulkRows.length : '';
+  if(i) i.textContent = (typeof HIST!=='undefined' && HIST.length) ? HIST.length : '';
+}
+(function initTabs(){
+  document.querySelectorAll('#tabnav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.t)));
+  const saved=localStorage.getItem('sourcer_tab');
+  if(saved && document.querySelector(`.tabpane[data-pane="${saved}"]`)) switchTab(saved);
+})();
+
+// ---------- Import catalog furnizor (XLSX / CSV) ----------
+const IMP = { wb:null, headers:[], data:[], items:[], map:{}, sel:new Set(), catSel:new Set(), done:new Set() };
+function loadDone(){ try{ IMP.done=new Set(JSON.parse(localStorage.getItem('sourcer_scanned')||'[]')); }catch{ IMP.done=new Set(); } }
+function saveDone(){ try{ localStorage.setItem('sourcer_scanned', JSON.stringify([...IMP.done])); }catch{} }
+loadDone();
+const norm = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+
+// dicționare pentru auto-detect (RO / EN / FR)
+const DETECT = {
+  code:   ['ean','ean13','barcode','bar code','gtin','upc','cod bare','codebare','code barre','codebarre','asin'],
+  name:   ['name','title','description','descriere','denumire','produs','product','designation','nume','articol','article name'],
+  cost:   ['cost','price','pret','prix','net','wholesale','buy price','unit price','pu','pret achizitie','tarif','list price'],
+  stock:  ['stock','stoc','available','avail','qty','qte','quantity','cantitate','disponibil','dispo','on hand','in stock','inventory'],
+  category:['category','categorie','cat','type','famille','group','grupa','grup','department','rayon','segment'],
+  brand:  ['brand','marca','marque','manufacturer','producator','fabricant','vendor','make'],
+  sku:    ['item code','itemcode','sku','ref','reference','referinta','cod','code','article','articol','mpn','model','art no','art nr']
+};
+const FIELD_LABELS = {
+  code:'Cod pt Keepa (EAN/ASIN)', name:'Denumire', cost:'Cost furnizor',
+  stock:'Stoc', category:'Categorie', brand:'Brand', sku:'SKU / cod intern'
+};
+
+function detectCol(field){
+  const kws = DETECT[field];
+  // 1) potrivire exactă pe cuvânt
+  for(const h of IMP.headers){ const n=norm(h); if(kws.includes(n)) return h; }
+  // 2) potrivire pe conținut (evită să confunde "cod bare" cu "cod")
+  for(const h of IMP.headers){ const n=' '+norm(h)+' ';
+    for(const k of kws){ if(n.includes(' '+k+' ')||n.includes(k)) return h; } }
+  return '';
+}
+
+function cleanCode(v){
+  if(v==null) return '';
+  if(typeof v==='number'){ v = Number.isInteger(v)?String(v):(v>1e6?String(Math.round(v)):String(v)); }
+  let s = String(v).trim();
+  if(/^[A-Za-z0-9]{10}$/.test(s) && /[A-Za-z]/.test(s)) return s.toUpperCase(); // ASIN
+  s = s.replace(/[^0-9]/g,''); // doar cifre pt EAN/UPC
+  if(!s) return '';
+  if(s.length>=11 && s.length<13) s = s.padStart(13,'0'); // Excel a tăiat zero-urile din față
+  return s;
+}
+const isSendable = c => !!c && ( (/^[A-Z0-9]{10}$/.test(c)&&/[A-Z]/.test(c)) || (/^\d+$/.test(c) && c.length>=8) );
+
+function cleanNum(v){
+  if(v==null||v==='') return null;
+  if(typeof v==='number') return isNaN(v)?null:v;
+  let s=String(v).replace(/[^\d.,\-]/g,'');
+  if(s.indexOf('.')>-1 && s.indexOf(',')>-1) s=s.replace(/\./g,'').replace(',','.'); // 1.234,56 -> 1234.56
+  else if(s.indexOf(',')>-1) s=s.replace(',','.');
+  const n=parseFloat(s); return isNaN(n)?null:n;
+}
+function cleanInt(v){ const n=cleanNum(v); return n==null?null:Math.round(n); }
+
+function readFile(file){
+  const name=(file.name||'').toLowerCase();
+  const rd=new FileReader();
+  rd.onload=e=>{
+    try{
+      const data=new Uint8Array(e.target.result);
+      IMP.wb=XLSX.read(data,{type:'array',raw:true});
+      const names=IMP.wb.SheetNames;
+      const sel=$("#sheetSel");
+      if(names.length>1){
+        $("#sheetPick").style.display='block';
+        sel.innerHTML=names.map(n=>`<option>${n}</option>`).join('');
+        sel.onchange=()=>loadSheet(sel.value);
+      } else { $("#sheetPick").style.display='none'; }
+      $("#impMeta").textContent = file.name;
+      loadSheet(names[0]);
+    }catch(err){ alert('Nu pot citi fișierul: '+err); }
+  };
+  rd.readAsArrayBuffer(file);
+}
+
+function loadSheet(sheetName){
+  const ws=IMP.wb.Sheets[sheetName];
+  const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+  // găsește primul rând care pare antet (are >=2 celule text ne-goale)
+  let hIdx=0;
+  for(let i=0;i<Math.min(aoa.length,15);i++){
+    const filled=aoa[i].filter(c=>String(c).trim()!=='').length;
+    const texty=aoa[i].filter(c=>typeof c==='string'&&c.trim()!=='').length;
+    if(filled>=2 && texty>=Math.ceil(filled/2)){ hIdx=i; break; }
+  }
+  IMP.headers=aoa[hIdx].map((h,i)=>String(h).trim()||('Coloana '+(i+1)));
+  IMP.rawRows=aoa.slice(hIdx+1).filter(r=>r.some(c=>String(c).trim()!==''));
+  IMP.map={}; Object.keys(DETECT).forEach(f=>IMP.map[f]=detectCol(f));
+  buildMapUI();
+  rebuildItems();
+  $("#mapArea").style.display='block';
+  $("#filterArea").style.display='block';
+}
+
+function buildMapUI(){
+  const opts=['<option value="">(niciuna)</option>'].concat(IMP.headers.map(h=>`<option value="${h.replace(/"/g,'&quot;')}">${h}</option>`)).join('');
+  $("#mapGrid").innerHTML=Object.keys(FIELD_LABELS).map(f=>`
+    <div class="mapf">
+      <label>${f==='code'?'<b>'+FIELD_LABELS[f]+'</b>':FIELD_LABELS[f]}</label>
+      <select data-f="${f}">${opts}</select>
+    </div>`).join('');
+  $("#mapGrid").querySelectorAll('select').forEach(sel=>{
+    sel.value=IMP.map[sel.dataset.f]||'';
+    sel.onchange=()=>{ IMP.map[sel.dataset.f]=sel.value; rebuildItems(); };
+  });
+}
+
+function rebuildItems(){
+  const col=f=>{ const h=IMP.map[f]; return h?IMP.headers.indexOf(h):-1; };
+  const ci=col('code'), cn=col('name'), cc=col('cost'), cs=col('stock'), cg=col('category'), cb=col('brand'), ck=col('sku');
+  IMP.items=IMP.rawRows.map(r=>{
+    const code=ci>=0?cleanCode(r[ci]):'';
+    return {
+      code, sendable:isSendable(code),
+      name: cn>=0?String(r[cn]??'').trim():'',
+      cost: cc>=0?cleanNum(r[cc]):null,
+      stock:cs>=0?cleanInt(r[cs]):null,
+      category: cg>=0?String(r[cg]??'').trim():'',
+      brand: cb>=0?String(r[cb]??'').trim():'',
+      sku: ck>=0?String(r[ck]??'').trim():''
+    };
+  });
+  IMP.sel=new Set(); IMP.catSel=new Set();
+  buildBrandOptions(); buildCatChips(); applyFilters();
+}
+
+function buildBrandOptions(){
+  const brands=[...new Set(IMP.items.map(x=>x.brand).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  $("#fBrand").innerHTML='<option value="">toate</option>'+brands.map(b=>`<option>${b}</option>`).join('');
+}
+function buildCatChips(){
+  const cats=[...new Set(IMP.items.map(x=>x.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const c=$("#catChips");
+  if(!cats.length){ c.innerHTML=''; return; }
+  c.innerHTML='<span style="font-family:var(--mono);font-size:10.5px;color:var(--dim);align-self:center;text-transform:uppercase;letter-spacing:.04em;margin-right:2px">Categorii:</span>'+
+    cats.map(cat=>`<span class="chip" data-cat="${cat.replace(/"/g,'&quot;')}">${cat}</span>`).join('');
+  c.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    const cat=ch.dataset.cat;
+    if(IMP.catSel.has(cat)){ IMP.catSel.delete(cat); ch.classList.remove('on'); }
+    else { IMP.catSel.add(cat); ch.classList.add('on'); }
+    applyFilters();
+  });
+}
+
+function filteredIdx(){
+  const q=norm($("#fSearch").value);
+  const cmin=cleanNum($("#fCostMin").value), cmax=cleanNum($("#fCostMax").value);
+  const smin=cleanInt($("#fStockMin").value);
+  const brand=$("#fBrand").value;
+  const onlyCode=$("#fOnlyCode").checked;
+  const out=[];
+  IMP.items.forEach((x,i)=>{
+    if(onlyCode && !x.sendable) return;
+    if(q){ const hay=norm(x.name+' '+x.code+' '+x.sku+' '+x.brand); if(!hay.includes(q)) return; }
+    if(cmin!=null && (x.cost==null || x.cost<cmin)) return;
+    if(cmax!=null && (x.cost==null || x.cost>cmax)) return;
+    if(smin!=null && (x.stock==null || x.stock<smin)) return;
+    if(brand && x.brand!==brand) return;
+    if(IMP.catSel.size && !IMP.catSel.has(x.category)) return;
+    out.push(i);
+  });
+  return out;
+}
+
+let FILT=[];
+function applyFilters(){
+  FILT=filteredIdx();
+  renderCat();
+  updateImpStat();
+}
+function updateImpStat(){
+  const selCount=IMP.sel.size;
+  $("#impStat").innerHTML=`<b>${FILT.length}</b> din ${IMP.items.length} produse · selectate <b>${selCount}</b>`+
+    (selCount?` = <b>${selCount}</b> tokeni Keepa`:'');
+  updateBatchStat();
+}
+function updateBatchStat(){
+  const el=$("#batchStat"); if(!el) return;
+  // câte produse cu cod din filtrul curent au fost deja trimise
+  let withCode=0, done=0;
+  FILT.forEach(i=>{ const x=IMP.items[i]; if(x.sendable){ withCode++; if(IMP.done.has(x.code)) done++; } });
+  const left=withCode-done;
+  el.innerHTML = withCode
+    ? `în filtru: <b>${done}</b> trimise · <b>${left}</b> rămase (cu cod)`
+    : '';
+}
+function selectNextBatch(n){
+  if(!IMP.items.length){ return; }
+  const next=[];
+  for(const i of FILT){
+    const x=IMP.items[i];
+    if(x.sendable && !IMP.done.has(x.code) && !next.includes(i)){ next.push(i); if(next.length>=n) break; }
+  }
+  if(!next.length){ alert('Nu mai sunt produse ne-trimise în filtrul curent. Schimbă filtrele sau apasă „reset progres".'); return; }
+  IMP.sel=new Set(next);
+  renderCat(); updateImpStat();
+  const cw=document.querySelector('.catwrap'); if(cw) cw.scrollTop=0;
+}
+function resetProgress(){
+  if(!IMP.done.size){ alert('Nu ai progres salvat.'); return; }
+  if(!confirm(`Uiți că ai trimis ${IMP.done.size} coduri? Le vei putea scana din nou.`)) return;
+  IMP.done.clear(); saveDone(); renderCat(); updateImpStat();
+}
+const CAP=600;
+function renderCat(){
+  const el=$("#catTable");
+  if(!IMP.items.length){ el.innerHTML='<div class="empty">Încarcă un fișier ca să vezi produsele.</div>'; return; }
+  if(!FILT.length){ el.innerHTML='<div class="empty">Niciun produs nu trece de filtre.</div>'; return; }
+  const show=FILT.slice(0,CAP);
+  const allSel=FILT.length>0 && FILT.every(i=>IMP.sel.has(i));
+  const rows=show.map(i=>{
+    const x=IMP.items[i];
+    const done=x.sendable && IMP.done.has(x.code);
+    return `<tr class="${x.sendable?'':'nocode'}${done?' done':''}">
+      <td><input type="checkbox" data-i="${i}" ${IMP.sel.has(i)?'checked':''}></td>
+      <td class="name">${x.name||'<span style="color:var(--dim)">—</span>'}</td>
+      <td>${x.code||'<span style="color:var(--dim)">—</span>'}${x.code&&!x.sendable?'<span class="nocode-tag">fără EAN</span>':''}${done?'<span class="done-tag">✓ trimis</span>':''}</td>
+      <td>${x.sku||''}</td>
+      <td>${x.cost!=null?x.cost.toFixed(2):'—'}</td>
+      <td>${x.stock!=null?x.stock:'—'}</td>
+      <td>${x.category||''}</td>
+      <td>${x.brand||''}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML=`<table class="cat">
+    <thead><tr>
+      <th><input type="checkbox" id="catHeadChk" ${allSel?'checked':''}></th>
+      <th>Denumire</th><th>Cod</th><th>SKU</th><th>Cost</th><th>Stoc</th><th>Categorie</th><th>Brand</th>
+    </tr></thead><tbody>${rows}</tbody></table>`+
+    (FILT.length>CAP?`<div class="empty" style="padding:12px">Afișez primele ${CAP} din ${FILT.length}. Filtrează mai fin sau folosește „Selectează tot filtrat".</div>`:'');
+  el.querySelectorAll('input[data-i]').forEach(chk=>chk.onchange=()=>{
+    const i=+chk.dataset.i;
+    if(chk.checked) IMP.sel.add(i); else IMP.sel.delete(i);
+    updateImpStat();
+    const head=$("#catHeadChk"); if(head) head.checked=FILT.every(j=>IMP.sel.has(j));
+  });
+  const head=$("#catHeadChk");
+  if(head) head.onchange=()=>{ if(head.checked) FILT.forEach(i=>IMP.sel.add(i)); else FILT.forEach(i=>IMP.sel.delete(i)); renderCat(); updateImpStat(); };
+}
+
+// wiring import
+(function initImport(){
+  const dz=$("#dropzone"), fi=$("#fileInput");
+  if(!dz) return;
+  dz.onclick=()=>fi.click();
+  fi.onchange=()=>{ if(fi.files[0]) readFile(fi.files[0]); };
+  ['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('drag');}));
+  dz.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f) readFile(f); });
+  ['fSearch','fCostMin','fCostMax','fStockMin'].forEach(id=>$("#"+id).addEventListener('input',applyFilters));
+  $("#fBrand").addEventListener('change',applyFilters);
+  $("#fOnlyCode").addEventListener('change',applyFilters);
+  $("#selAll").onclick=()=>{ FILT.forEach(i=>IMP.sel.add(i)); renderCat(); updateImpStat(); };
+  $("#selNone").onclick=()=>{ IMP.sel.clear(); renderCat(); updateImpStat(); };
+  $("#impSend").onclick=sendToBulk;
+  $("#impExport").onclick=exportSelection;
+  document.querySelectorAll('.batch-n').forEach(b=>b.onclick=()=>selectNextBatch(+b.dataset.n));
+  $("#batchReset").onclick=resetProgress;
+  if($("#sellerGo")){
+    $("#sellerGo").addEventListener('click',fetchSeller);
+    $("#sellerInput").addEventListener('keydown',e=>{ if(e.key==='Enter') fetchSeller(); });
+  }
+})();
+
+// ---------- Spionează seller (storefront Keepa) ----------
+let SELLER = null;
+async function fetchSeller(){
+  const raw=$("#sellerInput").value.trim();
+  if(!raw){ alert('Lipește un seller ID sau un link de storefront.'); return; }
+  const btn=$("#sellerGo"); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
+  const box=$("#sellerInfo"); box.innerHTML='<div class="empty">Aduc catalogul vânzătorului…</div>';
+  try{
+    const r=await fetch(`${FN}/seller?seller=${encodeURIComponent(raw)}&domain=${$("#sellerDomain").value}`);
+    const d=await r.json();
+    if(d.error){ box.innerHTML=`<div class="err">${d.error}${d.detail?(' — '+d.detail):''}</div>`; return; }
+    if(!d.found){ box.innerHTML=`<div class="err">Vânzător negăsit pe Keepa (verifică ID-ul și piața aleasă). Tokeni rămași: ${d.tokensLeft??'?'}</div>`; return; }
+    SELLER=d;
+    renderSeller(d);
+    if(d.asinList && d.asinList.length) loadSellerAsins(d);
+    else box.insertAdjacentHTML('beforeend','<div class="empty">Keepa n-are lista de produse pentru acest vânzător (storefront indisponibil).</div>');
+  }catch(e){
+    box.innerHTML=`<div class="err">Eroare: ${e}. Ai deployat funcția seller.js?</div>`;
+  }finally{ btn.disabled=false; btn.textContent='Adu catalogul'; }
+}
+function renderSeller(d){
+  const rc=d.ratingCount;
+  // semnalul de ungated: cont mic/nou = probabil fără restricții de categorie
+  let sig={cls:'big',txt:'Vânzător mare — probabil are aprobări pe care tu nu le ai'};
+  if(rc!=null && rc<100) sig={cls:'good',txt:`Doar ${rc} feedback-uri — cont mic, semn bun de ungated`};
+  else if(rc!=null && rc<1000) sig={cls:'mid',txt:`${rc} feedback-uri — cont mediu, semnal parțial`};
+  else if(rc==null) sig={cls:'mid',txt:'Fără date de feedback — nu pot estima'};
+  const since=d.trackedSince?new Date(d.trackedSince).toLocaleDateString('ro-RO',{month:'short',year:'numeric'}):'—';
+  $("#sellerInfo").innerHTML=`
+    <div class="sellerbox">
+      <div class="sellerhead">
+        <div>
+          <div class="sellername">${d.sellerName||'(fără nume)'}</div>
+          <div class="sellerid">${d.sellerId} · ${d.hasFBA?'are FBA':'fără FBA'}${d.isScammer?' · <span style="color:var(--red)">semnalat ca fraudulos</span>':''}</div>
+        </div>
+        <span class="tokens">tokens Keepa: ${d.tokensLeft??'—'}</span>
+      </div>
+      <div class="sstats">
+        <div class="sstat"><div class="k">Feedback-uri</div><div class="v ${rc!=null&&rc<100?'good':''}">${rc!=null?rc.toLocaleString():'—'}</div></div>
+        <div class="sstat"><div class="k">Rating</div><div class="v">${d.rating!=null?d.rating+'%':'—'}</div></div>
+        <div class="sstat"><div class="k">Produse listate</div><div class="v">${d.totalStorefrontAsins!=null?d.totalStorefrontAsins.toLocaleString():'—'}</div></div>
+        <div class="sstat"><div class="k">Aduse acum</div><div class="v good">${d.asinCount||0}</div></div>
+        <div class="sstat"><div class="k">Urmărit din</div><div class="v" style="font-size:14px">${since}</div></div>
+      </div>
+      <div class="signal ${sig.cls}">${sig.txt}</div>
+    </div>`;
+}
+function loadSellerAsins(d){
+  const items=(d.asinList||[]).map(a=>({
+    code:String(a).toUpperCase(), sendable:true, name:'', cost:null, stock:null,
+    category:'', brand:'', sku:''
+  }));
+  setItems(items, `storefront ${d.sellerName||d.sellerId}`);
+  $("#importCard").scrollIntoView({behavior:'smooth',block:'start'});  // e în același tab (Sourcing)
+}
+// încarcă o listă de produse în tabelul cu loturi (folosit de fișier ȘI de storefront)
+function setItems(items, label){
+  IMP.items=items;
+  IMP.sel=new Set(); IMP.catSel=new Set();
+  $("#impMeta").textContent=label||'';
+  $("#mapArea").style.display='none';       // storefront n-are coloane de mapat
+  $("#filterArea").style.display='block';
+  buildBrandOptions(); buildCatChips(); applyFilters();
+}
+
+function sendToBulk(){
+  const chosen=[...IMP.sel].map(i=>IMP.items[i]);
+  if(!chosen.length){ alert('Selectează cel puțin un produs din tabel.'); return; }
+  const seen=new Set(); const lines=[]; let skipped=0;
+  chosen.forEach(x=>{
+    if(!x.sendable){ skipped++; return; }
+    if(seen.has(x.code)) return; seen.add(x.code);
+    lines.push(x.cost!=null ? `${x.code};${x.cost}` : x.code);
+  });
+  if(!lines.length){ alert('Niciun produs selectat nu are cod EAN/ASIN valid pentru Keepa.'); return; }
+  $("#bulkInput").value=lines.join('\n');
+  // memorează codurile trimise (ca lotul următor să continue de aici)
+  seen.forEach(c=>IMP.done.add(c)); saveDone();
+  let msg=`${lines.length} produse trimise în „Analiză în masă".`;
+  if(skipped) msg+=` ${skipped} sărite (fără cod valid).`;
+  $("#bulkProgress").textContent=msg;
+  renderCat(); updateImpStat();
+  switchTab('analiza');   // lotul a plecat -> arăt direct tab-ul Rezultate
+  const bi=$("#bulkInput"); bi.style.transition='box-shadow .3s'; bi.style.boxShadow='0 0 0 2px var(--lime-dim)';
+  setTimeout(()=>bi.style.boxShadow='none',1200);
+}
+
+function exportSelection(){
+  const chosen=[...IMP.sel].map(i=>IMP.items[i]);
+  if(!chosen.length){ alert('Selectează produse ca să le exporți.'); return; }
+  if(typeof XLSX==='undefined'){ alert('Biblioteca Excel nu s-a încărcat.'); return; }
+  const cols=['Denumire','Cod','SKU','Cost','Stoc','Categorie','Brand'];
+  const rows=chosen.map(x=>({Denumire:x.name,Cod:x.code,SKU:x.sku,Cost:x.cost,Stoc:x.stock,Categorie:x.category,Brand:x.brand}));
+  const ws=XLSX.utils.json_to_sheet(rows,{header:cols});
+  ws['!cols']=[{wch:40},{wch:15},{wch:16},{wch:10},{wch:8},{wch:20},{wch:18}];
+  ws['!autofilter']={ref:`A1:${XLSX.utils.encode_col(cols.length-1)}${rows.length+1}`};
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Selectie');
+  XLSX.writeFile(wb,'sourcer-selectie-'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+// ---------- Analiză în masă ----------
+const BULK_FEES = {ref:15, close:0.99, dsf:3, vat:20, prep:0.50, regime:'franchise'};
+let bulkRows = [];
+let bulkFilter = 'all';
+let amzFilter = 'all';
+function parseBulk(txt){
+  return txt.split(/\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
+    const parts = l.split(/[;,\t]/).map(s=>s.trim());
+    const cost = parts[1]!=null && parts[1]!=='' ? parseFloat(parts[1].replace(',','.')) : null;
+    return {code:parts[0], cost:(cost!=null && !isNaN(cost))?cost:null};
+  }).filter(x=>x.code);
+}
+const CHUNK = 100; // Keepa acceptă până la 100 de produse per request
+const chunk = (arr,n) => { const out=[]; for(let i=0;i<arr.length;i+=n) out.push(arr.slice(i,i+n)); return out; };
+
+async function runBulk(){
+  const items = parseBulk($("#bulkInput").value);
+  if(!items.length){ alert('Lipește cel puțin un cod (ASIN sau EAN).'); return; }
+  if(items.length>100 && !confirm(items.length+' produse = '+items.length+' tokeni Keepa. Continui?')) return;
+  const domain = $("#bulkDomain").value;
+  const btn = $("#bulkGo"); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
+  bulkRows=[];
+
+  // costul e legat de cod, ca să-l regăsim după ce vin rezultatele grupate
+  const costOf = new Map(); items.forEach(it=>{ if(!costOf.has(it.code)) costOf.set(it.code, it.cost); });
+
+  // ASIN-urile și EAN-urile merg pe parametri diferiți la Keepa -> două grupe
+  const asins = items.filter(it=>isASIN(it.code)).map(it=>it.code);
+  const codes = items.filter(it=>!isASIN(it.code)).map(it=>it.code);
+  const jobs = [
+    ...chunk(asins,CHUNK).map(list=>({param:'asins', list})),
+    ...chunk(codes,CHUNK).map(list=>({param:'codes', list}))
+  ];
+
+  let done=0;
+  for(let j=0;j<jobs.length;j++){
+    const job=jobs[j];
+    $("#bulkProgress").textContent = `lot ${j+1}/${jobs.length} · ${done}/${items.length} produse…`;
+    try{
+      const r = await fetch(`${FN}/keepa?${job.param}=${encodeURIComponent(job.list.join(','))}&domain=${domain}`);
+      const data = await r.json();
+      if(data.error) throw new Error(data.error);
+      (data.results||[]).forEach(d=>{
+        const code = d.query;
+        const cost = costOf.has(code) ? costOf.get(code) : null;
+        if(d && d.found){
+          const fba = d.fbaFee!=null ? d.fbaFee : 4.79;
+          const m = computeMargin({sale:d.buyBoxNow, cost:cost||0, cashback:0, ref:d.referralPercent??BULK_FEES.ref,
+            fba, close:BULK_FEES.close, dsf:BULK_FEES.dsf, prep:BULK_FEES.prep, other:0, vat:BULK_FEES.vat, regime:BULK_FEES.regime});
+          const v = verdict(m, d, {margin:20, roi:30});
+          bulkRows.push({code, d, cost, m, v, fba, domain});
+        } else {
+          bulkRows.push({code, d:{asin:code, title:'(negăsit pe Keepa)'}, notFound:true, domain});
+        }
+      });
+      done += job.list.length;
+    }catch(e){
+      job.list.forEach(code=>bulkRows.push({code, d:{asin:code, title:'(eroare)'}, notFound:true, domain}));
+      done += job.list.length;
+    }
+    if(j<jobs.length-1) await new Promise(res=>setTimeout(res,1500)); // pauză mică între loturi
+  }
+  $("#bulkProgress").textContent = `gata · ${bulkRows.length} produse`;
+  btn.disabled=false; btn.textContent='Analizează lista';
+  renderBulk();
+  sbUpsert(bulkRows.filter(b=>!b.notFound).map(scanRow)).then(loadHistory);
+  $("#bulkExport").style.display = bulkRows.length?'inline-block':'none';
+  $("#bulkFilter").style.display = bulkRows.length?'inline-flex':'none';
+  $("#bulkNumFilters").style.display = bulkRows.length?'flex':'none';
+  updateTabCounts();
+}
+const isOpportunity = b => !b.notFound && b.cost!=null && b.v && (b.v.level==='g' || b.v.level==='a');
+const RANGE_IDS = ['fBB_min','fBB_max','fBSR_min','fBSR_max','fSEL_min','fSEL_max','fMAR_min','fMAR_max','fROI_min','fROI_max'];
+function rv(id){ const el=$("#"+id); const v=el?parseFloat(el.value):NaN; return isNaN(v)?null:v; }
+function bulkVisible(){
+  const R = {
+    bb:[rv('fBB_min'),rv('fBB_max')], bsr:[rv('fBSR_min'),rv('fBSR_max')], sel:[rv('fSEL_min'),rv('fSEL_max')],
+    mar:[rv('fMAR_min'),rv('fMAR_max')], roi:[rv('fROI_min'),rv('fROI_max')]
+  };
+  const anyRange = Object.values(R).some(([a,b])=>a!=null||b!=null);
+  let v = bulkFilter==='ok' ? bulkRows.filter(isOpportunity) : bulkRows;
+  if(amzFilter!=='all'){
+    v = v.filter(b=>{
+      if(b.notFound) return false;
+      const on = b.d.amazonOnListing===true;
+      return amzFilter==='yes' ? on : !on;
+    });
+  }
+  if(anyRange){
+    const chk=(val,[mn,mx])=>{ if(mn==null&&mx==null) return true; if(val==null) return false;
+      if(mn!=null&&val<mn) return false; if(mx!=null&&val>mx) return false; return true; };
+    v = v.filter(b=>{
+      if(b.notFound) return false;
+      return chk(b.d.buyBoxNow,R.bb) && chk(b.d.salesRankNow,R.bsr) && chk(b.d.offerCountNow,R.sel)
+        && chk(b.m?b.m.margin:null,R.mar) && chk(b.m?b.m.roi:null,R.roi);
+    });
+  }
+  return v;
+}
+function renderBulk(){
+  const el = $("#bulkResults");
+  if(!bulkRows.length){ el.innerHTML=''; return; }
+  const vis = bulkVisible();
+  const hidden = bulkRows.length - vis.length;
+  if(!vis.length){
+    el.innerHTML = `<div class="empty">Niciun produs nu trece de filtre (verdict / BSR / selleri). <a href="#" onclick="clearBulkNum();setBulkFilter('all');return false" style="color:var(--lime)">arată tot</a></div>`;
+    return;
+  }
+  const rows = vis.map(b=>{
+    if(b.notFound){
+      return `<tr><td class="prod">${b.d.title}</td><td>${b.d.asin||''}</td><td colspan="9" style="color:var(--dim)">—</td></tr>`;
+    }
+    const m=b.m, d=b.d, v=b.v;
+    const hasCost = b.cost!=null;
+    return `<tr>
+      <td class="prod">${d.title||''}</td>
+      <td>${d.asin||''}</td>
+      <td>${money(d.buyBoxNow)}</td>
+      <td>${d.salesRankNow!=null?('#'+d.salesRankNow.toLocaleString()):'—'}</td>
+      <td>${d.offerCountNow!=null?d.offerCountNow:'—'}</td>
+      <td>${d.priceDeltaPct!=null?(d.priceDeltaPct+'%'):'—'}</td>
+      <td>${money(b.fba)}</td>
+      <td>${hasCost?money(b.cost):'—'}</td>
+      <td>${hasCost?money(m.net):'—'}</td>
+      <td>${hasCost?Math.round(m.roi)+'%':'—'}</td>
+      <td>${hasCost?`<span class="vtag ${v.level}">${v.label}</span>`:'<span style="color:var(--dim)">fără cost</span>'}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `<table class="bulk">
+    <thead><tr>
+      <th>Produs</th><th>ASIN</th><th>Buy Box</th><th>BSR</th><th>Selleri</th><th>Δ90z</th>
+      <th>FBA</th><th>Cost</th><th>Profit</th><th>ROI</th><th>Verdict</th>
+    </tr></thead><tbody>${rows}</tbody></table>`+
+    (hidden>0 ? `<div class="empty" style="padding:12px">${vis.length} afișate · ${hidden} ascunse (verdict / BSR / selleri / negăsite)</div>` : '');
+}
+function setBulkFilter(f){
+  bulkFilter=f;
+  document.querySelectorAll('#bulkFilter button').forEach(b=>b.classList.toggle('on', b.dataset.f===f));
+  renderBulk();
+}
+function clearBulkNum(){ RANGE_IDS.forEach(id=>{ const el=$("#"+id); if(el) el.value=''; }); }
+function bulkToExportRows(){
+  return bulkVisible().filter(b=>!b.notFound).map(b=>{
+    const m=b.m, d=b.d;
+    const num=x=>(x==null||isNaN(x))?'':Number(x).toFixed(2);
+    return {
+      "Produs": d.title||'',
+      "ASIN": d.asin||'',
+      "Pret Amazon": num(d.buyBoxNow),
+      "Cost furnizor": b.cost!=null?num(b.cost):'',
+      "Profit final": b.cost!=null?num(m.net):'',
+      "Furnizor 1": '',
+      "Furnizor 2": ''
+    };
+  });
+}
+$("#bulkGo").addEventListener('click',runBulk);
+document.querySelectorAll('#bulkFilter button').forEach(b=>b.addEventListener('click',()=>setBulkFilter(b.dataset.f)));
+RANGE_IDS.forEach(id=>{ const el=$("#"+id); if(el) el.addEventListener('input',renderBulk); });
+document.querySelectorAll('#fAmz button').forEach(b=>b.addEventListener('click',()=>{
+  amzFilter=b.dataset.a;
+  document.querySelectorAll('#fAmz button').forEach(x=>x.classList.toggle('on',x===b));
+  renderBulk();
+}));
+$("#bulkNumClear").addEventListener('click',()=>{ clearBulkNum(); renderBulk(); amzResetUI(); });
+function amzResetUI(){ amzFilter='all'; document.querySelectorAll('#fAmz button').forEach(x=>x.classList.toggle('on',x.dataset.a==='all')); }
+$("#bulkExport").addEventListener('click',()=>{
+  const rows=bulkToExportRows();
+  if(!rows.length){ alert('Nimic de exportat.'); return; }
+  writeXLSX(rows, 'sourcer-masa-'+new Date().toISOString().slice(0,10)+'.xlsx', 'Analiza in masa');
+});
+
+// ---------- Furnizorii mei (quick-search links, localStorage) ----------
+const DEFAULT_SUP = [
+  {name:'Qogita', url:'https://www.qogita.com/search?query={EAN}'},
+  {name:'eany',   url:'https://www.eany.io/catalog?search={EAN}'}
+];
+function getSup(){
+  const v = localStorage.getItem('sourcer_suppliers');
+  if(v===null) return DEFAULT_SUP.slice();
+  try{ return JSON.parse(v) }catch{ return DEFAULT_SUP.slice() }
+}
+function setSup(a){ localStorage.setItem('sourcer_suppliers', JSON.stringify(a)); renderSupLinks(); }
+function addSup(){
+  const name = prompt('Nume furnizor (ex. Qogita):');
+  if(!name) return;
+  const url = prompt(
+    'URL de căutare — pune {EAN} unde apare codul produsului.\n\n'+
+    'Cum îl afli sigur: caută manual un produs pe site-ul furnizorului, '+
+    'copiază URL-ul din bara de adrese și înlocuiește codul cu {EAN}.\n\n'+
+    'Ex: https://www.qogita.com/search?query={EAN}'
+  );
+  if(!url) return;
+  const a = getSup(); a.push({name:name.trim(), url:url.trim()}); setSup(a);
+}
+function delSup(i){ const a=getSup(); a.splice(i,1); setSup(a); }
+function renderSupLinks(){
+  const c = $("#supLinks"); if(!c) return;
+  const ean = current && current.ean;
+  const list = getSup();
+  c.innerHTML = list.map((s,i)=>{
+    const href = ean ? s.url.replace(/\{EAN\}/g, encodeURIComponent(ean)) : '';
+    const clickable = href ? `onclick="window.open('${href.replace(/'/g,"%27")}','_blank')"` : '';
+    return `<span class="badge use" ${clickable} title="${s.url}">🔎 ${s.name}`+
+      `<b onclick="event.stopPropagation();delSup(${i})" style="margin-left:7px;color:var(--dim)">✕</b></span>`;
+  }).join('') + `<span class="badge use" onclick="addSup()">＋ furnizor</span>`;
+}
+
+// ---------- Istoric în cloud (Supabase) ----------
+const SB_URL = "https://mqubrftzzhxhdtypjhri.supabase.co";
+const SB_KEY = "sb_publishable_vqo9nKtJnumJgIwtBYHDTw_NdT6tw8k";
+const SB_HEADERS = { apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json' };
+const numOrNull = v => (v==null||v===''||isNaN(v)) ? null : Number(v);
+
+function scanRow(b){
+  const d=b.d||{}, m=b.m||{}, v=b.v||{};
+  const hasCost = b.cost!=null && Number(b.cost)>0;
+  return {
+    code: String(d.ean||d.asin||b.code||''),
+    domain: String(b.domain||d.domain||'4'),
+    asin:d.asin||null, ean:d.ean||null, title:d.title||null, brand:d.brand||null, image:d.image||null,
+    buybox:numOrNull(d.buyBoxNow), bsr:numOrNull(d.salesRankNow), sellers:numOrNull(d.offerCountNow),
+    price_delta:numOrNull(d.priceDeltaPct), sales_per_month:numOrNull(d.salesPerMonth),
+    fba:numOrNull(b.fba!=null?b.fba:d.fbaFee), cost:numOrNull(b.cost),
+    // fără cost de furnizor nu există profit/marjă/verdict reale — nu salvăm cifre false
+    profit: hasCost ? numOrNull(m.net) : null,
+    margin: hasCost && m.margin!=null && !isNaN(m.margin) ? Math.round(m.margin) : null,
+    roi:    hasCost && m.roi!=null    && !isNaN(m.roi)    ? Math.round(m.roi)    : null,
+    verdict: hasCost ? (v.level||null) : null,
+    verdict_label: hasCost ? (v.label||null) : null,
+    found:!b.notFound,
+    updated_at:new Date().toISOString()
+  };
+}
+async function sbUpsert(rows){
+  rows=(rows||[]).filter(r=>r.code);
+  if(!SB_URL||!rows.length) return;
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/scans?on_conflict=code,domain`,{
+      method:'POST', headers:{...SB_HEADERS, Prefer:'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify(rows)});
+    if(!r.ok) console.warn('SB upsert', r.status, await r.text());
+  }catch(e){ console.warn('SB upsert err', e); }
+}
+let saveTimer=null;
+function queueSaveCurrent(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveCurrentNow,1500); }
+function saveCurrentNow(){
+  if(!current) return;
+  const b={ code:current.ean||current.asin, d:current,
+    cost:parseFloat($("#i_cost")&&$("#i_cost").value)||null, m:current._m, v:current._verdict,
+    fba:parseFloat($("#i_fba")&&$("#i_fba").value), domain:current.domain };
+  sbUpsert([scanRow(b)]).then(loadHistory);
+}
+
+// HIST și histVerdict sunt declarate sus, lângă $ și current
+const HIST_PAGE=25; let histShown=HIST_PAGE;
+function histOpen(){ return localStorage.getItem('sourcer_hist_open')==='1'; }
+function setHistOpen(v){
+  localStorage.setItem('sourcer_hist_open', v?'1':'0');
+  $("#histBody").style.display = v?'block':'none';
+  $("#histChev").style.transform = v?'rotate(90deg)':'none';
+  if(v) renderHistory();
+}
+function histSummary(){
+  const stars=HIST.filter(x=>x.starred).length;
+  const ok=HIST.filter(x=>x.verdict==='g'||x.verdict==='a').length;
+  $("#histStatus").innerHTML = HIST.length
+    ? `${HIST.length} salvate · <span style="color:var(--lime)">${ok} oportunități</span>${stars?` · <span style="color:var(--amber)">★ ${stars}</span>`:''}`
+    : 'gol';
+  updateTabCounts();
+}
+async function loadHistory(){
+  const el=$("#histList"); if(!el) return;
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/scans?select=*&order=updated_at.desc&limit=400`,{headers:SB_HEADERS});
+    if(!r.ok){
+      const detail=await r.text().catch(()=>'');
+      histError(`eroare ${r.status}`, detail.slice(0,160));
+      return;
+    }
+    HIST=await r.json();
+    histSummary();
+    if(histOpen()) renderHistory();
+  }catch(e){ histError('fără conexiune', String(e)); }
+}
+// eroarea trebuie să se vadă ȘI când istoricul e pliat
+function histError(scurt, detaliu){
+  $("#histStatus").innerHTML=`<span style="color:var(--red)">${scurt}</span>`;
+  $("#histList").innerHTML=`<div class="err">Nu pot citi istoricul: ${scurt}.${detaliu?'<br><span style="font-size:11px;opacity:.75">'+detaliu.replace(/</g,'&lt;')+'</span>':''}</div>`;
+}
+function histFiltered(){
+  const q=($("#histSearch").value||'').toLowerCase().trim();
+  return HIST.filter(x=>{
+    if(histVerdict==='ok' && !(x.verdict==='g'||x.verdict==='a')) return false;
+    if(histVerdict==='star' && !x.starred) return false;
+    if(q){ const hay=((x.title||'')+' '+(x.code||'')+' '+(x.asin||'')+' '+(x.ean||'')+' '+(x.brand||'')).toLowerCase(); if(!hay.includes(q)) return false; }
+    return true;
+  });
+}
+function renderHistory(){
+  const el=$("#histList"); if(!el) return;
+  if(!HIST.length){ el.innerHTML='<div class="empty">Încă nimic în istoric. Scanează produse și apar aici — le vezi de pe orice device.</div>'; return; }
+  const rows=histFiltered();
+  if(!rows.length){ el.innerHTML='<div class="empty">Niciun rezultat pentru filtrul curent.</div>'; return; }
+  const show=rows.slice(0,histShown);
+  el.innerHTML=`<table class="hist"><thead><tr>
+    <th></th><th>Produs</th><th>Cod</th><th>Buy Box</th><th>BSR</th><th>Sel</th><th>Cost</th><th>Profit</th><th>ROI</th><th>Verdict</th><th>Când</th><th></th>
+  </tr></thead><tbody>${show.map(histRow).join('')}</tbody></table>`+
+    (rows.length>show.length
+      ? `<div style="text-align:center;padding:12px"><button class="btn ghost" onclick="histMore()" style="padding:8px 16px;font-size:12px">arată încă ${Math.min(HIST_PAGE,rows.length-show.length)} din ${rows.length-show.length} rămase</button></div>`
+      : '');
+}
+function histMore(){ histShown+=HIST_PAGE; renderHistory(); }
+function histRow(x){
+  const vl=x.verdict||''; const when=x.updated_at?new Date(x.updated_at).toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit'}):'';
+  const code=(x.asin||x.code||'').replace(/'/g,'');
+  return `<tr onclick="openHist(${x.id})" title="click pentru detalii">
+    <td><button class="star ${x.starred?'on':''}" onclick="event.stopPropagation();toggleStar(${x.id},${x.starred?'true':'false'})">${x.starred?'★':'☆'}</button></td>
+    <td class="t">${x.title||'—'}${x.note?'<span class="done-tag" title="are notiță">✎</span>':''}</td>
+    <td>${x.asin||x.code||''}</td>
+    <td>${x.buybox!=null?money(x.buybox):'—'}</td>
+    <td>${x.bsr!=null?'#'+Number(x.bsr).toLocaleString():'—'}</td>
+    <td>${x.sellers!=null?x.sellers:'—'}</td>
+    <td>${x.cost!=null?money(x.cost):'—'}</td>
+    <td>${x.profit!=null?money(x.profit):'—'}</td>
+    <td>${x.roi!=null?Math.round(x.roi)+'%':'—'}</td>
+    <td>${vl?`<span class="vtag ${vl}">${x.verdict_label||''}</span>`:'—'}</td>
+    <td style="color:var(--dim)">${when}</td>
+    <td><span style="display:flex;gap:4px">
+      <button class="hist-act" onclick="event.stopPropagation();reanalyzeHist('${code}','${x.domain||'4'}')">re-analiză</button>
+      <button class="hist-act" onclick="event.stopPropagation();delHist(${x.id})">✕</button>
+    </span></td>
+  </tr>`;
+}
+async function toggleStar(id,cur){
+  try{ await fetch(`${SB_URL}/rest/v1/scans?id=eq.${id}`,{method:'PATCH',headers:{...SB_HEADERS,Prefer:'return=minimal'},body:JSON.stringify({starred:!cur})});
+    const it=HIST.find(h=>h.id===id); if(it) it.starred=!cur; renderHistory(); histSummary();
+  }catch(e){ alert('Nu pot actualiza favoritul.'); }
+}
+async function delHist(id){
+  if(!confirm('Ștergi produsul din istoric?')) return;
+  try{ await fetch(`${SB_URL}/rest/v1/scans?id=eq.${id}`,{method:'DELETE',headers:{...SB_HEADERS,Prefer:'return=minimal'}});
+    HIST=HIST.filter(h=>h.id!==id); histSummary(); renderHistory();
+  }catch(e){ alert('Nu pot șterge.'); }
+}
+function reanalyzeHist(code,domain){ if(!code) return; closeHist(); $("#q").value=code; if($("#domain"))$("#domain").value=domain||'4'; switchTab('produs'); search(); }
+
+// ---------- Detalii produs din istoric (fără tokeni — doar ce e salvat) ----------
+const AMZ_TLD={'4':'fr','3':'de','8':'it','9':'es','2':'co.uk'};
+function closeHist(){ $("#histModal").classList.remove('on'); }
+function openHist(id){
+  const x=HIST.find(h=>h.id===id); if(!x) return;
+  const tld=AMZ_TLD[String(x.domain)]||'fr';
+  const num=(v,d=2)=>v==null?'—':Number(v).toFixed(d);
+  const when=t=>t?new Date(t).toLocaleString('ro-RO',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+  const vl=x.verdict||'';
+  $("#histModalBox").innerHTML=`
+    <div class="hmhead">
+      ${x.image?`<img src="${x.image}" onerror="this.style.display='none'"/>`:''}
+      <div style="min-width:0;flex:1">
+        <div class="t">${x.title||'(fără titlu)'}</div>
+        <div class="m">${x.asin||''}${x.ean?' · EAN '+x.ean:''}${x.brand?' · '+x.brand:''}</div>
+        <div class="m">Amazon.${tld}</div>
+      </div>
+      <button class="x" onclick="closeHist()" style="font-size:22px;flex-shrink:0">✕</button>
+    </div>
+
+    ${vl?`<div class="pverdict ${vl}" style="margin-bottom:12px">
+      <span class="lbl">${x.verdict_label||''}</span>
+      <span class="why">la ultima analiză</span></div>`:''}
+
+    <div class="hmgrid">
+      <div class="c"><div class="k">Buy Box</div><div class="v good">${x.buybox!=null?num(x.buybox)+' €':'—'}</div></div>
+      <div class="c"><div class="k">Cost</div><div class="v">${x.cost!=null?num(x.cost)+' €':'—'}</div></div>
+      <div class="c"><div class="k">Profit</div><div class="v ${x.profit>0?'good':(x.profit!=null?'bad':'')}">${x.profit!=null?num(x.profit)+' €':'—'}</div></div>
+      <div class="c"><div class="k">ROI</div><div class="v">${x.roi!=null?Math.round(x.roi)+'%':'—'}</div></div>
+      <div class="c"><div class="k">Marjă</div><div class="v">${x.margin!=null?Math.round(x.margin)+'%':'—'}</div></div>
+      <div class="c"><div class="k">Taxă FBA</div><div class="v">${x.fba!=null?num(x.fba)+' €':'—'}</div></div>
+      <div class="c"><div class="k">BSR</div><div class="v">${x.bsr!=null?'#'+Number(x.bsr).toLocaleString():'—'}</div></div>
+      <div class="c"><div class="k">Selleri</div><div class="v ${x.sellers>12?'warn':''}">${x.sellers!=null?x.sellers:'—'}</div></div>
+      <div class="c"><div class="k">Δ 90z</div><div class="v ${x.price_delta<-12?'bad':(x.price_delta>12?'warn':'')}">${x.price_delta!=null?x.price_delta+'%':'—'}</div></div>
+      <div class="c"><div class="k">Vânz/lună</div><div class="v ${x.sales_per_month!=null&&x.sales_per_month<3?'warn':''}">${x.sales_per_month!=null?'~'+x.sales_per_month:'—'}</div></div>
+    </div>
+
+    <div style="font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-bottom:11px">
+      salvat prima dată ${when(x.created_at)} · actualizat ${when(x.updated_at)}
+    </div>
+
+    <div class="hmlinks">
+      <span class="badge use" onclick="openLinkSafe('https://www.amazon.${tld}/dp/${x.asin||''}')">🔗 listarea Amazon</span>
+      <span class="badge use" onclick="openLinkSafe('https://keepa.com/#!product/${x.domain}-${x.asin||''}')">📈 Keepa</span>
+      ${x.ean?`<span class="badge use" onclick="openLinkSafe('https://www.google.com/search?q=${encodeURIComponent(x.ean)}')">🔎 caută EAN</span>`:''}
+    </div>
+
+    <div>
+      <div style="font-family:var(--mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Notițe</div>
+      <textarea class="hmnote" id="hmNote" rows="3" placeholder="ex: furnizor X are la 4.20 · gated pe contul meu · de reverificat în decembrie">${(x.note||'').replace(/</g,'&lt;')}</textarea>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:7px">
+        <button class="btn ghost" onclick="saveNote(${x.id})" style="padding:7px 14px;font-size:12px">Salvează notița</button>
+        <span class="tokens" id="hmNoteMsg"></span>
+      </div>
+    </div>
+
+    <div class="hmact">
+      <button class="btn ghost" onclick="toggleStar(${x.id},${x.starred?'true':'false'});closeHist()" style="padding:8px 14px;font-size:12px">${x.starred?'★ scoate din favorite':'☆ adaugă la favorite'}</button>
+      <span style="flex:1"></span>
+      <button class="btn ghost" onclick="delHist(${x.id});closeHist()" style="padding:8px 14px;font-size:12px;color:var(--red)">Șterge</button>
+      <button class="btn" onclick="reanalyzeHist('${(x.asin||x.code||'').replace(/'/g,'')}','${x.domain||'4'}')" style="padding:8px 16px;font-size:12px">↻ Re-analizează (1 token)</button>
+    </div>`;
+  $("#histModal").classList.add('on');
+}
+function openLinkSafe(url){ window.open(url,'_blank','noopener'); }
+async function saveNote(id){
+  const t=$("#hmNote").value, msg=$("#hmNoteMsg");
+  msg.textContent='salvez…';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/scans?id=eq.${id}`,{method:'PATCH',
+      headers:{...SB_HEADERS,Prefer:'return=minimal'},body:JSON.stringify({note:t})});
+    if(!r.ok) throw new Error(r.status);
+    const it=HIST.find(h=>h.id===id); if(it) it.note=t;
+    msg.innerHTML='<span style="color:var(--lime)">salvat ✓</span>';
+    renderHistory();
+  }catch(e){ msg.innerHTML='<span style="color:var(--red)">nu s-a salvat</span>'; }
+}
+function exportHistory(){
+  const rows=histFiltered(); if(!rows.length){ alert('Nimic de exportat.'); return; }
+  if(typeof XLSX==='undefined'){ alert('Biblioteca Excel nu s-a încărcat.'); return; }
+  const cols=['Produs','ASIN','EAN','Buy Box','BSR','Selleri','Cost','Profit','Marja %','ROI %','Verdict','Data'];
+  const data=rows.map(x=>({Produs:x.title,ASIN:x.asin,EAN:x.ean,'Buy Box':x.buybox,BSR:x.bsr,Selleri:x.sellers,Cost:x.cost,Profit:x.profit,'Marja %':x.margin,'ROI %':x.roi,Verdict:x.verdict_label,Data:x.updated_at?x.updated_at.slice(0,10):''}));
+  const ws=XLSX.utils.json_to_sheet(data,{header:cols});
+  ws['!cols']=cols.map(c=>({wch:c==='Produs'?40:12}));
+  ws['!autofilter']={ref:`A1:${XLSX.utils.encode_col(cols.length-1)}${data.length+1}`};
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Istoric');
+  XLSX.writeFile(wb,'sourcer-istoric-'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+(function initHistory(){
+  if(!$("#historyCard")) return;
+  $("#histToggle").onclick=()=>setHistOpen($("#histBody").style.display==='none');
+  $("#histReload").onclick=e=>{ e.stopPropagation(); loadHistory(); };
+  $("#histSearch").addEventListener('input',()=>{ histShown=HIST_PAGE; renderHistory(); });
+  document.querySelectorAll('#histVerdict button').forEach(b=>b.onclick=()=>{ histVerdict=b.dataset.v; histShown=HIST_PAGE;
+    document.querySelectorAll('#histVerdict button').forEach(x=>x.classList.toggle('on',x===b)); renderHistory(); });
+  $("#histExport").onclick=exportHistory;
+  setHistOpen(histOpen());   // respectă preferința ta de data trecută
+  const hm=$("#histModal");
+  if(hm) hm.addEventListener('click',e=>{ if(e.target===hm) closeHist(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeHist(); });
+  loadHistory();
+})();
+</script>
+
+
+</body></html>

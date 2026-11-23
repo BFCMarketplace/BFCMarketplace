@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#E8EDF3">
+<title>Cockpit FBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#E8EDF3;--panel:#FFFFFF;--fg:#101C28;--mut:#566475;--line:#D3DBE5;--acc:#0B57D0;
+  --good:#0E8A4B;--goodbg:#D8F3E5;--bad:#C4271E;--badbg:#FADDDA;--warn:#8A5A00;--warnbg:#FFF0CC;
+  --f:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --fm:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f);line-height:1.45;
+  padding:max(12px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.app{max-width:1060px;margin:0 auto;display:grid;gap:18px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* meniu sticky tip pastilă */
+.nav{position:sticky;top:max(8px,env(safe-area-inset-top));z-index:5;display:flex;align-items:center;gap:4px;flex-wrap:wrap;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;padding:6px}
+.nav .logo{font-weight:800;padding:0 8px;margin-right:auto;letter-spacing:-.01em;font-size:.95rem;white-space:nowrap}
+.nav button{border:0;background:none;color:var(--mut);padding:9px 11px;border-radius:999px;cursor:pointer;font-size:.85rem}
+.nav button[aria-current="page"]{background:var(--acc);color:#fff}
+.nav button:disabled{opacity:.45;cursor:not-allowed}
+
+.hero .chip{display:inline-flex;align-items:center;gap:8px;font-size:.8125rem;color:var(--mut);padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.dots{display:inline-flex;gap:4px}.dots i{width:7px;height:7px;border-radius:50%;display:block}
+.dots i:nth-child(1){background:#3B82F6}.dots i:nth-child(2){background:#8B5CF6}.dots i:nth-child(3){background:#22C55E}
+.hero h1{margin:12px 0 0;font-size:clamp(1.9rem,6vw,3rem);line-height:1.02;letter-spacing:-.02em;font-weight:800}
+.hero h1 span{display:block}
+.hero h1 span:nth-child(1){color:var(--fg)}.hero h1 span:nth-child(2){color:#6C7886}.hero h1 span:nth-child(3){color:#A3ADB9}
+.hero h1 span:nth-child(1) b{color:#3B82F6}.hero h1 span:nth-child(2) b{color:#8B5CF6}.hero h1 span:nth-child(3) b{color:#22C55E}
+
+.view[hidden]{display:none}
+.cols{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.cols{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:start}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px;min-width:0;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(16,28,40,.08)}
+.card h2{margin:0 0 12px;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);display:flex;justify-content:space-between}
+.card h2::after{content:"↗";letter-spacing:0}
+.stack{display:grid;gap:16px;min-width:0}
+
+.form{display:grid;gap:12px;grid-template-columns:1fr 1fr;align-items:end}
+.form .full{grid-column:1/-1}
+label{display:grid;gap:4px;font-size:.8125rem;color:var(--mut);min-width:0}
+input[type=text],input[type=number],input[type=date],select{width:100%;border:1px solid var(--line);border-radius:6px;padding:10px 11px;background:#fff;font-size:1rem;color:var(--fg);min-height:44px}
+input[type=number],.mono{font-family:var(--fm)}
+.chk{display:flex;align-items:center;gap:10px;font-size:.9375rem;color:var(--fg);min-height:44px}
+.chk input{width:22px;height:22px;accent-color:var(--acc)}
+.hint{font-size:.75rem;color:var(--mut);margin:0}
+
+.verdict{border:0;border-radius:8px;padding:20px;color:#fff;display:grid;gap:14px}
+.verdict.green{background:var(--good)}.verdict.red{background:var(--bad)}
+.verdict h2{color:#fff;opacity:.85}
+.vtag{justify-self:start;font-weight:800;letter-spacing:.06em;font-size:.8125rem;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:999px}
+.big{font-family:var(--fm);font-weight:600;font-size:clamp(2.3rem,9vw,3.6rem);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.kv span{display:block;font-size:.75rem;opacity:.8}.kv b{font-family:var(--fm);font-size:1.125rem;font-variant-numeric:tabular-nums}
+.why{margin:0;font-size:.875rem;opacity:.95}
+.buy{border:0;border-radius:999px;padding:15px 20px;font-weight:800;background:#fff;color:var(--fg);cursor:pointer;min-height:48px;transition:box-shadow .2s}
+.buy:hover:not(:disabled){box-shadow:0 0 22px rgba(255,255,255,.7)}
+.buy:disabled{background:rgba(255,255,255,.22);color:rgba(255,255,255,.75);cursor:not-allowed}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:6px;padding:10px 12px;font-size:.875rem}
+
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9375rem}
+.rows li:last-child{border-bottom:0}
+.rows em{font-style:normal;color:var(--mut)}
+.num{font-family:var(--fm);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tot{font-weight:800}
+.checks .l{display:grid;min-width:0}.checks small{color:var(--mut);font-size:.8125rem}
+.pill{font-size:.6875rem;font-weight:800;letter-spacing:.05em;padding:3px 9px;border-radius:999px;height:fit-content;white-space:nowrap}
+.pill.ok{background:var(--goodbg);color:var(--good)}.pill.no{background:var(--badbg);color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 18px;cursor:pointer;min-height:44px}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.hist{display:grid;gap:10px}
+.hitem{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.hitem .t{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.hitem .m{font-size:.8125rem;color:var(--mut)}
+.empty{color:var(--mut);padding:16px 0}
+.toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--fg);color:#fff;padding:10px 16px;border-radius:999px;font-size:.875rem;z-index:9}
+.toast[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.card,.buy{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="nav" aria-label="Meniu principal">
+    <span class="logo">Cockpit FBA</span>
+    <button type="button" data-view="fisa" aria-current="page">Fișă</button>
+    <button type="button" data-view="bani">Bani</button>
+    <button type="button" data-view="istoric">Istoric</button>
+    <button type="button" disabled title="Vine în versiunea 2">Stoc</button>
+  </nav>
+
+  <!-- ================= FIȘA PRODUSULUI ================= -->
+  <main id="view-fisa" class="view">
+    <section class="hero">
+      <span class="chip"><span class="dots"><i></i><i></i><i></i></span>Regulile decid, nu emoția</span>
+      <h1><span>Verifică<b>.</b></span><span>Calculează<b>.</b></span><span>Cumpără<b>.</b></span></h1>
+    </section>
+
+    <div class="cols" style="margin-top:18px">
+      <form class="card" id="form" autocomplete="off" onsubmit="return false">
+        <h2>Produs</h2>
+        <div class="form">
+          <label class="full">Titlu sau notă<input type="text" id="title" placeholder="ex. Cremă hidratantă 50 ml"></label>
+          <label>ASIN<input type="text" id="asin" class="mono" placeholder="B0…" maxlength="10"></label>
+          <label>EAN<input type="text" id="ean" class="mono" inputmode="numeric" placeholder="13 cifre"></label>
+          <label class="full">Categorie<select id="category"></select></label>
+          <label>Preț vânzare TTC (€)<input type="number" id="sell" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Cost cumpărare cu TVA (€)<input type="number" id="buy" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Comision Amazon %<input type="number" id="refPct" inputmode="decimal" step="0.1" min="0" value="15"></label>
+          <label>Taxă FBA HT (€)<input type="number" id="fba" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Vânzări / lună<input type="number" id="sales" inputmode="numeric" min="0"></label>
+          <label>Vânzători FBA<input type="number" id="sellers" inputmode="numeric" min="0"></label>
+          <label class="full">Amazon absent din listare, ultimele 90 zile (%)<input type="number" id="amzAbsent" inputmode="numeric" min="0" max="100"></label>
+          <label class="full" id="expiryWrap">Data de expirare (beauty)<input type="date" id="expiry"></label>
+          <label class="chk full" id="hazmatWrap"><input type="checkbox" id="hazmatOk">Am verificat fișa FDS / hazmat</label>
+          <label class="chk full"><input type="checkbox" id="listingOk">Titlu, descriere și poze sunt despre același produs</label>
+          <label class="chk full"><input type="checkbox" id="isNew" checked>Produs nou (prima comandă, max 200 €)</label>
+          <p class="hint full">Până legăm Keepa, preț, BSR, vânzări și vânzători se introduc manual. Taxa FBA o iei din SellerAmp sau din calculatorul Amazon.</p>
+        </div>
+      </form>
+
+      <div class="stack" aria-live="polite">
+        <article class="card verdict red" id="verdict">
+          <h2>Verdict</h2>
+          <span class="vtag" id="vTag">COMPLETEAZĂ FIȘA</span>
+          <div class="big" id="vProfit">0,00 €</div>
+          <div class="kv">
+            <div><span>ROI</span><b id="vRoi">—</b></div>
+            <div><span>Cantitate maximă</span><b id="vQty">—</b></div>
+            <div><span>Cost cumpărare</span><b id="vBuy">—</b></div>
+            <div><span>Preț vânzare</span><b id="vSell">—</b></div>
+          </div>
+          <p class="why" id="vWhy"></p>
+          <button type="button" class="buy" id="buyBtn" disabled>Cumpărarea e blocată</button>
+        </article>
+        <div class="warn" id="fixedWarn" hidden></div>
+        <article class="card"><h2>De unde vine profitul</h2><ul class="rows" id="costs"></ul></article>
+        <article class="card"><h2>Verificări</h2><ul class="rows checks" id="checks"></ul></article>
+        <div class="actions"><button type="button" class="btn pri" id="saveBtn">Salvează în istoric</button><button type="button" class="btn" id="clearBtn">Produs nou</button></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= BANI ================= -->
+  <main id="view-bani" class="view" hidden>
+    <div class="cols">
+      <form class="card" onsubmit="return false">
+        <h2>Capital și cont</h2>
+        <div class="form">
+          <label class="full">Capital disponibil (€)<input type="number" id="s_capital" inputmode="decimal" step="1" min="0"></label>
+          <label class="full">Tip cont Amazon<select id="s_account"><option value="individual">Individual (≈0,99 € pe vânzare, fără abonament)</option><option value="pro">Pro (abonament lunar)</option></select></label>
+          <p class="hint full">Cu 20% din capital pe produs, plafonul tău e <b id="capLimit">—</b> €. Prima comandă la produs nou: <b id="capFirst">—</b> €.</p>
+        </div>
+      </form>
+      <form class="card" onsubmit="return false">
+        <h2>Costuri fixe lunare</h2>
+        <div class="form">
+          <label>Abonament Pro (€ cu TVA)<input type="number" id="s_proFee" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Keepa (€)<input type="number" id="s_keepa" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Netlify + Supabase (€)<input type="number" id="s_hosting" inputmode="decimal" step="0.01" min="0"></label>
+          <label>Altele (€)<input type="number" id="s_otherFixed" inputmode="decimal" step="0.01" min="0"></label>
+          <label>CFE pe an (€)<input type="number" id="s_cfeYear" inputmode="decimal" step="1" min="0"></label>
+          <label>Bucăți estimate pe an<input type="number" id="s_unitsYear" inputmode="numeric" min="1"></label>
+          <p class="hint full">Cu cont Individual, abonamentul Pro nu se numără. Taxa de 0,99 € e inclusă în calculul fiecărui produs. CFE: de verificat dacă ești scutit în primul an.</p>
+          <div class="full tot" id="fixedTotal"></div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- ================= ISTORIC ================= -->
+  <main id="view-istoric" class="view" hidden>
+    <section class="card"><h2>Verdicte salvate</h2><div class="hist" id="hist"></div></section>
+  </main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="engine.js"></script>
+<script>
+(function(){
+  "use strict";
+  var E=window.FBAEngine, $=function(i){return document.getElementById(i)};
+  var KEY_S="fba.settings.v1", KEY_H="fba.history.v1", KEY_P="fba.draft.v1";
+
+  /* ---- stocare locală (strat separat, ca să-l înlocuim cu Supabase) ---- */
+  var store={
+    get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+    set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  };
+  /* ---- sursa datelor de produs: acum manuală; aici se leagă Keepa mai târziu ---- */
+  var dataSource={ name:"manual" /* lookup(asinOrEan) -> {sell,sales,sellers,amzAbsent,fba,refPct} */ };
+
+  var settings=Object.assign({},E.DEFAULT_SETTINGS,store.get(KEY_S,{}));
+  var fields=["title","asin","ean","category","sell","buy","refPct","fba","sales","sellers","amzAbsent","expiry"];
+  var checks=["hazmatOk","listingOk","isNew"];
+  var last=null, raf=null;
+
+  function eur(n){return Number(n).toLocaleString("ro-RO",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function toast(msg){var t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},2400)}
+
+  /* ---- fișă ---- */
+  function readProduct(){
+    var p={};
+    fields.forEach(function(f){p[f]=$(f).value});
+    checks.forEach(function(f){p[f]=$(f).checked});
+    return p;
+  }
+  function writeProduct(p){
+    fields.forEach(function(f){$(f).value=p[f]==null?"":p[f]});
+    checks.forEach(function(f){$(f).checked=!!p[f]});
+  }
+  function count(el,to){
+    if(raf)cancelAnimationFrame(raf);
+    if(matchMedia("(prefers-reduced-motion:reduce)").matches){el.textContent=eur(to);return}
+    var t0=performance.now();
+    (function step(t){var p=Math.min(1,(t-t0)/600),e=1-Math.pow(1-p,3);el.textContent=eur(to*e);if(p<1)raf=requestAnimationFrame(step)})(t0);
+  }
+  var shownProfit=null;
+  function render(){
+    var p=readProduct(), strict=(E.CATEGORIES.filter(function(c){return c.id===p.category})[0]||{}).strict;
+    $("expiryWrap").hidden=!strict; $("hazmatWrap").hidden=!strict;
+    store.set(KEY_P,p);
+    var empty=!(E.num(p.sell)>0&&E.num(p.buy)>0);
+    var r=E.evaluate(p,settings); last={p:p,r:r};
+    var v=$("verdict");
+    v.className="card verdict "+(r.green?"green":"red");
+    $("vTag").textContent=empty?"COMPLETEAZĂ PREȚUL ȘI COSTUL":(r.green?"VERDE · POȚI CUMPĂRA":"ROȘU · NU CUMPERI");
+    var net=empty?0:r.eco.net;
+    if(shownProfit!==net){count($("vProfit"),net);shownProfit=net}
+    $("vRoi").textContent=empty?"—":Math.round(r.eco.roi*100)+"%";
+    $("vQty").textContent=empty?"—":(r.green?r.qty+" buc.":"0 buc.");
+    $("vBuy").textContent=empty?"—":eur(r.eco.buy);
+    $("vSell").textContent=empty?"—":eur(r.eco.sell);
+    $("vWhy").textContent=empty?"Introdu prețul de vânzare și costul de cumpărare.":
+      (r.green?"Cumperi maximum "+r.qty+" buc. ("+eur(r.qty*r.eco.buy)+"). Plafon: "+eur(r.limits.cap)+".":
+      r.fails.length+(r.fails.length===1?" regulă picată: ":" reguli picate: ")+r.fails.map(function(f){return f.label}).join(", ")+".");
+    var b=$("buyBtn"); b.disabled=empty||!r.green;
+    b.textContent=(!empty&&r.green)?"Decid: cumpăr "+r.qty+" buc. ("+eur(r.qty*r.eco.buy)+")":"Cumpărarea e blocată";
+    var e=r.eco, rows=empty?[]:[["Preț de vânzare",e.sell],["Cost cumpărare cu TVA",-e.buy],["Comision Amazon",-e.referral],["Taxă FBA",-e.fba],["Frais de clôture",-e.close],["DSF 3%",-e.dsf],["TVA 20% pe taxe",-e.feesVat],["Urssaf 12,3% din preț",-e.urssaf],["CFP + CFE",-(e.cfp+e.cfe)]];
+    $("costs").innerHTML=empty?"<li class=\"empty\">Cifrele apar după ce introduci prețul și costul.</li>":
+      rows.map(function(x){return "<li><em>"+x[0]+"</em><span class=\"num\">"+(x[1]<0?"− ":"")+eur(Math.abs(x[1]))+"</span></li>"}).join("")+
+      "<li class=\"tot\"><span>Profit net</span><span class=\"num\">"+eur(e.net)+"</span></li>";
+    $("checks").innerHTML=empty?"":r.checks.map(function(c){return "<li><span class=\"l\"><span>"+esc(c.label)+"</span><small>"+esc(c.detail)+"</small></span><span class=\"pill "+(c.ok?"ok\">OK":"no\">PICAT")+"</span></li>"}).join("");
+    var w=$("fixedWarn");
+    if(!empty&&r.fixed.total>0){
+      w.hidden=false;
+      w.textContent="Costuri fixe: "+eur(r.fixed.total)+"/lună. "+(r.breakEvenUnits===null?"La acest produs nu le acoperi.":"Ca să le acoperi din acest produs vinzi "+r.breakEvenUnits+" buc./lună; cantitatea maximă îți aduce "+eur(r.monthlyProfit)+".");
+      w.style.background=r.coversFixed?"var(--goodbg)":"";
+      w.style.color=r.coversFixed?"var(--good)":"";
+    } else w.hidden=true;
+  }
+
+  /* ---- setări ---- */
+  var sFields=["capital","proFee","keepa","hosting","otherFixed","cfeYear","unitsYear"];
+  function renderSettings(){
+    sFields.forEach(function(f){var el=$("s_"+f); if(document.activeElement!==el) el.value=settings[f]});
+    $("s_account").value=settings.account;
+    var lim=E.moneyLimits(settings,false), first=E.moneyLimits(settings,true);
+    $("capLimit").textContent=lim.perProduct.toFixed(2).replace(".",",");
+    $("capFirst").textContent=first.cap.toFixed(2).replace(".",",");
+    var fx=E.fixedCosts(settings);
+    $("fixedTotal").textContent="Costuri fixe numărate: "+eur(fx.total)+" pe lună";
+  }
+  function readSettings(){
+    sFields.forEach(function(f){settings[f]=E.num($("s_"+f).value)});
+    settings.account=$("s_account").value;
+    store.set(KEY_S,settings); renderSettings(); render();
+  }
+
+  /* ---- istoric ---- */
+  function hist(){return store.get(KEY_H,[])}
+  function renderHist(){
+    var h=hist(), el=$("hist");
+    if(!h.length){el.innerHTML="<div class=\"empty\">Niciun verdict salvat încă. Apasă „Salvează în istoric” pe o fișă.</div>";return}
+    el.innerHTML=h.map(function(x,i){return "<div class=\"hitem\"><div class=\"t\">"+esc(x.title||x.asin||"Fără titlu")+"</div><div class=\"num\">"+eur(x.net)+"</div><div class=\"m\">"+esc(x.date)+" · "+esc(x.status)+(x.qty?" · "+x.qty+" buc.":"")+"</div><button class=\"btn\" data-del=\""+i+"\" type=\"button\">Șterge</button></div>"}).join("");
+  }
+  function save(status){
+    if(!last)return; var p=last.p, r=last.r;
+    var h=hist(); h.unshift({title:p.title,asin:p.asin,ean:p.ean,net:r.eco.net,roi:r.eco.roi,qty:r.green?r.qty:0,verdict:r.green?"verde":"roșu",status:status,date:new Date().toLocaleDateString("ro-RO")});
+    store.set(KEY_H,h.slice(0,200)); renderHist();
+  }
+
+  /* ---- navigare ---- */
+  function show(v){
+    ["fisa","bani","istoric"].forEach(function(n){$("view-"+n).hidden=n!==v});
+    Array.prototype.forEach.call(document.querySelectorAll(".nav button[data-view]"),function(b){
+      if(b.dataset.view===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+    window.scrollTo(0,0);
+  }
+
+  /* ---- pornire ---- */
+  $("category").innerHTML=E.CATEGORIES.map(function(c){return "<option value=\""+c.id+"\">"+c.label+"</option>"}).join("");
+  var draft=store.get(KEY_P,null);
+  if(draft)writeProduct(draft); else {$("category").value="beauty";$("refPct").value="15";$("isNew").checked=true}
+  fields.concat(checks).forEach(function(f){$(f).addEventListener("input",render);$(f).addEventListener("change",render)});
+  sFields.concat(["account"]).forEach(function(f){$("s_"+f).addEventListener("input",readSettings);$("s_"+f).addEventListener("change",readSettings)});
+  Array.prototype.forEach.call(document.querySelectorAll(".nav button[data-view]"),function(b){b.addEventListener("click",function(){show(b.dataset.view)})});
+  $("buyBtn").addEventListener("click",function(){save("de cumpărat");toast("Salvat în istoric: de cumpărat")});
+  $("saveBtn").addEventListener("click",function(){save("doar verificat");toast("Salvat în istoric")});
+  $("clearBtn").addEventListener("click",function(){writeProduct({category:"beauty",refPct:15,isNew:true});shownProfit=null;render()});
+  $("hist").addEventListener("click",function(ev){var i=ev.target.getAttribute&&ev.target.getAttribute("data-del");if(i===null||i===undefined)return;var h=hist();h.splice(+i,1);store.set(KEY_H,h);renderHist()});
+  renderSettings();renderHist();render();
+})();
+</script>
+</body>
+</html>
